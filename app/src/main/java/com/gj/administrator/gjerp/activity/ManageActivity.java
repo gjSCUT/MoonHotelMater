@@ -12,6 +12,7 @@ import android.view.View;
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.adapter.RecyclerAdapter;
 import com.gj.administrator.gjerp.base.BaseActivity;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import io.github.codefalling.recyclerviewswipedismiss.SwipeDismissRecyclerViewTo
 public class ManageActivity extends BaseActivity {
     RecyclerView recyclerView;
     RecyclerAdapter adapter;
-
+    FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,14 +38,27 @@ public class ManageActivity extends BaseActivity {
     @Override
     protected void initViews() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         List<String> dataset = new ArrayList<>();
         for (int i = 0; i < 100; i++){
             dataset.add("item" + i);
         }
-        adapter = new RecyclerAdapter(mContext, R.layout.dp40_list_items, dataset, RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER, true, true);
+        adapter = new RecyclerAdapter(mContext, R.layout.dp40_list_items, dataset, RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_BORDER, true, true);
+        adapter.setOnImageClickListener(new RecyclerAdapter.OnClickListener() {
+            @Override
+            public void OnImageClick(Boolean isChecked) {
+                //TODO
+            }
+
+            @Override
+            public void OnItemClick(int position) {
+                startActivity(ManageItemActivity.class);
+            }
+        });
         recyclerView.setAdapter(adapter);
+
 
     }
 
@@ -60,23 +74,29 @@ public class ManageActivity extends BaseActivity {
 
                     @Override
                     public void onDismiss(View view) {
-                        int id = (int) recyclerView.getChildItemId(view);
-                        adapter.mDataList.remove(id);
+                        int id = recyclerView.getChildAdapterPosition(view);
+                        adapter.getDataList().remove(id);
                         adapter.notifyDataSetChanged();
 
                     }
                 })
                 .setIsVertical(false)
-                .setItemTouchCallback(
-                        new SwipeDismissRecyclerViewTouchListener.OnItemTouchCallBack() {
-                            @Override
-                            public void onTouch(int index) {
-
-                            }
-                        })
                 .create();
 
         recyclerView.setOnTouchListener(listener);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!adapter.getCheckedList().isEmpty()){
+                    adapter.removeChecked();
+                    adapter.notifyDataSetChanged();
+                }
+                else{
+                    startActivity(ManageItemActivity.class);
+                }
+            }
+        });
     }
 
     @Override

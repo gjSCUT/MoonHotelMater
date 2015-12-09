@@ -2,6 +2,7 @@ package com.gj.administrator.gjerp.base;
 
 import android.app.Application;
 
+import com.activeandroid.ActiveAndroid;
 import com.gj.administrator.gjerp.util.LogUtil;
 
 /**
@@ -32,8 +33,9 @@ public class BaseApplication extends Application {
             instance = this;
         }
 
-        ActivityManage.init();               // 初始化活动管理器
-        LogUtil.setLogStatus(isDebugmode); // 设置是否显示日志
+        ActivityManage.init();
+        LogUtil.setLogStatus(isDebugmode);
+        ActiveAndroid.initialize(this);
 
     }
 
@@ -47,5 +49,6 @@ public class BaseApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         LogUtil.e("BaseApplication", "onTerminate");
+        ActiveAndroid.dispose();
     }
 }

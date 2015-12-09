@@ -25,7 +25,6 @@ public class DrawableAdapter extends BaseAdapter {
     // this is the descriptions used in the main page, under the descriptions
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
     private TextDrawable.IBuilder mDrawableBuilder;
-    private boolean isRandomColor;
     private boolean canCheckView;
     private int itemId;
     // list of data items
@@ -38,9 +37,6 @@ public class DrawableAdapter extends BaseAdapter {
         this.context = context;
         this.itemId = itemId;
         this.mDataList = new ArrayList<>();
-        for(String s:datas)
-            this.mDataList.add(new ListData(s));
-        this.isRandomColor = isRandomColor;
         this.canCheckView = canCheckView;
         // initialize the builder based on the "TYPE"
         switch (type) {
@@ -78,6 +74,8 @@ public class DrawableAdapter extends BaseAdapter {
                         .round();
                 break;
         }
+        for(String s:datas)
+            this.mDataList.add(new ListData(s,mDrawableBuilder,mColorGenerator,isRandomColor));
     }
 
 
@@ -133,8 +131,7 @@ public class DrawableAdapter extends BaseAdapter {
             holder.checkIcon.setVisibility(View.VISIBLE);
         }
         else {
-            TextDrawable drawable = mDrawableBuilder.build(String.valueOf(item.data.charAt(0)), isRandomColor ? mColorGenerator.getRandomColor() : mColorGenerator.getColor(item.data));
-            holder.imageView.setImageDrawable(drawable);
+            holder.imageView.setImageDrawable(item.drawable);
             holder.view.setBackgroundColor(Color.TRANSPARENT);
             holder.checkIcon.setVisibility(View.GONE);
         }
@@ -151,15 +148,17 @@ public class DrawableAdapter extends BaseAdapter {
             textView = (TextView) view.findViewById(R.id.textView);
             checkIcon = (ImageView) view.findViewById(R.id.check_icon);
         }
+
     }
 
     private static class ListData {
         private String data;
+        private TextDrawable drawable;
         private boolean isChecked;
-        public ListData(String data) {
+        public ListData(String data, TextDrawable.IBuilder mDrawableBuilder, ColorGenerator mColorGenerator, boolean isRandomColor) {
             this.data = data;
+            drawable = mDrawableBuilder.build(String.valueOf(data.charAt(0)), isRandomColor ? mColorGenerator.getRandomColor() : mColorGenerator.getColor(data));
         }
-
         public void setChecked(boolean isChecked) {
             this.isChecked = isChecked;
         }

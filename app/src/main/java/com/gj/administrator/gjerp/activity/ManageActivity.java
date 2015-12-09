@@ -8,16 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.gj.administrator.gjerp.R;
-import com.gj.administrator.gjerp.adapter.DrawableAdapter;
 import com.gj.administrator.gjerp.adapter.RecyclerAdapter;
 import com.gj.administrator.gjerp.base.BaseActivity;
-import com.gj.administrator.gjerp.util.SessionUtil;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import io.github.codefalling.recyclerviewswipedismiss.SwipeDismissRecyclerViewTouchListener;
@@ -34,6 +30,8 @@ public class ManageActivity extends BaseActivity {
         final ActionBar ab = getSupportActionBar();
         if(ab!=null)
             ab.setDisplayHomeAsUpEnabled(true);
+        initViews();
+        initEvents();
     }
 
     @Override
@@ -45,7 +43,7 @@ public class ManageActivity extends BaseActivity {
         for (int i = 0; i < 100; i++){
             dataset.add("item" + i);
         }
-        adapter = new RecyclerAdapter(this, R.layout.manage_list_items, SessionUtil.getHotelnames(), RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER, true, true);
+        adapter = new RecyclerAdapter(mContext, R.layout.dp40_list_items, dataset, RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER, true, true);
         recyclerView.setAdapter(adapter);
 
     }
@@ -57,7 +55,6 @@ public class ManageActivity extends BaseActivity {
                 new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
                     @Override
                     public boolean canDismiss(int position) {
-
                         return true;
                     }
 

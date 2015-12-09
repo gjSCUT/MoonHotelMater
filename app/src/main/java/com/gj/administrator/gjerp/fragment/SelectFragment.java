@@ -11,7 +11,6 @@ import android.widget.ListView;
 
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.adapter.DrawableAdapter;
-import com.gj.administrator.gjerp.adapter.RecyclerAdapter;
 import com.gj.administrator.gjerp.base.BaseFragment;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
@@ -56,7 +55,7 @@ public class SelectFragment extends BaseFragment{
     @Override
     protected void initEvents() {
         if(listView != null){
-            listView.setAdapter(new DrawableAdapter(context, R.layout.manage_list_items, SessionUtil.getHotelnames(), DrawableAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER, true, false));
+            listView.setAdapter(new DrawableAdapter(context, R.layout.dp60_list_items, SessionUtil.getHotelnames(), DrawableAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER, true, false));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

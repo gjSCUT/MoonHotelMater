@@ -34,6 +34,53 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         SAMPLE_RECT, SAMPLE_ROUND_RECT,SAMPLE_ROUND,
         SAMPLE_RECT_BORDER,SAMPLE_ROUND_RECT_BORDER, SAMPLE_ROUND_BORDER
     }
+
+    public RecyclerAdapter(Context context, int itemId, List<String> datas, DRAWABLE_TYPE type, boolean isRandomColor, boolean canCheckView) {
+        this.context = context;
+        this.itemId = itemId;
+        this.mDataList = new ArrayList<>();
+        for(String s:datas)
+            this.mDataList.add(new ListData(s));
+        this.isRandomColor = isRandomColor;
+        this.canCheckView = canCheckView;
+        // initialize the builder based on the "TYPE"
+        switch (type) {
+            case SAMPLE_RECT:
+                mDrawableBuilder = TextDrawable.builder()
+                        .rect();
+                break;
+            case SAMPLE_ROUND_RECT:
+                mDrawableBuilder = TextDrawable.builder()
+                        .roundRect(10);
+                break;
+            case SAMPLE_ROUND:
+                mDrawableBuilder = TextDrawable.builder()
+                        .round();
+                break;
+            case SAMPLE_RECT_BORDER:
+                mDrawableBuilder = TextDrawable.builder()
+                        .beginConfig()
+                        .withBorder(4)
+                        .endConfig()
+                        .rect();
+                break;
+            case SAMPLE_ROUND_RECT_BORDER:
+                mDrawableBuilder = TextDrawable.builder()
+                        .beginConfig()
+                        .withBorder(4)
+                        .endConfig()
+                        .roundRect(10);
+                break;
+            case SAMPLE_ROUND_BORDER:
+                mDrawableBuilder = TextDrawable.builder()
+                        .beginConfig()
+                        .withBorder(4)
+                        .endConfig()
+                        .round();
+                break;
+        }
+    }
+
     public RecyclerAdapter(Context context, int itemId, String[] datas, DRAWABLE_TYPE type, boolean isRandomColor, boolean canCheckView) {
         this.context = context;
         this.itemId = itemId;

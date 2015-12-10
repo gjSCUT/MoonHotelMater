@@ -48,7 +48,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         this.dataList = dataList;
     }
 
-    public void setOnImageClickListener(OnClickListener onClickListener) {
+    public void setOnClickListener(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
@@ -190,7 +190,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             imageView = (ImageView) view.findViewById(R.id.imageView);
             textView = (TextView) view.findViewById(R.id.textView);
             checkIcon = (ImageView) view.findViewById(R.id.check_icon);
-            textView.setOnClickListener(this);
+            if (textView != null) {
+                textView.setOnClickListener(this);
+            }
         }
 
         @Override

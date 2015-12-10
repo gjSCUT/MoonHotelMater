@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gj.administrator.gjerp.R;
+import com.gj.administrator.gjerp.activity.ManageItemActivity;
 import com.gj.administrator.gjerp.adapter.RecyclerAdapter;
 import com.gj.administrator.gjerp.base.BaseFragment;
 import com.gj.administrator.gjerp.domain.Room;
@@ -29,7 +30,7 @@ public class RoomDisplayOrderedFragment extends BaseFragment {
 
     private static Room[] mRoomArray;
     private static RecyclerView mRecyclerView;
-    private static RecyclerView.Adapter mAdapter;
+    private static RecyclerAdapter mAdapter;
     private static Context context;
 
     private OnFragmentInteractionListener mListener;
@@ -81,16 +82,27 @@ public class RoomDisplayOrderedFragment extends BaseFragment {
         List<RecyclerAdapter.ListData> rmIdStrings = new ArrayList<>();
 
         for (Room room: mRoomArray) {
-            rmIdStrings.add(new RecyclerAdapter.ListData(room.getRmId(),room.getRmId(),null));
+            rmIdStrings.add(new RecyclerAdapter.ListData(room.rmId,room.rmId,null));
         }
 
         mAdapter = new RecyclerAdapter(
                 context,
                 R.layout.grid_items,
                 rmIdStrings,
-                RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_RECT,
+                RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER,
                 false
         );
+        mAdapter.setOnClickListener(new RecyclerAdapter.OnClickListener() {
+            @Override
+            public void OnImageClick(Boolean isChecked) {
+                //TODO
+            }
+
+            @Override
+            public void OnItemClick(int position) {
+
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(mRecyclerView.getContext(),4));
     }

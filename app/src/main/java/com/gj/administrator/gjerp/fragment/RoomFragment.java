@@ -130,9 +130,11 @@ public class RoomFragment extends BaseFragment {
     public void fetchRoomArray() {
         //TODO: insert database operation?
         mRoomArray = new Room[100];
+        int temp = 0;
         for(int i = 0; i < mRoomArray.length; i++) {
             mRoomArray[i] = new Room();
-            mRoomArray[i].setRmId("" + 800 + i);
+            temp = 800 + i;
+            mRoomArray[i].rmId = "" + temp;
         }
     }
 

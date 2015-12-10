@@ -28,6 +28,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     // this is the descriptions used in the main page, under the descriptions
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
     private TextDrawable.IBuilder mDrawableBuilder;
+    private boolean isRandomColor;
     private boolean canCheckView;
     private int itemId;
     private OnClickListener onClickListener;
@@ -47,7 +48,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         this.dataList = dataList;
     }
 
-    public void setOnImageClickListener(OnClickListener onClickListener) {
+    public void setOnClickListener(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
@@ -61,12 +62,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         SAMPLE_RECT_BORDER,SAMPLE_ROUND_RECT_BORDER, SAMPLE_ROUND_BORDER
     }
 
-    public RecyclerAdapter(Context context, int itemId, List<String> datas, DRAWABLE_TYPE type, boolean isRandomColor, boolean canCheckView) {
+    public RecyclerAdapter(Context context, int itemId, List<ListData> dataList, DRAWABLE_TYPE type, boolean canCheckView) {
         this.context = context;
         this.itemId = itemId;
-        this.dataList = new ArrayList<>();
+        this.dataList = dataList;
         this.checkedList = new ArrayList<>();
-
+        
         this.canCheckView = canCheckView;
         // initialize the builder based on the "TYPE"
         switch (type) {
@@ -104,12 +105,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         .round();
                 break;
         }
-        for(String s:datas)
-            this.dataList.add(new ListData(s,mDrawableBuilder,mColorGenerator,isRandomColor));
     }
-
-
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -122,7 +118,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         // provide support for selected state
         updateCheckedState(holder, item);
         holder.position = position;
-        if(canCheckView) {
+        if(canCheckView && holder.imageView!=null)
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -133,8 +129,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     onClickListener.OnImageClick(checkedList.isEmpty());
                 }
             });
-        }
-        holder.textView.setText(item.data);
+        if(holder.textView!=null)
+            holder.textView.setText(item.data);
     }
 
     @Override
@@ -148,18 +144,30 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     private void updateCheckedState(ViewHolder holder, ListData item) {
-        if (item.isChecked) {
-            checkedList.add(item);
-            holder.imageView.setImageDrawable(mDrawableBuilder.build(" ", 0xff616161));
-            holder.view.setBackgroundColor(HIGHLIGHT_COLOR);
-            holder.checkIcon.setVisibility(View.VISIBLE);
+        if (canCheckView && item.isChecked) {
+            if(holder.imageView!=null)
+                holder.imageView.setImageDrawable(mDrawableBuilder.build(" ", 0xff616161));
+            if(holder.view!=null)
+                holder.view.setBackgroundColor(HIGHLIGHT_COLOR);
+            if(holder.checkIcon!=null)
+                holder.checkIcon.setVisibility(View.VISIBLE);
         }
         else {
-            if(checkedList.contains(item))
-                checkedList.remove(item);
-            holder.imageView.setImageDrawable(item.drawable);
-            holder.view.setBackgroundColor(Color.TRANSPARENT);
-            holder.checkIcon.setVisibility(View.GONE);
+            int color;
+            if(item.isRandomColor){
+                color = mColorGenerator.getRandomColor();
+            }
+            else if(item.color == null)
+                color = mColorGenerator.getColor(item.data);
+            else
+                color = item.color;
+            TextDrawable drawable = mDrawableBuilder.build(item.IconText, color);
+            if(holder.imageView!=null)
+                holder.imageView.setImageDrawable(drawable);
+            if(holder.view!=null)
+                holder.view.setBackgroundColor(Color.TRANSPARENT);
+            if(holder.checkIcon!=null)
+                holder.checkIcon.setVisibility(View.GONE);
         }
     }
 
@@ -182,7 +190,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             imageView = (ImageView) view.findViewById(R.id.imageView);
             textView = (TextView) view.findViewById(R.id.textView);
             checkIcon = (ImageView) view.findViewById(R.id.check_icon);
-            textView.setOnClickListener(this);
+            if (textView != null) {
+                textView.setOnClickListener(this);
+            }
         }
 
         @Override
@@ -194,15 +204,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     }
 
-    private static class ListData {
+    public static class ListData {
         private String data;
-        private TextDrawable drawable;
+        private String IconText;
+        private Integer color;
         private boolean isChecked;
-        public ListData(String data, TextDrawable.IBuilder mDrawableBuilder, ColorGenerator mColorGenerator, boolean isRandomColor) {
+        private boolean isRandomColor;
+        public ListData(String data, String iconText) {
             this.data = data;
-            drawable = mDrawableBuilder.build(String.valueOf(data.charAt(0)), isRandomColor ? mColorGenerator.getRandomColor() : mColorGenerator.getColor(data));
+            this.IconText = iconText;
+            this.isRandomColor = true;
         }
-
+        public ListData(String data, String iconText, Integer color){
+            this.data = data;
+            this.IconText = iconText;
+            this.color = color;
+            this.isRandomColor = false;
+        }
         public void setChecked(boolean isChecked) {
             this.isChecked = isChecked;
         }

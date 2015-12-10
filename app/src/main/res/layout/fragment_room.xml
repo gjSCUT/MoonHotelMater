@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_gravity="center_vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:textSize="15sp"
-            android:text="Sort Style : "/>
+            android:text="Sort Style : "
+            android:textSize="15sp" />
 
         <RadioGroup
             android:id="@+id/room_style_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/room_style_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="5.0dp"
                 android:text="Room Number"
-                android:textSize="12sp"
-                android:layout_marginRight="5.0dp" />
+                android:textSize="12sp" />
 
 
             <RadioButton
@@ -51,21 +51,23 @@
     <TextView
         android:id="@+id/room_state_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
     <GridView
         android:id="@+id/room_state_grid"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:columnWidth="90dp"
         android:gravity="center"
-        android:horizontalSpacing="10dp"
+        android:horizontalSpacing="8dp"
         android:numColumns="3"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" />
+        android:verticalSpacing="8dp" />
 
     <FrameLayout
-        android:id="@+id/container"
+        android:id="@+id/room_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

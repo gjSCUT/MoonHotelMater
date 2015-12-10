@@ -41,12 +41,18 @@ public class ManageActivity extends BaseActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        List<String> dataset = new ArrayList<>();
+        List<RecyclerAdapter.ListData> data = new ArrayList<>();
         for (int i = 0; i < 100; i++){
-            dataset.add("item" + i);
+            data.add(new RecyclerAdapter.ListData("item" + i,"i",null));
         }
-        adapter = new RecyclerAdapter(mContext, R.layout.dp40_list_items, dataset, RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_BORDER, true, true);
-        adapter.setOnImageClickListener(new RecyclerAdapter.OnClickListener() {
+        adapter = new RecyclerAdapter(
+                mContext,
+                R.layout.dp40_list_items,
+                data,
+                RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER,
+                true
+                );
+        adapter.setOnClickListener(new RecyclerAdapter.OnClickListener() {
             @Override
             public void OnImageClick(Boolean isChecked) {
                 //TODO

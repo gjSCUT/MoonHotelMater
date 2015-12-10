@@ -9,5 +9,16 @@
 
     <string name="about_copyright">Copyright © 2015 by Guo Jun</string>
     <string name="about_title">Glad to join the intership of WorkApp</string>
-	<string name="about_text">Welcome to guide. Thank you.\nBy GuoJun\n2015.12.11</string>
+    <string name="about_text">Welcome to guide. Thank you.\nBy GuoJun\n2015.12.11</string>
+
+    <string name="room_type_blank">空房\n%1$d（间）</string>
+    <string name="room_type_dirty">脏房\n%1$d（间）</string>
+    <string name="room_type_in_use">住人\n%1$d（间）</string>
+    <string name="room_type_repair">维修\n%1$d（间）</string>
+    <string name="room_type_in_use_dirty">占脏\n%1$d（间）</string>
+    <string name="room_type_total">全部\n%1$d（间）</string>
+    <string name="room_string_model">%1$d（间）</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

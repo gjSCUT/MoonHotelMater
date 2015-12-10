@@ -9,8 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.activeandroid.Model;
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.base.BaseActivity;
+import com.gj.administrator.gjerp.domain.Guest;
 import com.gj.administrator.gjerp.util.LogUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
@@ -38,6 +40,7 @@ public class LoginActivity extends BaseActivity{
 
         initViews();
         initEvents();
+
     }
 
 

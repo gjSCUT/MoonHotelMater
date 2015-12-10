@@ -7,7 +7,7 @@ import com.activeandroid.annotation.Table;
 
 @Table(name="hotels")
 public class Hotel extends Model {
-	@Column(name = "Name")
+	@Column(name = "name")
 	public String name;
 
 	public Hotel(){

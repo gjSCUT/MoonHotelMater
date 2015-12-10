@@ -39,11 +39,17 @@ public class ManageActivity extends BaseActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        List<String> dataset = new ArrayList<>();
+        List<RecyclerAdapter.ListData> data = new ArrayList<>();
         for (int i = 0; i < 100; i++){
-            dataset.add("item" + i);
+            data.add(new RecyclerAdapter.ListData("item" + i,"i",null));
         }
-        adapter = new RecyclerAdapter(mContext, R.layout.dp40_list_items, dataset, RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER, true, true);
+        adapter = new RecyclerAdapter(
+                mContext,
+                R.layout.dp40_list_items,
+                data,
+                RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER,
+                true
+                );
         recyclerView.setAdapter(adapter);
 
     }

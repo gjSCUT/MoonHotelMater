@@ -25,7 +25,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     // this is the descriptions used in the main page, under the descriptions
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
     private TextDrawable.IBuilder mDrawableBuilder;
-    private boolean isRandomColor;
     private boolean canCheckView;
     private int itemId;
     // list of data items
@@ -35,59 +34,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         SAMPLE_RECT_BORDER,SAMPLE_ROUND_RECT_BORDER, SAMPLE_ROUND_BORDER
     }
 
-    public RecyclerAdapter(Context context, int itemId, List<String> datas, DRAWABLE_TYPE type, boolean isRandomColor, boolean canCheckView) {
+    public RecyclerAdapter(Context context, int itemId, List<ListData> dataList, DRAWABLE_TYPE type, boolean canCheckView) {
         this.context = context;
         this.itemId = itemId;
         this.mDataList = new ArrayList<>();
-        for(String s:datas)
-            this.mDataList.add(new ListData(s));
-        this.isRandomColor = isRandomColor;
-        this.canCheckView = canCheckView;
-        // initialize the builder based on the "TYPE"
-        switch (type) {
-            case SAMPLE_RECT:
-                mDrawableBuilder = TextDrawable.builder()
-                        .rect();
-                break;
-            case SAMPLE_ROUND_RECT:
-                mDrawableBuilder = TextDrawable.builder()
-                        .roundRect(10);
-                break;
-            case SAMPLE_ROUND:
-                mDrawableBuilder = TextDrawable.builder()
-                        .round();
-                break;
-            case SAMPLE_RECT_BORDER:
-                mDrawableBuilder = TextDrawable.builder()
-                        .beginConfig()
-                        .withBorder(4)
-                        .endConfig()
-                        .rect();
-                break;
-            case SAMPLE_ROUND_RECT_BORDER:
-                mDrawableBuilder = TextDrawable.builder()
-                        .beginConfig()
-                        .withBorder(4)
-                        .endConfig()
-                        .roundRect(10);
-                break;
-            case SAMPLE_ROUND_BORDER:
-                mDrawableBuilder = TextDrawable.builder()
-                        .beginConfig()
-                        .withBorder(4)
-                        .endConfig()
-                        .round();
-                break;
-        }
-    }
-
-    public RecyclerAdapter(Context context, int itemId, String[] datas, DRAWABLE_TYPE type, boolean isRandomColor, boolean canCheckView) {
-        this.context = context;
-        this.itemId = itemId;
-        this.mDataList = new ArrayList<>();
-        for(String s:datas)
-            this.mDataList.add(new ListData(s));
-        this.isRandomColor = isRandomColor;
+        this.mDataList = dataList;
         this.canCheckView = canCheckView;
         // initialize the builder based on the "TYPE"
         switch (type) {
@@ -131,8 +82,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = View.inflate(context, itemId , null);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
+
     }
 
     @Override
@@ -140,7 +91,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         ListData item =  mDataList.get(position);
         // provide support for selected state
         updateCheckedState(holder, item);
-        if(canCheckView)
+        if(canCheckView && holder.imageView!=null)
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -150,7 +101,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     updateCheckedState(holder, data);
                 }
             });
-        holder.textView.setText(item.data);
+        if(holder.textView!=null)
+            holder.textView.setText(item.data);
     }
 
     @Override
@@ -164,16 +116,30 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     private void updateCheckedState(ViewHolder holder, ListData item) {
-        if (item.isChecked) {
-            holder.imageView.setImageDrawable(mDrawableBuilder.build(" ", 0xff616161));
-            holder.view.setBackgroundColor(HIGHLIGHT_COLOR);
-            holder.checkIcon.setVisibility(View.VISIBLE);
+        if (canCheckView && item.isChecked) {
+            if(holder.imageView!=null)
+                holder.imageView.setImageDrawable(mDrawableBuilder.build(" ", 0xff616161));
+            if(holder.view!=null)
+                holder.view.setBackgroundColor(HIGHLIGHT_COLOR);
+            if(holder.checkIcon!=null)
+                holder.checkIcon.setVisibility(View.VISIBLE);
         }
         else {
-            TextDrawable drawable = mDrawableBuilder.build(String.valueOf(item.data.charAt(0)), isRandomColor ? mColorGenerator.getRandomColor() : mColorGenerator.getColor(item.data));
-            holder.imageView.setImageDrawable(drawable);
-            holder.view.setBackgroundColor(Color.TRANSPARENT);
-            holder.checkIcon.setVisibility(View.GONE);
+            int color;
+            if(item.isRandomColor){
+                color = mColorGenerator.getRandomColor();
+            }
+            else if(item.color == null)
+                color = mColorGenerator.getColor(item.data);
+            else
+                color = item.color;
+            TextDrawable drawable = mDrawableBuilder.build(item.IconText, color);
+            if(holder.imageView!=null)
+                holder.imageView.setImageDrawable(drawable);
+            if(holder.view!=null)
+                holder.view.setBackgroundColor(Color.TRANSPARENT);
+            if(holder.checkIcon!=null)
+                holder.checkIcon.setVisibility(View.GONE);
         }
     }
 
@@ -191,13 +157,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
     }
 
-    private static class ListData {
+    public static class ListData {
         private String data;
+        private String IconText;
+        private Integer color;
         private boolean isChecked;
-        public ListData(String data) {
+        private boolean isRandomColor;
+        public ListData(String data, String iconText) {
             this.data = data;
+            this.IconText = iconText;
+            this.isRandomColor = true;
         }
-
+        public ListData(String data, String iconText, Integer color){
+            this.data = data;
+            this.IconText = iconText;
+            this.color = color;
+            this.isRandomColor = false;
+        }
         public void setChecked(boolean isChecked) {
             this.isChecked = isChecked;
         }

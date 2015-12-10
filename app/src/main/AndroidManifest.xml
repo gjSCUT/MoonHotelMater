@@ -3,15 +3,7 @@
     package="com.gj.administrator.gjerp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".base.BaseApplication"
@@ -19,6 +11,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <uses-library android:name="android.test.runner" />
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/company_name"
@@ -45,6 +39,12 @@
         </activity>
         <activity
             android:name=".activity.ManageActivity"
+            android:label="Manage"
+            android:screenOrientation="portrait"  >
+        </activity>
+        <activity
+            android:name=".activity.ManageItemActivity"
+            android:label="Item"
             android:screenOrientation="portrait"  >
         </activity>
     </application>

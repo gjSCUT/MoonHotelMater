@@ -3,8 +3,11 @@ package com.gj.administrator.gjerp.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,10 +28,35 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     // this is the descriptions used in the main page, under the descriptions
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
     private TextDrawable.IBuilder mDrawableBuilder;
+    private boolean isRandomColor;
     private boolean canCheckView;
     private int itemId;
+    private OnClickListener onClickListener;
     // list of data items
-    public List<ListData> mDataList;
+    private List<ListData> dataList;
+    private List<ListData> checkedList;
+
+    public List<ListData> getCheckedList() {
+        return checkedList;
+    }
+
+    public List<ListData> getDataList() {
+        return dataList;
+    }
+
+    public void setDataList(List<ListData> dataList) {
+        this.dataList = dataList;
+    }
+
+    public void setOnImageClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
+    public interface OnClickListener{
+        void OnImageClick(Boolean isChecked);
+        void OnItemClick(int position);
+    }
+
     public enum DRAWABLE_TYPE{
         SAMPLE_RECT, SAMPLE_ROUND_RECT,SAMPLE_ROUND,
         SAMPLE_RECT_BORDER,SAMPLE_ROUND_RECT_BORDER, SAMPLE_ROUND_BORDER
@@ -37,8 +65,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public RecyclerAdapter(Context context, int itemId, List<ListData> dataList, DRAWABLE_TYPE type, boolean canCheckView) {
         this.context = context;
         this.itemId = itemId;
-        this.mDataList = new ArrayList<>();
-        this.mDataList = dataList;
+        this.dataList = dataList;
+        this.checkedList = new ArrayList<>();
+        
         this.canCheckView = canCheckView;
         // initialize the builder based on the "TYPE"
         switch (type) {
@@ -78,27 +107,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
     }
 
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(context, itemId , null);
-        return new ViewHolder(view);
-
+        return new ViewHolder(LayoutInflater.from(context).inflate(itemId, parent,false));
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder,final int position) {
-        ListData item =  mDataList.get(position);
+        ListData item =  dataList.get(position);
         // provide support for selected state
         updateCheckedState(holder, item);
+        holder.position = position;
         if(canCheckView && holder.imageView!=null)
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // when the image is clicked, update the selected state
-                    ListData data = mDataList.get(position);
+                    ListData data = dataList.get(position);
                     data.setChecked(!data.isChecked);
                     updateCheckedState(holder, data);
+                    onClickListener.OnImageClick(checkedList.isEmpty());
                 }
             });
         if(holder.textView!=null)
@@ -112,7 +140,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount()  {
-        return mDataList.size();
+        return dataList.size();
     }
 
     private void updateCheckedState(ViewHolder holder, ListData item) {
@@ -143,18 +171,35 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public void removeChecked(){
+        for(ListData data:checkedList){
+            dataList.remove(data);
+        }
+        checkedList.clear();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private View view;
         private ImageView imageView;
         private TextView textView;
         private ImageView checkIcon;
+        public int position;
         private ViewHolder(View view) {
             super(view);
             this.view = view;
             imageView = (ImageView) view.findViewById(R.id.imageView);
             textView = (TextView) view.findViewById(R.id.textView);
             checkIcon = (ImageView) view.findViewById(R.id.check_icon);
+            textView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            if (onClickListener != null) {
+                onClickListener.OnItemClick(position);
+             }
+        }
+
     }
 
     public static class ListData {

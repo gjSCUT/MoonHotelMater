@@ -1,122 +1,54 @@
 package com.gj.administrator.gjerp.domain;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
-@Table(name="tb_guest")
-public class Guest {
-	private String gtId;			//uupkid
-	private String gtName;			//客人姓名
-	private String gtType;			//客人类型
-	private String gtCardCatalog;	//客人证件类别
-	private String gtCardId;		//客人证件号码
-	private String gtCountry;		//国籍
-	private String gtAddress;		//地址
-	private String gtZip;			//邮编
-	private String gtCompany;		//公司(工作单位)
-	private String gtTelphone;		//固定电话
-	private String gtMobile;		//手机
-	private String gtGender;		//性别
-	private String gtEmail;			//Email
-	private Timestamp gtCreateTime;	//资料创建时间
 
-	public String getGtId() {
-		return gtId;
+@Table(name="guests")
+public class Guest extends Model {
+	public enum TYPE{
+		NORMAL,VIP,GROUP
 	}
-	public void setGtId(String gtId) {
-		this.gtId = gtId;
-	}
+	@Column(name="name",length = 20, notNull = true)
+	public String name;
+	@Column(name="type", notNull =  true)
+	public int type;
+	@Column(name = "createTime",length = 20, notNull =  true)
+	public Date createTime;
+	@Column(name="cardCatalog",length = 16, notNull =  true)
+	public String cardCatalog;
+	@Column(name="cardId",length = 32, notNull =  true)
+	public String cardId;
+	@Column(name="telphone",length = 16, notNull =  true)
+	public String telphone;
+	@Column(name="gender",length = 5, notNull =  true)
+	public String gender;
+	@Column(name="country",length = 16)
+	public String country;
+	@Column(name="address",length = 50)
+	public String address;
+	@Column(name="company",length = 50)
+	public String company;
+	@Column(name="email",length = 32)
+	public String email;
 
-	public String getGtName() {
-		return gtName;
-	}
-	public void setGtName(String gtName) {
-		this.gtName = gtName;
-	}
+	public Guest(){}
 
-	public String getGtType() {
-		return gtType;
-	}
-	public void setGtType(String gtType) {
-		this.gtType = gtType;
-	}
-
-	public String getGtCardCatalog() {
-		return gtCardCatalog;
-	}
-	public void setGtCardCatalog(String gtCardCatalog) {
-		this.gtCardCatalog = gtCardCatalog;
-	}
-
-	public String getGtCardId() {
-		return gtCardId;
-	}
-	public void setGtCardId(String gtCardId) {
-		this.gtCardId = gtCardId;
+	public Guest(String name, TYPE type, String cardCatalog, String cardId, String telphone, String gender, String country, String address, String company, String email) {
+		this.name = name;
+		this.type = type.ordinal();
+		this.createTime = new Date();
+		this.cardCatalog = cardCatalog;
+		this.cardId = cardId;
+		this.telphone = telphone;
+		this.gender = gender;
+		this.country = country;
+		this.address = address;
+		this.company = company;
+		this.email = email;
 	}
 
-	public String getGtCountry() {
-		return gtCountry;
-	}
-	public void setGtCountry(String gtCountry) {
-		this.gtCountry = gtCountry;
-	}
-
-	public String getGtAddress() {
-		return gtAddress;
-	}
-	public void setGtAddress(String gtAddress) {
-		this.gtAddress = gtAddress;
-	}
-
-	public String getGtZip() {
-		return gtZip;
-	}
-	public void setGtZip(String gtZip) {
-		this.gtZip = gtZip;
-	}
-
-	public String getGtCompany() {
-		return gtCompany;
-	}
-	public void setGtCompany(String gtCompany) {
-		this.gtCompany = gtCompany;
-	}
-
-	public String getGtTelphone() {
-		return gtTelphone;
-	}
-	public void setGtTelphone(String gtTelphone) {
-		this.gtTelphone = gtTelphone;
-	}
-
-	public String getGtMobile() {
-		return gtMobile;
-	}
-	public void setGtMobile(String gtMobile) {
-		this.gtMobile = gtMobile;
-	}
-
-	public String getGtGender() {
-		return gtGender;
-	}
-	public void setGtGender(String gtGender) {
-		this.gtGender = gtGender;
-	}
-
-	public String getGtEmail() {
-		return gtEmail;
-	}
-	public void setGtEmail(String gtEmail) {
-		this.gtEmail = gtEmail;
-	}
-
-	public Timestamp getGtCreateTime() {
-		return gtCreateTime;
-	}
-	public void setGtCreateTime(Timestamp gtCreateTime) {
-		this.gtCreateTime = gtCreateTime;
-	}
 }

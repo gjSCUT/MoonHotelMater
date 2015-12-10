@@ -51,9 +51,15 @@ public class ManageFragment extends BaseFragment{
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    startActivity(context, ManageActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type",i);
                     switch (i) {
-                        //TODO
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            startActivity(context, ManageActivity.class, bundle);
+                            break;
                         default:
                             break;
                     }

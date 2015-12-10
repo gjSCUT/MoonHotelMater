@@ -1,12 +1,18 @@
 package com.gj.administrator.gjerp.base;
 
-import android.app.ActionBar;
+import android.support.v7.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+
+
+import com.gj.administrator.gjerp.dao.DaoMaster;
+import com.gj.administrator.gjerp.dao.DaoSession;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,9 +26,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     protected Context mContext;
     protected List<AsyncTask<Void, Void, Boolean>> mAsyncTasks = new ArrayList<AsyncTask<Void, Void, Boolean>>();
-    protected ActionBar mActionBar;
-
-    public BaseHandler.UnleakHandler handler ;
+    protected ActionBar actionBar;
+    protected BaseHandler.UnleakHandler handler ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mContext = this;
         handler = new BaseHandler.UnleakHandler(this);
         ActivityManage.addActivity(this);
+        actionBar = getSupportActionBar();
     }
 
     @Override

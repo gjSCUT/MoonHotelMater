@@ -76,4 +76,13 @@ public abstract class BaseFragment extends Fragment {
         Intent intent = new Intent(context, cls);
         startActivity(intent);
     }
+
+    /** 含有Bundle通过Action跳转界面 **/
+    protected void startActivity(Context context, Class<?> cls, Bundle bundle) {
+        Intent intent = new Intent(context, cls);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivity(intent);
+    }
 }

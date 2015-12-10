@@ -43,11 +43,8 @@ public class MainActivity extends BaseActivity{
 
     @Override
     protected void initViews() {
-        final ActionBar ab = getSupportActionBar();
-        if(ab!=null) {
-            ab.setHomeAsUpIndicator(R.mipmap.ic_menu);
-            ab.setDisplayHomeAsUpEnabled(true);
-        }
+        actionBar.setHomeAsUpIndicator(R.mipmap.ic_menu);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer);
         navigationView = (NavigationView) findViewById(R.id.main_navigation);
         mNavName = (TextView) findViewById(R.id.nav_username);

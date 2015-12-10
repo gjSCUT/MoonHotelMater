@@ -31,9 +31,7 @@ public class AnalyzeChartActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analyze_chart);
-        final ActionBar ab = getSupportActionBar();
-        if(ab!=null)
-            ab.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         initViews();
         initEvents();
     }

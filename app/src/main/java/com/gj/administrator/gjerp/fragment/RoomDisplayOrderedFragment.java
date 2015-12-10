@@ -5,14 +5,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gj.administrator.gjerp.R;
-import com.gj.administrator.gjerp.activity.ManageItemActivity;
 import com.gj.administrator.gjerp.adapter.RecyclerAdapter;
 import com.gj.administrator.gjerp.base.BaseFragment;
 import com.gj.administrator.gjerp.domain.Room;
@@ -82,7 +80,7 @@ public class RoomDisplayOrderedFragment extends BaseFragment {
         List<RecyclerAdapter.ListData> rmIdStrings = new ArrayList<>();
 
         for (Room room: mRoomArray) {
-            rmIdStrings.add(new RecyclerAdapter.ListData(room.rmId,room.rmId,null));
+            rmIdStrings.add(new RecyclerAdapter.ListData(room.getNum(),room.getNum(),null));
         }
 
         mAdapter = new RecyclerAdapter(

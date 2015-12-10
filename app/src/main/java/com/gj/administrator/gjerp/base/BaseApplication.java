@@ -1,9 +1,13 @@
 package com.gj.administrator.gjerp.base;
 
 import android.app.Application;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
+import com.gj.administrator.gjerp.dao.DaoMaster;
+import com.gj.administrator.gjerp.dao.DaoSession;
 import com.gj.administrator.gjerp.util.LogUtil;
 
 /**
@@ -14,6 +18,9 @@ public class BaseApplication extends Application {
 
     private static BaseApplication instance;
     public static boolean isDebugmode = false;
+    private static SQLiteDatabase db;
+    private static DaoMaster daoMaster;
+    private static DaoSession daoSession;
 
     /**
      * <p>
@@ -27,6 +34,37 @@ public class BaseApplication extends Application {
         return instance;
     }
 
+    /**
+     * 取得DaoMaster
+     *
+     * @param context
+     * @return
+     */
+    public static DaoMaster getDaoMaster(Context context) {
+        if (daoMaster == null) {
+            DaoMaster.OpenHelper helper = new DaoMaster.DevOpenHelper(context,"moon-hm", null);
+            daoMaster = new DaoMaster(helper.getWritableDatabase());
+            daoSession = daoMaster.newSession();
+        }
+        return daoMaster;
+    }
+
+    /**
+     * 取得DaoSession
+     *
+     * @param context
+     * @return
+     */
+    public static DaoSession getDaoSession(Context context) {
+        if (daoSession == null) {
+            if (daoMaster == null) {
+                daoMaster = getDaoMaster(context);
+            }
+            daoSession = daoMaster.newSession();
+        }
+        return daoSession;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -36,8 +74,11 @@ public class BaseApplication extends Application {
 
         ActivityManage.init();
         LogUtil.setLogStatus(isDebugmode);
-        Configuration dbConfiguration = new Configuration.Builder(this).setDatabaseName("moonhm.db").create();
-        ActiveAndroid.initialize(dbConfiguration);
+
+        DaoMaster.OpenHelper helper = new DaoMaster.DevOpenHelper(this,"moon-hm", null);
+
+        DaoMaster.dropAllTables(helper.getWritableDatabase(), true);
+        DaoMaster.createAllTables(helper.getWritableDatabase(), true);
 
     }
 
@@ -51,6 +92,5 @@ public class BaseApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         LogUtil.e("BaseApplication", "onTerminate");
-        ActiveAndroid.dispose();
     }
 }

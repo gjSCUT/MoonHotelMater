@@ -1,8 +1,8 @@
 package com.gj.administrator.gjerp.activity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -12,25 +12,44 @@ import android.view.View;
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.adapter.RecyclerAdapter;
 import com.gj.administrator.gjerp.base.BaseActivity;
+import com.gj.administrator.gjerp.base.BaseApplication;
+import com.gj.administrator.gjerp.dao.DaoMaster;
+import com.gj.administrator.gjerp.dao.DaoSession;
+import com.gj.administrator.gjerp.dao.GuestDao;
+import com.gj.administrator.gjerp.dao.RoomDao;
+import com.gj.administrator.gjerp.domain.Guest;
+import com.gj.administrator.gjerp.domain.Room;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import de.greenrobot.dao.AbstractDao;
 import io.github.codefalling.recyclerviewswipedismiss.SwipeDismissRecyclerViewTouchListener;
 
 
 public class ManageActivity extends BaseActivity {
     RecyclerView recyclerView;
-    RecyclerAdapter adapter;
     FloatingActionButton fab;
+    private int type;
+    private GuestDao guestDao;
+    private RoomDao roomDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        type = this.getIntent().getExtras().getInt("type");
+        switch (type){
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                roomDao = BaseApplication.getDaoSession(this).getRoomDao();
+                break;
+        }
         setContentView(R.layout.activity_manage);
-        final ActionBar ab = getSupportActionBar();
-        if(ab!=null)
-            ab.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         initViews();
         initEvents();
     }
@@ -41,17 +60,21 @@ public class ManageActivity extends BaseActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    protected void initEvents() {
         List<RecyclerAdapter.ListData> data = new ArrayList<>();
         for (int i = 0; i < 100; i++){
             data.add(new RecyclerAdapter.ListData("item" + i,"i",null));
         }
-        adapter = new RecyclerAdapter(
+        final RecyclerAdapter adapter = new RecyclerAdapter(
                 mContext,
                 R.layout.dp40_list_items,
                 data,
                 RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER,
                 true
-                );
+        );
         adapter.setOnClickListener(new RecyclerAdapter.OnClickListener() {
             @Override
             public void OnImageClick(Boolean isChecked) {
@@ -64,12 +87,6 @@ public class ManageActivity extends BaseActivity {
             }
         });
         recyclerView.setAdapter(adapter);
-
-
-    }
-
-    @Override
-    protected void initEvents() {
         SwipeDismissRecyclerViewTouchListener listener = new SwipeDismissRecyclerViewTouchListener.Builder(
                 recyclerView,
                 new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
@@ -83,6 +100,7 @@ public class ManageActivity extends BaseActivity {
                         int id = recyclerView.getChildAdapterPosition(view);
                         adapter.getDataList().remove(id);
                         adapter.notifyDataSetChanged();
+
 
                     }
                 })
@@ -98,8 +116,14 @@ public class ManageActivity extends BaseActivity {
                     adapter.removeChecked();
                     adapter.notifyDataSetChanged();
                 }
-                else{
-                    startActivity(ManageItemActivity.class);
+                else {
+                    Room room = new Room(null,"8000");
+                    long id = roomDao.insert(room);
+                    room = roomDao.load(id);
+                    /*Guest guest = new Guest(1L, "Guo jun",1, "man","ID card","360728199410300098","15918770336",new Date(),null,null,null,null);
+                    long id = Dao.insert(guest);
+                    guest = Dao.load(id);*/
+                    //startActivity(ManageItemActivity.class);
                 }
             }
         });

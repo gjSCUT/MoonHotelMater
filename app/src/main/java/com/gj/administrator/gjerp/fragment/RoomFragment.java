@@ -134,7 +134,7 @@ public class RoomFragment extends BaseFragment {
         for(int i = 0; i < mRoomArray.length; i++) {
             mRoomArray[i] = new Room();
             temp = 800 + i;
-            mRoomArray[i].rmId = "" + temp;
+            mRoomArray[i].setNum("" + temp);
         }
     }
 

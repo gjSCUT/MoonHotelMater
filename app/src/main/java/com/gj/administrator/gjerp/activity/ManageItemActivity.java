@@ -17,9 +17,7 @@ public class ManageItemActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setTitle("Item");
         setContentView(R.layout.activity_manage_item);
-        final ActionBar ab = getSupportActionBar();
-        if(ab!=null)
-            ab.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     private static String TAG = "MyAdapter";
 
     protected Context context;
-    private List<GuestData> guestDataList;
+    private List<rowData> rowDataList;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public LinearLayout mLinearLayout;
@@ -50,9 +50,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         }
     }
 
-    public RecyclerListAdapter(Context context, List<GuestData> guestDataList) {
+    public RecyclerListAdapter(Context context, List<rowData> rowDataList) {
         this.context = context;
-        this.guestDataList = guestDataList;
+        this.rowDataList = rowDataList;
     }
 
     @Override
@@ -82,29 +82,29 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                 (TextView) holder.mLinearLayout.findViewById(R.id.third_row_text);
         TextView guestTimeSpanTextView =
                 (TextView) holder.mLinearLayout.findViewById(R.id.forth_row_text);
-        guestRmIdTextView.setText(guestDataList.get(position).guestRoomId);
-        guestNameTextView.setText(guestDataList.get(position).guestName);
-        guestIncomeTextView.setText(guestDataList.get(position).guestIncome);
-        guestTimeSpanTextView.setText(guestDataList.get(position).guestTimeSpan);
+        guestRmIdTextView.setText(rowDataList.get(position).first);
+        guestNameTextView.setText(rowDataList.get(position).second);
+        guestIncomeTextView.setText(rowDataList.get(position).third);
+        guestTimeSpanTextView.setText(rowDataList.get(position).forth);
     }
 
     @Override
     public int getItemCount() {
-        if (null != guestDataList) return guestDataList.size();
+        if (null != rowDataList) return rowDataList.size();
         else return 0;
     }
 
-    public static class GuestData {
-        private String guestRoomId;
-        private String guestName;
-        private String guestIncome;
-        private String guestTimeSpan;
+    public static class rowData {
+        private String first;
+        private String second;
+        private String third;
+        private String forth;
 
-        public GuestData(String roomId, String name, String income, String timeSpan) {
-            guestRoomId = roomId;
-            guestName = name;
-            guestIncome = income;
-            guestTimeSpan = timeSpan;
+        public rowData(String firstString, String secondString, String thirdString, String forthString) {
+            first = firstString;
+            second = secondString;
+            third = thirdString;
+            forth = forthString;
         }
     }
 }

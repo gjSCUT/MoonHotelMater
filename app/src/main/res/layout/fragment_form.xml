@@ -3,18 +3,78 @@
     android:orientation="vertical"
     android:layout_gravity="center_vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="8dp">
 
-    <GridView
-        android:id="@+id/room_state_grid"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:columnWidth="90dp"
-        android:gravity="center"
-        android:horizontalSpacing="10dp"
-        android:numColumns="3"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" />
+    <RadioGroup
+        android:id="@+id/room_style_group"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/guest_state_in_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/form_current"
+            android:textSize="12sp" />
+
+
+        <RadioButton
+            android:id="@+id/guest_state_left_today_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/form_history"
+            android:textSize="12sp" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:gravity="center_vertical|start"
+            android:text="@string/form_type" />
+
+        <TextView
+            android:layout_width="76dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|end"
+            android:text=""/>
+
+        <TextView
+            android:layout_width="76dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|end"
+            android:text="@string/form_yesterday_value"/>
+
+        <TextView
+            android:layout_width="112dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:gravity="center_vertical|end"
+            android:text="@string/form_month_value"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/form_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical" />
 
 
 </LinearLayout>

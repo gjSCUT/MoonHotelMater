@@ -2,6 +2,8 @@ package com.gj.administrator.gjerp.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +13,29 @@ import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
 
 import com.gj.administrator.gjerp.R;
+import com.gj.administrator.gjerp.adapter.RecyclerListAdapter;
 import com.gj.administrator.gjerp.base.BaseFragment;
+import com.gj.administrator.gjerp.view.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Form fragment
  * Created by guojun on 2015/12/07
  */
-public class FormFragment extends BaseFragment{
-    // this is the descriptions used in the main page, under the descriptions
-    String[] states = new String[] { "Empty", "Checking", "Booking", "Outing", "Blocking" };
+public class FormFragment extends BaseFragment {
+    // this is the fragment representing data of income
     protected Context context;
-    private GridView gridView;
+    private static RecyclerView mRecyclerView;
+    private static RecyclerListAdapter mAdapter;
+
+    private List<RecyclerListAdapter.rowData> mRowDataList;
+
+    public FormFragment() {
+        mRowDataList = new ArrayList<>();
+    }
 
     public static FormFragment getInstance(Context context) {
         FormFragment mf = new FormFragment();
@@ -45,36 +56,29 @@ public class FormFragment extends BaseFragment{
 
     @Override
     protected void initViews() {
-        gridView = (GridView) findViewById(R.id.room_state_grid);
+        mRecyclerView = (RecyclerView) findViewById(R.id.form_recyclerView);
     }
 
     @Override
     protected void initEvents() {
-        if(gridView != null){
-            setupGridContent();
-        }
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.setHasFixedSize(true);
+        fetchFormData();
+        mAdapter = new RecyclerListAdapter(context, mRowDataList);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+
     }
 
-    private void setupGridContent() {
-        ArrayList<HashMap<String, Object>> lstImageItems = new ArrayList<HashMap<String, Object>>();
-        for (int i = 0; i < states.length; i++) {
-            HashMap<String, Object> map = new HashMap<String, Object>();
-            map.put("itemText", states[i]);
-            lstImageItems.add(map);
-        }
-        SimpleAdapter sa = new SimpleAdapter(context, lstImageItems,R.layout.room_state_grid_items,
-                new String[] {"itemText" },new int[] {R.id.textView});
 
-        gridView.setAdapter(sa);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i) {
-                    default:
-                        break;
-                }
-            }
-        });
+    public void fetchFormData() {
+        mRowDataList.clear();
+        String[] rowTypeName = new String[]{"Total Income", "Room sold", "Average room price", "Cash", "Credit card"};
+        float[] yesterdayValue = new float[]{3600.0f, 10.0f, 360.0f, 720.0f, 2880.0f};
+        float[] monthlyValue = new float[]{48000.0f, 160.0f, 300.0f, 1920.0f, 46080.0f};
+        for (int i = 0; i < 5; i++) {
+            mRowDataList.add(new RecyclerListAdapter.rowData(rowTypeName[i], "",  "" + yesterdayValue[i], "" + monthlyValue[i]));
+        }
     }
 
 }

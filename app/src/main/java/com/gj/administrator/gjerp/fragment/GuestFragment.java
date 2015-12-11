@@ -28,13 +28,13 @@ public class GuestFragment extends BaseFragment {
     private static RecyclerView mRecyclerView;
     private static RecyclerListAdapter mAdapter;
 
-    private List<RecyclerListAdapter.GuestData> mGuestDataList;
+    private List<RecyclerListAdapter.rowData> mRowDataList;
     private int todayIncome;
     private int guestCount;
 
     public GuestFragment() {
         // Required empty public constructor
-        mGuestDataList = new ArrayList<>();
+        mRowDataList = new ArrayList<>();
     }
 
     public static GuestFragment getInstance(Context context) {
@@ -63,17 +63,16 @@ public class GuestFragment extends BaseFragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setHasFixedSize(true);
         fetchGuestList();
-        mAdapter = new RecyclerListAdapter(context, mGuestDataList);
+        mAdapter = new RecyclerListAdapter(context, mRowDataList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         TextView textView = (TextView) findViewById(R.id.guest_state_in_summary);
-        textView.setText(new String(
-                String.format(
+        textView.setText(String.format(
                         getString(R.string.guest_state_in_summary_textView),
                         guestCount,
                         todayIncome
                 )
-        ));
+        );
     }
 
     @Override
@@ -83,17 +82,18 @@ public class GuestFragment extends BaseFragment {
 
     public void fetchGuestList() {
         //TODO: replace placeholder data generator with proper operations.
+        mRowDataList.clear();
         int temp = 0;
         todayIncome = 0;
         guestCount = 0;
-        for (int i = 0; i < 10; i ++) {
+        for (int i = 0; i < 10; i++) {
             temp = 800 + i;
             String name = "Guest No." + i;
             String timeSpanPlaceHolder = "PlaceHolder";
             todayIncome += temp;
-            mGuestDataList.add(new RecyclerListAdapter.GuestData("" + temp, name, "" + temp, timeSpanPlaceHolder));
+            mRowDataList.add(new RecyclerListAdapter.rowData("" + temp, name, "" + temp, timeSpanPlaceHolder));
         }
-        guestCount = mGuestDataList.size();
+        guestCount = mRowDataList.size();
 
     }
 

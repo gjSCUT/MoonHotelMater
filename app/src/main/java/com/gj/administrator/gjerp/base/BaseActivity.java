@@ -25,7 +25,7 @@ import java.util.List;
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     protected Context mContext;
-    protected List<AsyncTask<Void, Void, Boolean>> mAsyncTasks = new ArrayList<AsyncTask<Void, Void, Boolean>>();
+    protected List<AsyncTask<Void, Void, Boolean>> mAsyncTasks = new ArrayList<>();
     protected ActionBar actionBar;
     protected BaseHandler.UnleakHandler handler ;
 
@@ -49,12 +49,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /** 清理异步处理事件 */
-    protected void clearAsyncTask() {
-        Iterator<AsyncTask<Void, Void, Boolean>> iterator = mAsyncTasks.iterator();
-        while (iterator.hasNext()) {
-            AsyncTask<Void, Void, Boolean> asyncTask = iterator.next();
-            if (asyncTask != null && !asyncTask.isCancelled()) {
-                asyncTask.cancel(true);
+    public void clearAsyncTask() {
+        for(AsyncTask task: mAsyncTasks){
+            if (task != null && !task.isCancelled()) {
+                task.cancel(true);
             }
         }
         mAsyncTasks.clear();
@@ -97,7 +95,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initEvents();
     /**
      * 处理消息
-     * @param msg
      */
     protected abstract void processMessage(Message msg);
 

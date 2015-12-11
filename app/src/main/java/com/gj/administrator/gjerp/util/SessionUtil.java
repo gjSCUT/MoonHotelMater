@@ -1,6 +1,7 @@
 package com.gj.administrator.gjerp.util;
 
-import com.gj.administrator.gjerp.vo.User;
+import com.gj.administrator.gjerp.domain.Hotel;
+import com.gj.administrator.gjerp.domain.User;
 
 import java.util.ArrayList;
 
@@ -8,15 +9,13 @@ import java.util.ArrayList;
  * Created by guojun on 2015/12/07
  */
 public class SessionUtil {
-    private static final String[] hotelnames={"GuangZhou hotel","ShangHai hotel"};
+    private static final String[] hotelnames = {"GuangZhou hotel", "ShangHai hotel"};
     private static User user;
-    private static String hotelname;
-    private static String dbname;
-    private static ArrayList<String> dblist;
+    private static Hotel hotel;
 
-    public static User getUser(){
-        if(user ==null)
-            user = new User();
+    public static User getUser() {
+        if (user == null)
+            user = new User(null);
         return user;
     }
 
@@ -28,27 +27,11 @@ public class SessionUtil {
         return hotelnames;
     }
 
-    public static String getHotelname() {
-        return hotelname;
+    public static Hotel getHotel() {
+        return hotel;
     }
 
     public static void setHotelname(String hotelname) {
-        SessionUtil.hotelname = hotelname;
-    }
-
-    public static String getDbname() {
-        return dbname;
-    }
-
-    public static void setDbname(String dbname) {
-        dbname = dbname;
-    }
-
-    public static ArrayList<String> getDblist() {
-        return dblist;
-    }
-
-    public static void setDblist(ArrayList<String> dblist) {
-        dblist = dblist;
+        SessionUtil.hotel = new Hotel(null, hotelname);
     }
 }

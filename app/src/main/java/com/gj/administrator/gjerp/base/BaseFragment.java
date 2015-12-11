@@ -20,7 +20,7 @@ import java.util.List;
  */
 public abstract class BaseFragment extends Fragment {
     protected View mView;
-    protected List<AsyncTask<Void, Void, Boolean>> mAsyncTasks = new ArrayList<AsyncTask<Void, Void, Boolean>>();
+    protected List<AsyncTask<Void, Void, Boolean>> mAsyncTasks = new ArrayList<>();
 
     public BaseFragment() {
         super();
@@ -52,11 +52,9 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void clearAsyncTask() {
-        Iterator<AsyncTask<Void, Void, Boolean>> iterator = mAsyncTasks.iterator();
-        while (iterator.hasNext()) {
-            AsyncTask<Void, Void, Boolean> asyncTask = iterator.next();
-            if (asyncTask != null && !asyncTask.isCancelled()) {
-                asyncTask.cancel(true);
+        for(AsyncTask task: mAsyncTasks){
+            if (task != null && !task.isCancelled()) {
+                task.cancel(true);
             }
         }
         mAsyncTasks.clear();

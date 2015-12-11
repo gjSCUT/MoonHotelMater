@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity{
         mNavName = (TextView) findViewById(R.id.nav_username);
         mHotelName = (TextView) findViewById(R.id.nav_hotelname);
         mNavName.setText(SessionUtil.getUser().getUsername());
-        mHotelName.setText(SessionUtil.getHotelname());
+        mHotelName.setText(SessionUtil.getHotel().getName());
     }
 
 

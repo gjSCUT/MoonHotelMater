@@ -75,10 +75,7 @@ public class BaseApplication extends Application {
         ActivityManage.init();
         LogUtil.setLogStatus(isDebugmode);
 
-        DaoMaster.OpenHelper helper = new DaoMaster.DevOpenHelper(this,"moon-hm", null);
-
-        DaoMaster.dropAllTables(helper.getWritableDatabase(), true);
-        DaoMaster.createAllTables(helper.getWritableDatabase(), true);
+        //TODO test mode,so delete all data
 
     }
 

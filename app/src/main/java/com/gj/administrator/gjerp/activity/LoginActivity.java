@@ -14,7 +14,6 @@ import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.util.LogUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
-import java.util.Date;
 
 /**
  * login activity

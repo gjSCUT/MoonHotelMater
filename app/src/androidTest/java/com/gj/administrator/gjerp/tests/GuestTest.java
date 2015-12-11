@@ -19,10 +19,11 @@ import de.greenrobot.dao.query.QueryBuilder;
  */
 public class GuestTest extends AndroidTestCase {
     Guest guest;
+    long id;
     GuestDao dao = BaseApplication.getDaoSession(getContext()).getGuestDao();
     public void testInsert() throws Exception{
         guest = new Guest(null, "Guo jun",1, "man","ID card","360728199410300098","15918770336",new Date(),null,null,null,null);
-        long id = dao.insert(guest);
+        id = dao.insert(guest);
         guest = dao.load(id);
         assertNotNull(guest);
         assertEquals(guest.getName(),"Guo jun");
@@ -36,8 +37,8 @@ public class GuestTest extends AndroidTestCase {
     }
 
     public void testUpdate() throws Exception{
-        guest = new Guest(1L, "Xiao Hong",1, "man","ID card","360728199410300098","15918770336",new Date(),null,null,null,null);
-        long id = dao.insertOrReplace(guest);
+        guest = new Guest(id, "Xiao Hong",1, "man","ID card","360728199410300098","15918770336",new Date(),null,null,null,null);
+        id = dao.insertOrReplace(guest);
         guest = dao.load(id);
         assertNotNull(guest);
         assertEquals(guest.getName(),"Guo jun");

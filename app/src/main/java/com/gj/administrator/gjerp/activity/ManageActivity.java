@@ -1,6 +1,5 @@
 package com.gj.administrator.gjerp.activity;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +16,6 @@ import com.gj.administrator.gjerp.dao.DaoMaster;
 import com.gj.administrator.gjerp.dao.DaoSession;
 import com.gj.administrator.gjerp.dao.GuestDao;
 import com.gj.administrator.gjerp.dao.RoomDao;
-import com.gj.administrator.gjerp.domain.Guest;
 import com.gj.administrator.gjerp.domain.Room;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -117,9 +115,7 @@ public class ManageActivity extends BaseActivity {
                     adapter.notifyDataSetChanged();
                 }
                 else {
-                    Room room = new Room(null,"8000");
-                    long id = roomDao.insert(room);
-                    room = roomDao.load(id);
+
                     /*Guest guest = new Guest(1L, "Guo jun",1, "man","ID card","360728199410300098","15918770336",new Date(),null,null,null,null);
                     long id = Dao.insert(guest);
                     guest = Dao.load(id);*/

@@ -54,6 +54,23 @@ public class RoomFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        fetchRoomArray();
+        switch (roomGroup.getCheckedRadioButtonId()) {
+            case R.id.room_style_num:
+                Fragment roomDisplayOrderedFragment = RoomDisplayOrderedFragment.getInstance(mRoomArray, context);
+                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                transaction.replace(R.id.room_container, roomDisplayOrderedFragment).commit();
+                break;
+            case R.id.room_style_type:
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     protected void initViews() {
         gridView = (GridView) findViewById(R.id.room_state_grid);
         roomGroup = (RadioGroup) findViewById(R.id.room_style_group);
@@ -61,15 +78,12 @@ public class RoomFragment extends BaseFragment {
 
     @Override
     protected void initEvents() {
+        Log.i(TAG, "Method initEvents is called.");
         if (gridView != null) {
             setupGridContent();
         }
         fetchRoomArray();
         roomGroup.check(R.id.room_style_num);
-        Fragment roomDisplayOrderedFragment = RoomDisplayOrderedFragment.getInstance(mRoomArray,context);
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.room_container, roomDisplayOrderedFragment)
-                .commit();
 
         roomGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
@@ -79,7 +93,7 @@ public class RoomFragment extends BaseFragment {
                 switch (checkedId) {
                     case R.id.room_style_num:
                         //TODO
-                        Fragment roomDisplayOrderedFragment = RoomDisplayOrderedFragment.getInstance(mRoomArray,context);
+                        Fragment roomDisplayOrderedFragment = RoomDisplayOrderedFragment.getInstance(mRoomArray, context);
                         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                         transaction.replace(R.id.room_container, roomDisplayOrderedFragment)
                                 .commit();
@@ -131,7 +145,7 @@ public class RoomFragment extends BaseFragment {
         //TODO: insert database operation?
         mRoomArray = new Room[100];
         int temp = 0;
-        for(int i = 0; i < mRoomArray.length; i++) {
+        for (int i = 0; i < mRoomArray.length; i++) {
             mRoomArray[i] = new Room();
             temp = 800 + i;
             mRoomArray[i].setNum("" + temp);
@@ -139,6 +153,7 @@ public class RoomFragment extends BaseFragment {
     }
 
     public void setCounts(int[] inputCounts) {
+        //TODO
         for (int i = 0; i < counts.length; i++) {
             counts[i] = inputCounts[i];
         }

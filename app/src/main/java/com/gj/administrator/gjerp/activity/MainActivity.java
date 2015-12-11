@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.gj.administrator.gjerp.R;
@@ -47,8 +48,9 @@ public class MainActivity extends BaseActivity{
         actionBar.setDisplayHomeAsUpEnabled(true);
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer);
         navigationView = (NavigationView) findViewById(R.id.main_navigation);
-        mNavName = (TextView) findViewById(R.id.nav_username);
-        mHotelName = (TextView) findViewById(R.id.nav_hotelname);
+        View headerLayout = navigationView.getHeaderView(0); // change introduced by changing support library from 23.0.x to 23.1.1
+        mNavName = (TextView) headerLayout.findViewById(R.id.nav_username);
+        mHotelName = (TextView) headerLayout.findViewById(R.id.nav_hotelname);
         mNavName.setText(SessionUtil.getUser().getUsername());
         mHotelName.setText(SessionUtil.getHotel().getName());
     }

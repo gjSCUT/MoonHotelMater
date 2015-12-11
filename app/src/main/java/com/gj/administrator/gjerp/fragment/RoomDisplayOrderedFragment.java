@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -74,7 +75,7 @@ public class RoomDisplayOrderedFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Activity activity = getActivity();
+        final Activity activity = getActivity();
         mRecyclerView = (RecyclerView) (activity.findViewById(R.id.room_display_ordered_recyclerView));
         mRecyclerView.setHasFixedSize(true);
         List<RecyclerAdapter.ListData> rmIdStrings = new ArrayList<>();
@@ -85,7 +86,7 @@ public class RoomDisplayOrderedFragment extends BaseFragment {
 
         mAdapter = new RecyclerAdapter(
                 context,
-                R.layout.grid_items,
+                R.layout.grid_items_room_grid,
                 rmIdStrings,
                 RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER,
                 false
@@ -94,11 +95,14 @@ public class RoomDisplayOrderedFragment extends BaseFragment {
             @Override
             public void OnImageClick(Boolean isChecked) {
                 //TODO
+                Snackbar.make(activity.findViewById(R.id.room_container), "A", Snackbar.LENGTH_LONG)
+                        .show();
             }
 
             @Override
             public void OnItemClick(int position) {
-
+                Snackbar.make(activity.findViewById(R.id.room_container), "A", Snackbar.LENGTH_LONG)
+                        .show();
             }
         });
         mRecyclerView.setAdapter(mAdapter);

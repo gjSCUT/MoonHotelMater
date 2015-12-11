@@ -41,7 +41,6 @@ public class GuestDao extends AbstractDao<Guest, Long> {
         public final static Property Country = new Property(10, String.class, "country", false, "COUNTRY");
         public final static Property Address = new Property(11, String.class, "address", false, "ADDRESS");
         public final static Property Email = new Property(12, String.class, "email", false, "EMAIL");
-        public final static Property Comment_id = new Property(13, Long.class, "comment_id", false, "COMMENT_ID");
     };
 
     private DaoSession daoSession;
@@ -72,8 +71,7 @@ public class GuestDao extends AbstractDao<Guest, Long> {
                 "\"CARD_ID\" TEXT," + // 9: card_id
                 "\"COUNTRY\" TEXT," + // 10: country
                 "\"ADDRESS\" TEXT," + // 11: address
-                "\"EMAIL\" TEXT," + // 12: email
-                "\"COMMENT_ID\" INTEGER);"); // 13: comment_id
+                "\"EMAIL\" TEXT);"); // 12: email
     }
 
     /** Drops the underlying database table. */
@@ -127,11 +125,6 @@ public class GuestDao extends AbstractDao<Guest, Long> {
         if (email != null) {
             stmt.bindString(13, email);
         }
- 
-        Long comment_id = entity.getComment_id();
-        if (comment_id != null) {
-            stmt.bindLong(14, comment_id);
-        }
     }
 
     @Override
@@ -162,8 +155,7 @@ public class GuestDao extends AbstractDao<Guest, Long> {
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // card_id
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // country
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // address
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // email
-            cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13) // comment_id
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // email
         );
         return entity;
     }
@@ -184,7 +176,6 @@ public class GuestDao extends AbstractDao<Guest, Long> {
         entity.setCountry(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setAddress(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
         entity.setEmail(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setComment_id(cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13));
      }
     
     /** @inheritdoc */

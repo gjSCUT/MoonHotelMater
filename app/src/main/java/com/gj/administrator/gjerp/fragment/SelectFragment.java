@@ -11,7 +11,9 @@ import android.widget.ListView;
 
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.adapter.DrawableAdapter;
+import com.gj.administrator.gjerp.base.BaseApplication;
 import com.gj.administrator.gjerp.base.BaseFragment;
+import com.gj.administrator.gjerp.domain.Hotel;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
 /**
@@ -59,7 +61,8 @@ public class SelectFragment extends BaseFragment{
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    SessionUtil.setHotelname(SessionUtil.getHotelnames()[i]);
+                    Hotel hotel = BaseApplication.getDaoSession(context).getHotelDao().load((long)i+1);
+                    SessionUtil.setHotel(hotel);
 
                     SharedPreferences preferences = context.getSharedPreferences("gjerp",context.MODE_PRIVATE);
                     preferences.edit().putString("loginHotel", String.valueOf(i));

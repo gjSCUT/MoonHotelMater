@@ -7,7 +7,7 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context=".LoginActivity">
+                tools:context=".SignUpActivity">
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -18,29 +18,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:columnCount="4"
-            android:padding="5dp"
-            android:rowCount="4">
-
+            android:padding="5dp">
 
             <TextView
-                android:id="@+id/loginTxHotel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnSpan="1"
-                android:text="hotels" />
-
-
-            <Spinner
-                android:id="@+id/loginSpHotel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_columnSpan="3"
-                android:ems="10" />
-
-            <TextView
-                android:id="@+id/loginTxUsr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="1"
@@ -55,7 +35,6 @@
                 android:ems="10" />
 
             <TextView
-                android:id="@+id/loginTxPwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="1"
@@ -70,6 +49,66 @@
                 android:ems="10"
                 android:inputType="textPassword" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="1"
+                android:text="real name" />
+
+            <EditText
+                android:id="@+id/loginEdName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_columnSpan="3"
+                android:ems="10" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="1"
+                android:text="gender" />
+
+            <EditText
+                android:id="@+id/loginEdGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_columnSpan="3"
+                android:ems="10" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="1"
+                android:text="age" />
+
+            <EditText
+                android:id="@+id/loginEdAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_columnSpan="3"
+                android:ems="10" />
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="1"
+                android:text="telphone" />
+
+            <EditText
+                android:id="@+id/loginEdPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_columnSpan="3"
+                android:ems="10" />
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -79,28 +118,6 @@
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/loginBtnClr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/md_white"
-                    android:background="@drawable/button_shape"
-                    android:layout_weight="1"
-                    android:text="clear" />
-
-
-                <Button
-                    android:id="@+id/loginBtnUp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/md_white"
-                    android:background="@drawable/button_shape"
-                    android:layout_weight="1"
-                    android:text="sign up" />
-
-                <Button
                     android:id="@+id/loginBtIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,7 +125,7 @@
                     android:background="@drawable/button_shape"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="sign in" />
+                    android:text="sure" />
             </LinearLayout>
         </GridLayout>
 

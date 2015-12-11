@@ -1,10 +1,8 @@
 package com.gj.administrator.gjerp.domain;
 
-import java.util.List;
 import com.gj.administrator.gjerp.dao.DaoSession;
 import de.greenrobot.dao.DaoException;
 
-import com.gj.administrator.gjerp.dao.CommentDao;
 import com.gj.administrator.gjerp.dao.GuestDao;
 import com.gj.administrator.gjerp.dao.UserDao;
 
@@ -34,7 +32,6 @@ public class Guest {
     private String country;
     private String address;
     private String email;
-    private Long comment_id;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -45,9 +42,11 @@ public class Guest {
     private User user;
     private Long user__resolvedKey;
 
-    private List<Comment> commentList;
 
     // KEEP FIELDS - put your custom fields here
+    public final static int NORMAL = 0;
+    public final static int GROUP = 0;
+    public final static int VIP = 0;
     // KEEP FIELDS END
 
     public Guest() {
@@ -57,7 +56,7 @@ public class Guest {
         this.id = id;
     }
 
-    public Guest(Long id, String name, int guest_type, String gender, String telphone, int age, java.util.Date create_time, Long user_id, String card_type, String card_id, String country, String address, String email, Long comment_id) {
+    public Guest(Long id, String name, int guest_type, String gender, String telphone, int age, java.util.Date create_time, Long user_id, String card_type, String card_id, String country, String address, String email) {
         this.id = id;
         this.name = name;
         this.guest_type = guest_type;
@@ -71,7 +70,6 @@ public class Guest {
         this.country = country;
         this.address = address;
         this.email = email;
-        this.comment_id = comment_id;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -192,14 +190,6 @@ public class Guest {
         this.email = email;
     }
 
-    public Long getComment_id() {
-        return comment_id;
-    }
-
-    public void setComment_id(Long comment_id) {
-        this.comment_id = comment_id;
-    }
-
     /** To-one relationship, resolved on first access. */
     public User getUser() {
         Long __key = this.user_id;
@@ -223,28 +213,6 @@ public class Guest {
             user_id = user == null ? null : user.getId();
             user__resolvedKey = user_id;
         }
-    }
-
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public List<Comment> getCommentList() {
-        if (commentList == null) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            CommentDao targetDao = daoSession.getCommentDao();
-            List<Comment> commentListNew = targetDao._queryGuest_CommentList(id);
-            synchronized (this) {
-                if(commentList == null) {
-                    commentList = commentListNew;
-                }
-            }
-        }
-        return commentList;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetCommentList() {
-        commentList = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

@@ -18,7 +18,7 @@ import com.gj.administrator.gjerp.base.BaseFragment;
  * Created by guojun on 2015/12/07
  */
 public class ManageFragment extends BaseFragment{
-    private static final String[] items = {"Rooms Manager","Travels Manager","Members Manager","Employees Manager"};
+    private static final String[] items = {"Rooms Manager","Travels Manager","Guest Manager","Employees Manager"};
     protected Context context;
     private ListView listView;
 

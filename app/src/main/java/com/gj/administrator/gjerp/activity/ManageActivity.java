@@ -12,27 +12,28 @@ import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.adapter.RecyclerAdapter;
 import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.base.BaseApplication;
-import com.gj.administrator.gjerp.dao.DaoMaster;
-import com.gj.administrator.gjerp.dao.DaoSession;
+import com.gj.administrator.gjerp.dao.EmployeeDao;
 import com.gj.administrator.gjerp.dao.GuestDao;
 import com.gj.administrator.gjerp.dao.RoomDao;
+import com.gj.administrator.gjerp.domain.Employee;
+import com.gj.administrator.gjerp.domain.Guest;
 import com.gj.administrator.gjerp.domain.Room;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import de.greenrobot.dao.AbstractDao;
 import io.github.codefalling.recyclerviewswipedismiss.SwipeDismissRecyclerViewTouchListener;
 
 
 public class ManageActivity extends BaseActivity {
     RecyclerView recyclerView;
     FloatingActionButton fab;
+    RecyclerAdapter adapter;
     private int type;
     private GuestDao guestDao;
     private RoomDao roomDao;
+    private EmployeeDao employeeDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,16 @@ public class ManageActivity extends BaseActivity {
         type = this.getIntent().getExtras().getInt("type");
         switch (type){
             case 0:
-            case 1:
-            case 2:
-            case 3:
                 roomDao = BaseApplication.getDaoSession(this).getRoomDao();
+                break;
+            case 1:
+                guestDao = BaseApplication.getDaoSession(this).getGuestDao();
+                break;
+            case 2:
+                guestDao = BaseApplication.getDaoSession(this).getGuestDao();
+                break;
+            case 3:
+                employeeDao = BaseApplication.getDaoSession(this).getEmployeeDao();
                 break;
         }
         setContentView(R.layout.activity_manage);
@@ -62,11 +69,32 @@ public class ManageActivity extends BaseActivity {
 
     @Override
     protected void initEvents() {
+        //init data
         List<RecyclerAdapter.ListData> data = new ArrayList<>();
-        for (int i = 0; i < 100; i++){
-            data.add(new RecyclerAdapter.ListData("item" + i,"i",null));
+        switch (type){
+            case 0:
+                List<Room> roomList = roomDao.loadAll();
+                for (Room item:roomList){
+                    data.add(new RecyclerAdapter.ListData(item.getNum(),item.getNum().substring(0, 1),null));
+                }
+                break;
+            case 1:
+                //TODO
+            case 2:
+                List<Guest> guestList = guestDao.loadAll();
+                for (Guest item:guestList){
+                    data.add(new RecyclerAdapter.ListData(item.getName(),item.getName().substring(0,1),null));
+                }
+                break;
+            case 3:
+                List<Employee> employeeList = employeeDao.loadAll();
+                for (Employee item:employeeList){
+                    data.add(new RecyclerAdapter.ListData(item.getName(),item.getName().substring(0,1),null));
+                }
+                break;
         }
-        final RecyclerAdapter adapter = new RecyclerAdapter(
+
+        adapter = new RecyclerAdapter(
                 mContext,
                 R.layout.dp40_list_items,
                 data,
@@ -76,12 +104,16 @@ public class ManageActivity extends BaseActivity {
         adapter.setOnClickListener(new RecyclerAdapter.OnClickListener() {
             @Override
             public void OnImageClick(Boolean isChecked) {
-                //TODO
+                if(!adapter.getCheckedList().isEmpty()) {
+                    fab.setImageResource(R.mipmap.ic_delete);
+                }
+                else{
+                    fab.setImageResource(R.mipmap.ic_add_white);
+                }
             }
-
             @Override
             public void OnItemClick(int position) {
-                startActivity(ManageItemActivity.class);
+                startActivity(ManageRoomActivity.class);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -95,35 +127,93 @@ public class ManageActivity extends BaseActivity {
 
                     @Override
                     public void onDismiss(View view) {
-                        int id = recyclerView.getChildAdapterPosition(view);
-                        adapter.getDataList().remove(id);
+                        long id = recyclerView.getChildAdapterPosition(view);
+                        removeItem(id);
                         adapter.notifyDataSetChanged();
-
-
                     }
                 })
                 .setIsVertical(false)
                 .create();
-
         recyclerView.setOnTouchListener(listener);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!adapter.getCheckedList().isEmpty()){
-                    adapter.removeChecked();
+                if (!adapter.getCheckedList().isEmpty()) {
+                    fab.setImageResource(R.mipmap.ic_add_white);
+                    for (int item : adapter.getCheckedList())
+                        removeItem((long) item);
+                    adapter.getCheckedList().clear();
                     adapter.notifyDataSetChanged();
-                }
-                else {
+                } else {
 
-                    /*Guest guest = new Guest(1L, "Guo jun",1, "man","ID card","360728199410300098","15918770336",new Date(),null,null,null,null);
-                    long id = Dao.insert(guest);
-                    guest = Dao.load(id);*/
-                    //startActivity(ManageItemActivity.class);
+                    // /startActivity(ManageRoomActivity.class);
                 }
             }
         });
     }
+
+    private void startUpdateActivity(Long id){
+        switch (type){
+            case 0:
+                roomDao.deleteByKey(id);
+                break;
+            case 1:
+                //TODO
+                break;
+            case 2:
+                guestDao.deleteByKey(id);
+                break;
+            case 3:
+                employeeDao.deleteByKey(id);
+                break;
+        }
+        adapter.getDataList().remove(id);
+    }
+
+    private void removeItem(Long id){
+        switch (type){
+            case 0:
+                roomDao.deleteByKey(id);
+                break;
+            case 1:
+                //TODO
+                break;
+            case 2:
+                guestDao.deleteByKey(id);
+                break;
+            case 3:
+                employeeDao.deleteByKey(id);
+                break;
+        }
+        adapter.getDataList().remove(id);
+    }
+
+    private void updateItem(Object object){
+
+        switch (type){
+            case 0:
+                Room room = (Room) object;
+                roomDao.insertOrReplace(room);
+                adapter.getDataList().add(new RecyclerAdapter.ListData(room.getNum(),room.getNum(),null));
+                break;
+            case 1:
+                //TODO
+                break;
+            case 2:
+                Guest guest = (Guest) object;
+                guestDao.insertOrReplace(guest);
+                adapter.getDataList().add(new RecyclerAdapter.ListData(guest.getName(),guest.getName(),null));
+                break;
+            case 3:
+                Employee employee = (Employee) object;
+                employeeDao.insertOrReplace((Employee) object);
+                adapter.getDataList().add(new RecyclerAdapter.ListData(employee.getName(),employee.getName(),null));
+                break;
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 
     @Override
     protected void processMessage(Message msg) {

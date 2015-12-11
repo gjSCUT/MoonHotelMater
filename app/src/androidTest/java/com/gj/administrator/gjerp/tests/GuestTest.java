@@ -21,8 +21,9 @@ public class GuestTest extends AndroidTestCase {
     Guest guest;
     long id;
     GuestDao dao = BaseApplication.getDaoSession(getContext()).getGuestDao();
+
     public void testInsert() throws Exception{
-        guest = new Guest(null, "Guo jun",1, "man","ID card","360728199410300098","15918770336",new Date(),null,null,null,null);
+        guest = new Guest(null, "Guo jun",1, "man","ID card",21,new Date(),null,"360728199410300098","15918770336",null,null,null,null);
         id = dao.insert(guest);
         guest = dao.load(id);
         assertNotNull(guest);
@@ -31,17 +32,17 @@ public class GuestTest extends AndroidTestCase {
 
     public void testQuery() throws Exception{
         QueryBuilder<Guest> qb = dao.queryBuilder();
-        qb.where(GuestDao.Properties.Id.eq(guest.getId()));
+        qb.where(GuestDao.Properties.Id.eq(id));
         qb.buildCount().count();
         assertTrue(qb.buildCount().count() > 0);
     }
 
     public void testUpdate() throws Exception{
-        guest = new Guest(id, "Xiao Hong",1, "man","ID card","360728199410300098","15918770336",new Date(),null,null,null,null);
+        guest = new Guest(id, "Xiao Hong",1, "man","ID card",21,new Date(),null,"360728199410300098","15918770336",null,null,null,null);
         id = dao.insertOrReplace(guest);
         guest = dao.load(id);
         assertNotNull(guest);
-        assertEquals(guest.getName(),"Guo jun");
+        assertEquals(guest.getName(),"Xiao Hong");
     }
 
     public void testRemove() throws Exception{

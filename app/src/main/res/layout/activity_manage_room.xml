@@ -1,74 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context=".LoginActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".ManageRoomActivity">
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
         <GridLayout
-            android:id="@+id/loginGridLayout"
+            android:id="@+id/GridLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:columnCount="4"
-            android:padding="5dp"
-            android:rowCount="4">
-
+            android:padding="5dp">
 
             <TextView
-                android:id="@+id/loginTxHotel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="1"
-                android:text="hotels" />
+                android:text="Room num" />
 
+            <EditText
+                android:id="@+id/room_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_columnSpan="3"
+                android:ems="10" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="1"
+                android:text="Room type" />
 
             <Spinner
-                android:id="@+id/loginSpHotel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_columnSpan="3"
-                android:ems="10" />
-
-            <TextView
-                android:id="@+id/loginTxUsr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnSpan="1"
-                android:text="username" />
-
-            <EditText
-                android:id="@+id/loginEdUsr"
+                android:id="@+id/room_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_columnSpan="3"
                 android:ems="10" />
 
-            <TextView
-                android:id="@+id/loginTxPwd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnSpan="1"
-                android:text="password" />
-
-            <EditText
-                android:id="@+id/loginEdPwd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_columnSpan="3"
-                android:ems="10"
-                android:inputType="textPassword" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -79,36 +58,24 @@
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/loginBtnClr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/md_white"
-                    android:background="@drawable/button_shape"
-                    android:layout_weight="1"
-                    android:text="clear" />
-
-
-                <Button
-                    android:id="@+id/loginBtnUp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/md_white"
-                    android:background="@drawable/button_shape"
-                    android:layout_weight="1"
-                    android:text="sign up" />
-
-                <Button
-                    android:id="@+id/loginBtIn"
+                    android:id="@+id/addRoomTypeBt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/md_white"
                     android:background="@drawable/button_shape"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="sign in" />
+                    android:text="Add Room Type" />
+
+                <Button
+                    android:id="@+id/addRoomBt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/md_white"
+                    android:background="@drawable/button_shape"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="Sure Add Room" />
             </LinearLayout>
         </GridLayout>
 

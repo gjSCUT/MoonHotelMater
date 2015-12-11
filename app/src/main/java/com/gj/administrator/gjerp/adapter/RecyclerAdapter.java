@@ -34,12 +34,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private OnClickListener onClickListener;
     // list of data items
     private List<ListData> dataList;
-    private List<ListData> checkedList;
+    private List<Integer> checkedList;
 
-    public List<ListData> getCheckedList() {
+    public List<Integer> getCheckedList() {
         return checkedList;
     }
-
     public List<ListData> getDataList() {
         return dataList;
     }
@@ -145,6 +144,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     private void updateCheckedState(ViewHolder holder, ListData item) {
         if (canCheckView && item.isChecked) {
+            checkedList.add(holder.position);
             if(holder.imageView!=null)
                 holder.imageView.setImageDrawable(mDrawableBuilder.build(" ", 0xff616161));
             if(holder.view!=null)
@@ -153,6 +153,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 holder.checkIcon.setVisibility(View.VISIBLE);
         }
         else {
+            checkedList.remove((Integer)holder.position);
             int color;
             if(item.isRandomColor){
                 color = mColorGenerator.getRandomColor();
@@ -169,13 +170,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             if(holder.checkIcon!=null)
                 holder.checkIcon.setVisibility(View.GONE);
         }
-    }
-
-    public void removeChecked(){
-        for(ListData data:checkedList){
-            dataList.remove(data);
-        }
-        checkedList.clear();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

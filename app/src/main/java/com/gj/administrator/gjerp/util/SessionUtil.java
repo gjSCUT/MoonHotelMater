@@ -13,6 +13,10 @@ public class SessionUtil {
     private static User user;
     private static Hotel hotel;
 
+    public static String[] getHotelnames() {
+        return hotelnames;
+    }
+
     public static User getUser() {
         if (user == null)
             user = new User(null);
@@ -23,15 +27,11 @@ public class SessionUtil {
         SessionUtil.user = user;
     }
 
-    public static String[] getHotelnames() {
-        return hotelnames;
-    }
-
     public static Hotel getHotel() {
         return hotel;
     }
 
-    public static void setHotelname(String hotelname) {
-        SessionUtil.hotel = new Hotel(null, hotelname);
+    public static void setHotel(Hotel hotel) {
+        SessionUtil.hotel = hotel;
     }
 }

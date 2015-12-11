@@ -28,8 +28,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.SignUpActivity"
+            android:label="Sign Up"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".activity.MainActivity"
-            android:label="@string/company_name"
+            android:label="Home"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -47,7 +52,7 @@
             android:screenOrientation="portrait"  >
         </activity>
         <activity
-            android:name=".activity.ManageItemActivity"
+            android:name=".activity.ManageRoomActivity"
             android:label="Item"
             android:screenOrientation="portrait"  >
         </activity>

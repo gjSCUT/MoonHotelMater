@@ -42,7 +42,7 @@ public class BaseApplication extends Application {
      */
     public static DaoMaster getDaoMaster(Context context) {
         if (daoMaster == null) {
-            DaoMaster.OpenHelper helper = new DaoMaster.DevOpenHelper(context,"moon-hm", null);
+            DaoMaster.OpenHelper helper = new DaoMaster.DevOpenHelper(context,"testdb", null);
             daoMaster = new DaoMaster(helper.getWritableDatabase());
             daoSession = daoMaster.newSession();
         }

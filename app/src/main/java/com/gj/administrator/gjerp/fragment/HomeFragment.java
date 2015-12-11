@@ -51,7 +51,7 @@ public class HomeFragment extends BaseFragment{
         fragments = new ArrayList<>();
         fragments.add(RoomFragment.getInstance(context));
         fragments.add(ManageFragment.getInstance(context));
-        fragments.add(AnalyzePiechartFragment.getInstance(context));
+        fragments.add(GuestFragment.getInstance(context));
         mPagerAdapter = new TabPagerAdapter(this.getChildFragmentManager(), fragments,titles);
         mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
         mViewPager.setAdapter(mPagerAdapter);

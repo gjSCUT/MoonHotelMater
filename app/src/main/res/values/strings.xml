@@ -19,6 +19,12 @@
     <string name="room_type_total">全部\n%1$d（间）</string>
     <string name="room_string_model">%1$d（间）</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="guest_state_in">在住报告</string>
+    <string name="guest_state_left_today">今日离店</string>
+    <string name="guest_state_left_yesterday">昨日离店</string>
+    <string name="guest_state_in_summary_textView">在住间数：%1$d间  房价合计：%2$d元</string>
+    <string name="guest_state_room_id">Room</string>
+    <string name="guest_state_name">Name</string>
+    <string name="guest_state_income">Income</string>
+    <string name="guest_state_time_span">Span</string>
 </resources>

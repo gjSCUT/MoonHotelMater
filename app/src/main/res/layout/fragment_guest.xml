@@ -56,34 +56,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <TextView
-            android:layout_width="48dp"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
             android:gravity="center_vertical|start"
             android:text="@string/guest_state_room_id" />
 
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="76dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
             android:gravity="center_vertical|end"
             android:text="@string/guest_state_name"/>
 
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="76dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
             android:gravity="center_vertical|end"
             android:text="@string/guest_state_income"/>
 
         <TextView
-            android:layout_width="96dp"
+            android:layout_width="112dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
             android:gravity="center_vertical|end"
             android:text="@string/guest_state_time_span"/>
 

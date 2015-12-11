@@ -19,6 +19,12 @@
     <string name="room_type_total">全部\n%1$d（间）</string>
     <string name="room_string_model">%1$d（间）</string>
 
+    <string name="form_current">Current</string>
+    <string name="form_history">History</string>
+    <string name="form_type">Type</string>
+    <string name="form_yesterday_value">Yesterday</string>
+    <string name="form_month_value">Monthly</string>
+
     <string name="guest_state_in">在住报告</string>
     <string name="guest_state_left_today">今日离店</string>
     <string name="guest_state_left_yesterday">昨日离店</string>

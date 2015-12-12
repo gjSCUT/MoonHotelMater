@@ -10,7 +10,11 @@ import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
+import com.gj.administrator.gjerp.domain.Schedule;
+import com.gj.administrator.gjerp.domain.Task;
 import com.gj.administrator.gjerp.domain.User;
 
 import com.gj.administrator.gjerp.domain.Employee;
@@ -30,20 +34,20 @@ public class EmployeeDao extends AbstractDao<Employee, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property Employee_type = new Property(2, int.class, "employee_type", false, "EMPLOYEE_TYPE");
-        public final static Property Gender = new Property(3, String.class, "gender", false, "GENDER");
-        public final static Property Telphone = new Property(4, String.class, "telphone", false, "TELPHONE");
-        public final static Property Email = new Property(5, String.class, "email", false, "EMAIL");
-        public final static Property Create_time = new Property(6, java.util.Date.class, "create_time", false, "CREATE_TIME");
+        public final static Property Employee_type = new Property(2, String.class, "employee_type", false, "EMPLOYEE_TYPE");
+        public final static Property Telphone = new Property(3, String.class, "telphone", false, "TELPHONE");
+        public final static Property Email = new Property(4, String.class, "email", false, "EMAIL");
+        public final static Property Create_time = new Property(5, java.util.Date.class, "create_time", false, "CREATE_TIME");
+        public final static Property Gender = new Property(6, String.class, "gender", false, "GENDER");
         public final static Property User_id = new Property(7, Long.class, "user_id", false, "USER_ID");
-        public final static Property Card_type = new Property(8, String.class, "card_type", false, "CARD_TYPE");
-        public final static Property Card_id = new Property(9, String.class, "card_id", false, "CARD_ID");
-        public final static Property Country = new Property(10, String.class, "country", false, "COUNTRY");
-        public final static Property Address = new Property(11, String.class, "address", false, "ADDRESS");
+        public final static Property Task_id = new Property(8, Long.class, "task_id", false, "TASK_ID");
+        public final static Property Schedule_id = new Property(9, Long.class, "schedule_id", false, "SCHEDULE_ID");
     };
 
     private DaoSession daoSession;
 
+    private Query<Employee> task_EmployeesQuery;
+    private Query<Employee> schedule_EmployeesQuery;
 
     public EmployeeDao(DaoConfig config) {
         super(config);
@@ -60,16 +64,14 @@ public class EmployeeDao extends AbstractDao<Employee, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"EMPLOYEE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"NAME\" TEXT NOT NULL ," + // 1: name
-                "\"EMPLOYEE_TYPE\" INTEGER NOT NULL ," + // 2: employee_type
-                "\"GENDER\" TEXT NOT NULL ," + // 3: gender
-                "\"TELPHONE\" TEXT NOT NULL ," + // 4: telphone
-                "\"EMAIL\" TEXT NOT NULL ," + // 5: email
-                "\"CREATE_TIME\" INTEGER NOT NULL ," + // 6: create_time
+                "\"EMPLOYEE_TYPE\" TEXT NOT NULL ," + // 2: employee_type
+                "\"TELPHONE\" TEXT NOT NULL ," + // 3: telphone
+                "\"EMAIL\" TEXT NOT NULL ," + // 4: email
+                "\"CREATE_TIME\" INTEGER NOT NULL ," + // 5: create_time
+                "\"GENDER\" TEXT NOT NULL ," + // 6: gender
                 "\"USER_ID\" INTEGER," + // 7: user_id
-                "\"CARD_TYPE\" TEXT," + // 8: card_type
-                "\"CARD_ID\" TEXT," + // 9: card_id
-                "\"COUNTRY\" TEXT," + // 10: country
-                "\"ADDRESS\" TEXT);"); // 11: address
+                "\"TASK_ID\" INTEGER," + // 8: task_id
+                "\"SCHEDULE_ID\" INTEGER);"); // 9: schedule_id
     }
 
     /** Drops the underlying database table. */
@@ -88,35 +90,25 @@ public class EmployeeDao extends AbstractDao<Employee, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getName());
-        stmt.bindLong(3, entity.getEmployee_type());
-        stmt.bindString(4, entity.getGender());
-        stmt.bindString(5, entity.getTelphone());
-        stmt.bindString(6, entity.getEmail());
-        stmt.bindLong(7, entity.getCreate_time().getTime());
+        stmt.bindString(3, entity.getEmployee_type());
+        stmt.bindString(4, entity.getTelphone());
+        stmt.bindString(5, entity.getEmail());
+        stmt.bindLong(6, entity.getCreate_time().getTime());
+        stmt.bindString(7, entity.getGender());
  
         Long user_id = entity.getUser_id();
         if (user_id != null) {
             stmt.bindLong(8, user_id);
         }
  
-        String card_type = entity.getCard_type();
-        if (card_type != null) {
-            stmt.bindString(9, card_type);
+        Long task_id = entity.getTask_id();
+        if (task_id != null) {
+            stmt.bindLong(9, task_id);
         }
  
-        String card_id = entity.getCard_id();
-        if (card_id != null) {
-            stmt.bindString(10, card_id);
-        }
- 
-        String country = entity.getCountry();
-        if (country != null) {
-            stmt.bindString(11, country);
-        }
- 
-        String address = entity.getAddress();
-        if (address != null) {
-            stmt.bindString(12, address);
+        Long schedule_id = entity.getSchedule_id();
+        if (schedule_id != null) {
+            stmt.bindLong(10, schedule_id);
         }
     }
 
@@ -138,16 +130,14 @@ public class EmployeeDao extends AbstractDao<Employee, Long> {
         Employee entity = new Employee( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // name
-            cursor.getInt(offset + 2), // employee_type
-            cursor.getString(offset + 3), // gender
-            cursor.getString(offset + 4), // telphone
-            cursor.getString(offset + 5), // email
-            new java.util.Date(cursor.getLong(offset + 6)), // create_time
+            cursor.getString(offset + 2), // employee_type
+            cursor.getString(offset + 3), // telphone
+            cursor.getString(offset + 4), // email
+            new java.util.Date(cursor.getLong(offset + 5)), // create_time
+            cursor.getString(offset + 6), // gender
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // user_id
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // card_type
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // card_id
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // country
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // address
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // task_id
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // schedule_id
         );
         return entity;
     }
@@ -157,16 +147,14 @@ public class EmployeeDao extends AbstractDao<Employee, Long> {
     public void readEntity(Cursor cursor, Employee entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.getString(offset + 1));
-        entity.setEmployee_type(cursor.getInt(offset + 2));
-        entity.setGender(cursor.getString(offset + 3));
-        entity.setTelphone(cursor.getString(offset + 4));
-        entity.setEmail(cursor.getString(offset + 5));
-        entity.setCreate_time(new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setEmployee_type(cursor.getString(offset + 2));
+        entity.setTelphone(cursor.getString(offset + 3));
+        entity.setEmail(cursor.getString(offset + 4));
+        entity.setCreate_time(new java.util.Date(cursor.getLong(offset + 5)));
+        entity.setGender(cursor.getString(offset + 6));
         entity.setUser_id(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setCard_type(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setCard_id(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setCountry(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setAddress(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setTask_id(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setSchedule_id(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */
@@ -192,6 +180,36 @@ public class EmployeeDao extends AbstractDao<Employee, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "employees" to-many relationship of Task. */
+    public List<Employee> _queryTask_Employees(Long task_id) {
+        synchronized (this) {
+            if (task_EmployeesQuery == null) {
+                QueryBuilder<Employee> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Task_id.eq(null));
+                queryBuilder.orderRaw("T.'NAME' DESC");
+                task_EmployeesQuery = queryBuilder.build();
+            }
+        }
+        Query<Employee> query = task_EmployeesQuery.forCurrentThread();
+        query.setParameter(0, task_id);
+        return query.list();
+    }
+
+    /** Internal query to resolve the "employees" to-many relationship of Schedule. */
+    public List<Employee> _querySchedule_Employees(Long schedule_id) {
+        synchronized (this) {
+            if (schedule_EmployeesQuery == null) {
+                QueryBuilder<Employee> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Schedule_id.eq(null));
+                queryBuilder.orderRaw("T.'NAME' DESC");
+                schedule_EmployeesQuery = queryBuilder.build();
+            }
+        }
+        Query<Employee> query = schedule_EmployeesQuery.forCurrentThread();
+        query.setParameter(0, schedule_id);
+        return query.list();
+    }
+
     private String selectDeep;
 
     protected String getSelectDeep() {
@@ -200,8 +218,14 @@ public class EmployeeDao extends AbstractDao<Employee, Long> {
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
             SqlUtils.appendColumns(builder, "T0", daoSession.getUserDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T1", daoSession.getTaskDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T2", daoSession.getScheduleDao().getAllColumns());
             builder.append(" FROM EMPLOYEE T");
             builder.append(" LEFT JOIN USER T0 ON T.\"USER_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN TASK T1 ON T.\"TASK_ID\"=T1.\"_id\"");
+            builder.append(" LEFT JOIN SCHEDULE T2 ON T.\"SCHEDULE_ID\"=T2.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -214,6 +238,14 @@ public class EmployeeDao extends AbstractDao<Employee, Long> {
 
         User user = loadCurrentOther(daoSession.getUserDao(), cursor, offset);
         entity.setUser(user);
+        offset += daoSession.getUserDao().getAllColumns().length;
+
+        Task task = loadCurrentOther(daoSession.getTaskDao(), cursor, offset);
+        entity.setTask(task);
+        offset += daoSession.getTaskDao().getAllColumns().length;
+
+        Schedule schedule = loadCurrentOther(daoSession.getScheduleDao(), cursor, offset);
+        entity.setSchedule(schedule);
 
         return entity;    
     }

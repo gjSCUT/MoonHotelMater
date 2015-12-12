@@ -62,12 +62,12 @@ public class SignUpActivity extends BaseActivity {
                         null,
                         loginEdName.getText().toString(),
                         Guest.NORMAL,
-                        loginEdGender.getText().toString(),
                         loginEdPhone.getText().toString(),
-                        Integer.parseInt(loginEdAge.getText().toString()),
+                        "gjscut@qq.com",
                         new Date(),
-                        userId,
-                        null,null,null,null,null);
+                        loginEdGender.getText().toString(),
+                        Integer.parseInt(loginEdAge.getText().toString()),
+                        userId);
                 daoSession.getGuestDao().insert(guest);
                 SessionUtil.getUser().setUsername(loginEdUsr.getText().toString());
                 SessionUtil.getUser().setPassword(loginEdPwd.getText().toString());

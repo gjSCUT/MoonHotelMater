@@ -2,12 +2,11 @@
 
 buildscript {
     repositories {
-        jcenter()
-        mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url 'http://dl.bintray.com/amulyakhare/maven' }
+        mavenCentral()
+        jcenter()
         maven { url "https://jitpack.io" }
-        maven { url 'http://maven.oschina.net/content/groups/public/'}
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 
 
@@ -18,11 +17,10 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
-        mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url 'http://dl.bintray.com/amulyakhare/maven' }
+        mavenCentral()
+        jcenter()
         maven { url "https://jitpack.io" }
-        maven { url 'http://maven.oschina.net/content/groups/public/'}
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 }

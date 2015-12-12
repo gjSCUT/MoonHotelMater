@@ -18,20 +18,18 @@ public class Guest {
     private Long id;
     /** Not-null value. */
     private String name;
-    private int guest_type;
     /** Not-null value. */
-    private String gender;
+    private String guest_type;
     /** Not-null value. */
     private String telphone;
-    private int age;
+    /** Not-null value. */
+    private String email;
     /** Not-null value. */
     private java.util.Date create_time;
+    /** Not-null value. */
+    private String gender;
+    private int age;
     private Long user_id;
-    private String card_type;
-    private String card_id;
-    private String country;
-    private String address;
-    private String email;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -44,9 +42,9 @@ public class Guest {
 
 
     // KEEP FIELDS - put your custom fields here
-    public final static int NORMAL = 0;
-    public final static int GROUP = 0;
-    public final static int VIP = 0;
+    public final static String NORMAL = "Normal";
+    public final static String GROUP = "Group";
+    public final static String VIP = "VIP";
     // KEEP FIELDS END
 
     public Guest() {
@@ -56,20 +54,16 @@ public class Guest {
         this.id = id;
     }
 
-    public Guest(Long id, String name, int guest_type, String gender, String telphone, int age, java.util.Date create_time, Long user_id, String card_type, String card_id, String country, String address, String email) {
+    public Guest(Long id, String name, String guest_type, String telphone, String email, java.util.Date create_time, String gender, int age, Long user_id) {
         this.id = id;
         this.name = name;
         this.guest_type = guest_type;
-        this.gender = gender;
         this.telphone = telphone;
-        this.age = age;
-        this.create_time = create_time;
-        this.user_id = user_id;
-        this.card_type = card_type;
-        this.card_id = card_id;
-        this.country = country;
-        this.address = address;
         this.email = email;
+        this.create_time = create_time;
+        this.gender = gender;
+        this.age = age;
+        this.user_id = user_id;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -96,22 +90,14 @@ public class Guest {
         this.name = name;
     }
 
-    public int getGuest_type() {
+    /** Not-null value. */
+    public String getGuest_type() {
         return guest_type;
     }
 
-    public void setGuest_type(int guest_type) {
-        this.guest_type = guest_type;
-    }
-
-    /** Not-null value. */
-    public String getGender() {
-        return gender;
-    }
-
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setGuest_type(String guest_type) {
+        this.guest_type = guest_type;
     }
 
     /** Not-null value. */
@@ -124,12 +110,14 @@ public class Guest {
         this.telphone = telphone;
     }
 
-    public int getAge() {
-        return age;
+    /** Not-null value. */
+    public String getEmail() {
+        return email;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /** Not-null value. */
@@ -142,52 +130,30 @@ public class Guest {
         this.create_time = create_time;
     }
 
+    /** Not-null value. */
+    public String getGender() {
+        return gender;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     public Long getUser_id() {
         return user_id;
     }
 
     public void setUser_id(Long user_id) {
         this.user_id = user_id;
-    }
-
-    public String getCard_type() {
-        return card_type;
-    }
-
-    public void setCard_type(String card_type) {
-        this.card_type = card_type;
-    }
-
-    public String getCard_id() {
-        return card_id;
-    }
-
-    public void setCard_id(String card_id) {
-        this.card_id = card_id;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     /** To-one relationship, resolved on first access. */

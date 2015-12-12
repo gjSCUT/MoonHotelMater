@@ -59,7 +59,7 @@ public class RoomFragment extends BaseFragment {
         fetchRoomArray();
         switch (roomGroup.getCheckedRadioButtonId()) {
             case R.id.room_style_num:
-                Fragment roomDisplayOrderedFragment = RoomDisplayOrderedFragment.getInstance(mRoomArray, context);
+                Fragment roomDisplayOrderedFragment = RoomStateFragment.getInstance(mRoomArray, context);
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.room_container, roomDisplayOrderedFragment).commit();
                 break;
@@ -93,7 +93,7 @@ public class RoomFragment extends BaseFragment {
                 switch (checkedId) {
                     case R.id.room_style_num:
                         //TODO
-                        Fragment roomDisplayOrderedFragment = RoomDisplayOrderedFragment.getInstance(mRoomArray, context);
+                        Fragment roomDisplayOrderedFragment = RoomStateFragment.getInstance(mRoomArray, context);
                         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                         transaction.replace(R.id.room_container, roomDisplayOrderedFragment)
                                 .commit();
@@ -124,7 +124,7 @@ public class RoomFragment extends BaseFragment {
         SimpleAdapter sa = new SimpleAdapter(
                 context,
                 lstImageItems,
-                R.layout.room_state_grid_items,
+                R.layout.grid_items_room_state,
                 new String[]{"itemText", "roomText"},
                 new int[]{R.id.room_state_text, R.id.room_state_count}
         );

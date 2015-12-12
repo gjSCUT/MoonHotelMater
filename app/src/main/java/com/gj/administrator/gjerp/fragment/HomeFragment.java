@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class HomeFragment extends BaseFragment{
     protected Context context;
-    private static final String[] titles = {"Room","Form","Guest"};
+    private static final String[] titles = {"Message","Task","Relation"};
     SlidingTabLayout slidingTabLayout;
     List<BaseFragment> fragments;
     TabPagerAdapter mPagerAdapter;
@@ -49,9 +49,9 @@ public class HomeFragment extends BaseFragment{
     protected void initViews() {
         // 加入Fragment
         fragments = new ArrayList<>();
-        fragments.add(RoomFragment.getInstance(context));
-        fragments.add(FormFragment.getInstance(context));
-        fragments.add(GuestFragment.getInstance(context));
+        fragments.add(MessageFragment.getInstance(context));
+        fragments.add(TaskFragment.getInstance(context));
+        fragments.add(RelationFragment.getInstance(context));
         mPagerAdapter = new TabPagerAdapter(this.getChildFragmentManager(), fragments,titles);
         mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
         mViewPager.setAdapter(mPagerAdapter);

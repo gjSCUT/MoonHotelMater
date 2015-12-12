@@ -30,17 +30,13 @@ public class GuestDao extends AbstractDao<Guest, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property Guest_type = new Property(2, int.class, "guest_type", false, "GUEST_TYPE");
-        public final static Property Gender = new Property(3, String.class, "gender", false, "GENDER");
-        public final static Property Telphone = new Property(4, String.class, "telphone", false, "TELPHONE");
-        public final static Property Age = new Property(5, int.class, "age", false, "AGE");
-        public final static Property Create_time = new Property(6, java.util.Date.class, "create_time", false, "CREATE_TIME");
-        public final static Property User_id = new Property(7, Long.class, "user_id", false, "USER_ID");
-        public final static Property Card_type = new Property(8, String.class, "card_type", false, "CARD_TYPE");
-        public final static Property Card_id = new Property(9, String.class, "card_id", false, "CARD_ID");
-        public final static Property Country = new Property(10, String.class, "country", false, "COUNTRY");
-        public final static Property Address = new Property(11, String.class, "address", false, "ADDRESS");
-        public final static Property Email = new Property(12, String.class, "email", false, "EMAIL");
+        public final static Property Guest_type = new Property(2, String.class, "guest_type", false, "GUEST_TYPE");
+        public final static Property Telphone = new Property(3, String.class, "telphone", false, "TELPHONE");
+        public final static Property Email = new Property(4, String.class, "email", false, "EMAIL");
+        public final static Property Create_time = new Property(5, java.util.Date.class, "create_time", false, "CREATE_TIME");
+        public final static Property Gender = new Property(6, String.class, "gender", false, "GENDER");
+        public final static Property Age = new Property(7, int.class, "age", false, "AGE");
+        public final static Property User_id = new Property(8, Long.class, "user_id", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -61,17 +57,13 @@ public class GuestDao extends AbstractDao<Guest, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"GUEST\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"NAME\" TEXT NOT NULL ," + // 1: name
-                "\"GUEST_TYPE\" INTEGER NOT NULL ," + // 2: guest_type
-                "\"GENDER\" TEXT NOT NULL ," + // 3: gender
-                "\"TELPHONE\" TEXT NOT NULL ," + // 4: telphone
-                "\"AGE\" INTEGER NOT NULL ," + // 5: age
-                "\"CREATE_TIME\" INTEGER NOT NULL ," + // 6: create_time
-                "\"USER_ID\" INTEGER," + // 7: user_id
-                "\"CARD_TYPE\" TEXT," + // 8: card_type
-                "\"CARD_ID\" TEXT," + // 9: card_id
-                "\"COUNTRY\" TEXT," + // 10: country
-                "\"ADDRESS\" TEXT," + // 11: address
-                "\"EMAIL\" TEXT);"); // 12: email
+                "\"GUEST_TYPE\" TEXT NOT NULL ," + // 2: guest_type
+                "\"TELPHONE\" TEXT NOT NULL ," + // 3: telphone
+                "\"EMAIL\" TEXT NOT NULL ," + // 4: email
+                "\"CREATE_TIME\" INTEGER NOT NULL ," + // 5: create_time
+                "\"GENDER\" TEXT NOT NULL ," + // 6: gender
+                "\"AGE\" INTEGER NOT NULL ," + // 7: age
+                "\"USER_ID\" INTEGER);"); // 8: user_id
     }
 
     /** Drops the underlying database table. */
@@ -90,40 +82,16 @@ public class GuestDao extends AbstractDao<Guest, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getName());
-        stmt.bindLong(3, entity.getGuest_type());
-        stmt.bindString(4, entity.getGender());
-        stmt.bindString(5, entity.getTelphone());
-        stmt.bindLong(6, entity.getAge());
-        stmt.bindLong(7, entity.getCreate_time().getTime());
+        stmt.bindString(3, entity.getGuest_type());
+        stmt.bindString(4, entity.getTelphone());
+        stmt.bindString(5, entity.getEmail());
+        stmt.bindLong(6, entity.getCreate_time().getTime());
+        stmt.bindString(7, entity.getGender());
+        stmt.bindLong(8, entity.getAge());
  
         Long user_id = entity.getUser_id();
         if (user_id != null) {
-            stmt.bindLong(8, user_id);
-        }
- 
-        String card_type = entity.getCard_type();
-        if (card_type != null) {
-            stmt.bindString(9, card_type);
-        }
- 
-        String card_id = entity.getCard_id();
-        if (card_id != null) {
-            stmt.bindString(10, card_id);
-        }
- 
-        String country = entity.getCountry();
-        if (country != null) {
-            stmt.bindString(11, country);
-        }
- 
-        String address = entity.getAddress();
-        if (address != null) {
-            stmt.bindString(12, address);
-        }
- 
-        String email = entity.getEmail();
-        if (email != null) {
-            stmt.bindString(13, email);
+            stmt.bindLong(9, user_id);
         }
     }
 
@@ -145,17 +113,13 @@ public class GuestDao extends AbstractDao<Guest, Long> {
         Guest entity = new Guest( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // name
-            cursor.getInt(offset + 2), // guest_type
-            cursor.getString(offset + 3), // gender
-            cursor.getString(offset + 4), // telphone
-            cursor.getInt(offset + 5), // age
-            new java.util.Date(cursor.getLong(offset + 6)), // create_time
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // user_id
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // card_type
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // card_id
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // country
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // address
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // email
+            cursor.getString(offset + 2), // guest_type
+            cursor.getString(offset + 3), // telphone
+            cursor.getString(offset + 4), // email
+            new java.util.Date(cursor.getLong(offset + 5)), // create_time
+            cursor.getString(offset + 6), // gender
+            cursor.getInt(offset + 7), // age
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // user_id
         );
         return entity;
     }
@@ -165,17 +129,13 @@ public class GuestDao extends AbstractDao<Guest, Long> {
     public void readEntity(Cursor cursor, Guest entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.getString(offset + 1));
-        entity.setGuest_type(cursor.getInt(offset + 2));
-        entity.setGender(cursor.getString(offset + 3));
-        entity.setTelphone(cursor.getString(offset + 4));
-        entity.setAge(cursor.getInt(offset + 5));
-        entity.setCreate_time(new java.util.Date(cursor.getLong(offset + 6)));
-        entity.setUser_id(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setCard_type(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setCard_id(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setCountry(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setAddress(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setEmail(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setGuest_type(cursor.getString(offset + 2));
+        entity.setTelphone(cursor.getString(offset + 3));
+        entity.setEmail(cursor.getString(offset + 4));
+        entity.setCreate_time(new java.util.Date(cursor.getLong(offset + 5)));
+        entity.setGender(cursor.getString(offset + 6));
+        entity.setAge(cursor.getInt(offset + 7));
+        entity.setUser_id(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
      }
     
     /** @inheritdoc */

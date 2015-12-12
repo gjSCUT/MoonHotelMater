@@ -56,54 +56,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         void OnItemClick(int position);
     }
 
-    public enum DRAWABLE_TYPE{
-        SAMPLE_RECT, SAMPLE_ROUND_RECT,SAMPLE_ROUND,
-        SAMPLE_RECT_BORDER,SAMPLE_ROUND_RECT_BORDER, SAMPLE_ROUND_BORDER
-    }
 
-    public RecyclerAdapter(Context context, int itemId, List<ListData> dataList, DRAWABLE_TYPE type, boolean canCheckView) {
+    public RecyclerAdapter(Context context, int itemId, List<ListData> dataList, TextDrawable.IBuilder mDrawableBuilder,  boolean canCheckView) {
         this.context = context;
         this.itemId = itemId;
         this.dataList = dataList;
         this.checkedList = new ArrayList<>();
         
         this.canCheckView = canCheckView;
-        // initialize the builder based on the "TYPE"
-        switch (type) {
-            case SAMPLE_RECT:
-                mDrawableBuilder = TextDrawable.builder()
-                        .rect();
-                break;
-            case SAMPLE_ROUND_RECT:
-                mDrawableBuilder = TextDrawable.builder()
-                        .roundRect(10);
-                break;
-            case SAMPLE_ROUND:
-                mDrawableBuilder = TextDrawable.builder()
-                        .round();
-                break;
-            case SAMPLE_RECT_BORDER:
-                mDrawableBuilder = TextDrawable.builder()
-                        .beginConfig()
-                        .withBorder(4)
-                        .endConfig()
-                        .rect();
-                break;
-            case SAMPLE_ROUND_RECT_BORDER:
-                mDrawableBuilder = TextDrawable.builder()
-                        .beginConfig()
-                        .withBorder(4)
-                        .endConfig()
-                        .roundRect(10);
-                break;
-            case SAMPLE_ROUND_BORDER:
-                mDrawableBuilder = TextDrawable.builder()
-                        .beginConfig()
-                        .withBorder(4)
-                        .endConfig()
-                        .round();
-                break;
-        }
+        this.mDrawableBuilder = mDrawableBuilder;
     }
 
     @Override

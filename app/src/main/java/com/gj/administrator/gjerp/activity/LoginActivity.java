@@ -12,10 +12,22 @@ import android.widget.Spinner;
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.base.BaseApplication;
+import com.gj.administrator.gjerp.dao.BookRecordDao;
+import com.gj.administrator.gjerp.dao.DaoSession;
 import com.gj.administrator.gjerp.dao.HotelDao;
+import com.gj.administrator.gjerp.dao.UserDao;
+import com.gj.administrator.gjerp.domain.Dialog;
 import com.gj.administrator.gjerp.domain.Hotel;
+import com.gj.administrator.gjerp.domain.Task;
+import com.gj.administrator.gjerp.domain.User;
 import com.gj.administrator.gjerp.util.LogUtil;
+import com.gj.administrator.gjerp.util.RandomUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
+
+import java.util.Date;
+import java.util.Random;
+
+import de.greenrobot.dao.query.QueryBuilder;
 
 
 /**
@@ -31,6 +43,7 @@ public class LoginActivity extends BaseActivity{
     private Button upBtn;
     private Button clearBtn;
     HotelDao hotelDao;
+    UserDao userDao;
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -40,10 +53,12 @@ public class LoginActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         preferences = getSharedPreferences("gjerp", MODE_PRIVATE);
+        DaoSession session = BaseApplication.getDaoSession(this);
+        hotelDao = session.getHotelDao();
+        userDao = session.getUserDao();
         initViews();
         initEvents();
     }
-
 
 
 
@@ -61,15 +76,11 @@ public class LoginActivity extends BaseActivity{
         hotelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         loginSpHotel.setAdapter(hotelAdapter);
 
-        hotelDao = BaseApplication.getDaoSession(mContext).getHotelDao();
-        for(int i = 1;i<SessionUtil.getHotelnames().length;i++){
-            Hotel hotel= new Hotel((long)i,SessionUtil.getHotelnames()[i-1]);
-            hotelDao.insertOrReplace(hotel);
-        }
         loginSpHotel.setSelection(Integer.parseInt(preferences.getString("loginHotel", "0")));
         loginEdUsr.setText(preferences.getString("loginUsr", "admin"));
         loginEdPwd.setText(preferences.getString("loginPwd", "admin"));
-        SessionUtil.setHotel(hotelDao.load(loginSpHotel.getSelectedItemId()+1));
+
+        SessionUtil.setHotel(hotelDao.load(loginSpHotel.getSelectedItemId() + 1));
     }
 
 
@@ -85,13 +96,20 @@ public class LoginActivity extends BaseActivity{
                 editor.putString("loginPwd", loginEdPwd.getText().toString());
                 editor.apply();
 
-                // save the login info
-                SessionUtil.setHotel(hotelDao.load(loginSpHotel.getSelectedItemId()+1));
-                SessionUtil.getUser().setUsername(loginEdUsr.getText().toString());
-                SessionUtil.getUser().setPassword(loginEdPwd.getText().toString());
+                QueryBuilder<User> qb = userDao.queryBuilder();
+                qb.where(UserDao.Properties.Username.eq(loginEdUsr.getText().toString()),
+                        UserDao.Properties.Password.eq(loginEdPwd.getText().toString()));
+                if(qb.list().isEmpty()){
+                    showShortToast("username or password is wrong");
+                }
+                else {
+                    // save the login info
+                    SessionUtil.setHotel(hotelDao.load(loginSpHotel.getSelectedItemId() + 1));
+                    SessionUtil.setUser(qb.list().get(0));
 
-                LogUtil.i(TAG, "LOGIN");
-                startActivity(MainActivity.class);
+                    LogUtil.i(TAG, "LOGIN");
+                    startActivity(MainActivity.class);
+                }
             }
         });
         upBtn.setOnClickListener(new View.OnClickListener() {

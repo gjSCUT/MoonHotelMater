@@ -18,6 +18,7 @@ import com.gj.administrator.gjerp.dao.RoomDao;
 import com.gj.administrator.gjerp.domain.Employee;
 import com.gj.administrator.gjerp.domain.Guest;
 import com.gj.administrator.gjerp.domain.Room;
+import com.gj.administrator.gjerp.util.DrawbalBuilderUtil;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -98,9 +99,9 @@ public class ManageActivity extends BaseActivity {
                 mContext,
                 R.layout.dp40_list_items,
                 data,
-                RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER,
+                DrawbalBuilderUtil.getDrawbalBuilder(DrawbalBuilderUtil.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER),
                 true
-        );
+                );
         adapter.setOnClickListener(new RecyclerAdapter.OnClickListener() {
             @Override
             public void OnImageClick(Boolean isChecked) {

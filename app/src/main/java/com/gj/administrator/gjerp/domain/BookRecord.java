@@ -19,10 +19,12 @@ public class BookRecord {
     private Long id;
     /** Not-null value. */
     private java.util.Date create_date;
+    /** Not-null value. */
     private java.util.Date arrive_date;
+    /** Not-null value. */
     private java.util.Date leave_date;
+    private double total_price;
     private Double deposit;
-    private Integer book_day;
     private long guest_id;
     private long room_id;
 
@@ -49,13 +51,13 @@ public class BookRecord {
         this.id = id;
     }
 
-    public BookRecord(Long id, java.util.Date create_date, java.util.Date arrive_date, java.util.Date leave_date, Double deposit, Integer book_day, long guest_id, long room_id) {
+    public BookRecord(Long id, java.util.Date create_date, java.util.Date arrive_date, java.util.Date leave_date, double total_price, Double deposit, long guest_id, long room_id) {
         this.id = id;
         this.create_date = create_date;
         this.arrive_date = arrive_date;
         this.leave_date = leave_date;
+        this.total_price = total_price;
         this.deposit = deposit;
-        this.book_day = book_day;
         this.guest_id = guest_id;
         this.room_id = room_id;
     }
@@ -84,20 +86,32 @@ public class BookRecord {
         this.create_date = create_date;
     }
 
+    /** Not-null value. */
     public java.util.Date getArrive_date() {
         return arrive_date;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setArrive_date(java.util.Date arrive_date) {
         this.arrive_date = arrive_date;
     }
 
+    /** Not-null value. */
     public java.util.Date getLeave_date() {
         return leave_date;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setLeave_date(java.util.Date leave_date) {
         this.leave_date = leave_date;
+    }
+
+    public double getTotal_price() {
+        return total_price;
+    }
+
+    public void setTotal_price(double total_price) {
+        this.total_price = total_price;
     }
 
     public Double getDeposit() {
@@ -106,14 +120,6 @@ public class BookRecord {
 
     public void setDeposit(Double deposit) {
         this.deposit = deposit;
-    }
-
-    public Integer getBook_day() {
-        return book_day;
-    }
-
-    public void setBook_day(Integer book_day) {
-        this.book_day = book_day;
     }
 
     public long getGuest_id() {

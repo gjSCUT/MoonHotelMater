@@ -33,8 +33,8 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
         public final static Property Create_date = new Property(1, java.util.Date.class, "create_date", false, "CREATE_DATE");
         public final static Property Arrive_date = new Property(2, java.util.Date.class, "arrive_date", false, "ARRIVE_DATE");
         public final static Property Leave_date = new Property(3, java.util.Date.class, "leave_date", false, "LEAVE_DATE");
-        public final static Property Deposit = new Property(4, Double.class, "deposit", false, "DEPOSIT");
-        public final static Property Book_day = new Property(5, Integer.class, "book_day", false, "BOOK_DAY");
+        public final static Property Total_price = new Property(4, double.class, "total_price", false, "TOTAL_PRICE");
+        public final static Property Deposit = new Property(5, Double.class, "deposit", false, "DEPOSIT");
         public final static Property Guest_id = new Property(6, long.class, "guest_id", false, "GUEST_ID");
         public final static Property Room_id = new Property(7, long.class, "room_id", false, "ROOM_ID");
     };
@@ -57,10 +57,10 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"BOOK_RECORD\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"CREATE_DATE\" INTEGER NOT NULL ," + // 1: create_date
-                "\"ARRIVE_DATE\" INTEGER," + // 2: arrive_date
-                "\"LEAVE_DATE\" INTEGER," + // 3: leave_date
-                "\"DEPOSIT\" REAL," + // 4: deposit
-                "\"BOOK_DAY\" INTEGER," + // 5: book_day
+                "\"ARRIVE_DATE\" INTEGER NOT NULL ," + // 2: arrive_date
+                "\"LEAVE_DATE\" INTEGER NOT NULL ," + // 3: leave_date
+                "\"TOTAL_PRICE\" REAL NOT NULL ," + // 4: total_price
+                "\"DEPOSIT\" REAL," + // 5: deposit
                 "\"GUEST_ID\" INTEGER NOT NULL ," + // 6: guest_id
                 "\"ROOM_ID\" INTEGER NOT NULL );"); // 7: room_id
     }
@@ -81,25 +81,13 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindLong(2, entity.getCreate_date().getTime());
- 
-        java.util.Date arrive_date = entity.getArrive_date();
-        if (arrive_date != null) {
-            stmt.bindLong(3, arrive_date.getTime());
-        }
- 
-        java.util.Date leave_date = entity.getLeave_date();
-        if (leave_date != null) {
-            stmt.bindLong(4, leave_date.getTime());
-        }
+        stmt.bindLong(3, entity.getArrive_date().getTime());
+        stmt.bindLong(4, entity.getLeave_date().getTime());
+        stmt.bindDouble(5, entity.getTotal_price());
  
         Double deposit = entity.getDeposit();
         if (deposit != null) {
-            stmt.bindDouble(5, deposit);
-        }
- 
-        Integer book_day = entity.getBook_day();
-        if (book_day != null) {
-            stmt.bindLong(6, book_day);
+            stmt.bindDouble(6, deposit);
         }
         stmt.bindLong(7, entity.getGuest_id());
         stmt.bindLong(8, entity.getRoom_id());
@@ -123,10 +111,10 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
         BookRecord entity = new BookRecord( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             new java.util.Date(cursor.getLong(offset + 1)), // create_date
-            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)), // arrive_date
-            cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)), // leave_date
-            cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4), // deposit
-            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // book_day
+            new java.util.Date(cursor.getLong(offset + 2)), // arrive_date
+            new java.util.Date(cursor.getLong(offset + 3)), // leave_date
+            cursor.getDouble(offset + 4), // total_price
+            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5), // deposit
             cursor.getLong(offset + 6), // guest_id
             cursor.getLong(offset + 7) // room_id
         );
@@ -138,10 +126,10 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
     public void readEntity(Cursor cursor, BookRecord entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setCreate_date(new java.util.Date(cursor.getLong(offset + 1)));
-        entity.setArrive_date(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
-        entity.setLeave_date(cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)));
-        entity.setDeposit(cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4));
-        entity.setBook_day(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setArrive_date(new java.util.Date(cursor.getLong(offset + 2)));
+        entity.setLeave_date(new java.util.Date(cursor.getLong(offset + 3)));
+        entity.setTotal_price(cursor.getDouble(offset + 4));
+        entity.setDeposit(cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5));
         entity.setGuest_id(cursor.getLong(offset + 6));
         entity.setRoom_id(cursor.getLong(offset + 7));
      }

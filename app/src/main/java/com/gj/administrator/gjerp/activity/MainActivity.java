@@ -15,6 +15,7 @@ import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.base.ActivityManage;
 import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.fragment.AnalyzeFragment;
+import com.gj.administrator.gjerp.fragment.DataFragment;
 import com.gj.administrator.gjerp.fragment.HomeFragment;
 import com.gj.administrator.gjerp.fragment.ManageFragment;
 import com.gj.administrator.gjerp.fragment.SelectFragment;
@@ -82,11 +83,11 @@ public class MainActivity extends BaseActivity{
                                 .commit();
                         setTitle("Home");
                         break;
-                    case R.id.nav_manage:
+                    case R.id.nav_data:
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, ManageFragment.getInstance(mContext))
+                                .replace(R.id.container, DataFragment.getInstance(mContext))
                                 .commit();
-                        setTitle("Manage");
+                        setTitle("Data");
                         break;
                     case R.id.nav_analyze:
                         getSupportFragmentManager().beginTransaction()

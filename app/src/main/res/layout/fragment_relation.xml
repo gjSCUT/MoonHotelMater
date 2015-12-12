@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/edit_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/md_white"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/drawtab_chat_editer"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:textCursorDrawable="@null"
+                android:imeOptions="actionSend"
+                android:textColor="@color/md_black"
+                android:layout_marginLeft="10.0dp"
+                android:layout_marginRight="10.0dp"
+                android:layout_marginTop="5.0dp"
+                android:layout_marginBottom="5.0dp"
+                android:hint="@null"/>
+
+            <Button
+                android:id="@+id/drawtab_chat_send"
+                android:layout_width="50dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5.0dp"
+                android:layout_marginEnd="10.0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:text="Find"
+                android:textColor="@color/md_white"
+                android:background="@drawable/button_shape"
+                android:contentDescription="@string/app_name">
+            </Button>
+
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/gird_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:columnWidth="90dp"
+            android:gravity="center"
+            android:horizontalSpacing="16dp"
+            android:numColumns="2"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="8dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/relationRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+
+
+    </LinearLayout>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="22dp"
+        android:src="@mipmap/ic_add_white"
+        fab:fab_colorNormal="@color/primary"
+        fab:fab_colorPressed="@color/primary_pressed"
+        fab:fab_colorRipple="@color/ripple" />
+</FrameLayout>

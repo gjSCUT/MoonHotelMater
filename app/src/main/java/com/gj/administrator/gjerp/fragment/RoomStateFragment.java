@@ -15,6 +15,7 @@ import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.adapter.RecyclerAdapter;
 import com.gj.administrator.gjerp.base.BaseFragment;
 import com.gj.administrator.gjerp.domain.Room;
+import com.gj.administrator.gjerp.util.DrawbalBuilderUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
  * Room fragment
  * Created by guojun on 2015/12/09
  */
-public class RoomDisplayOrderedFragment extends BaseFragment {
+public class RoomStateFragment extends BaseFragment {
 
     // TODO: Rename and change types of parameters
 
@@ -34,16 +35,16 @@ public class RoomDisplayOrderedFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public RoomDisplayOrderedFragment() {
+    public RoomStateFragment() {
         // Required empty public constructor
     }
 
-    public static RoomDisplayOrderedFragment getInstance(Room[] roomArray, Context context) {
-        RoomDisplayOrderedFragment fragment = new RoomDisplayOrderedFragment();
+    public static RoomStateFragment getInstance(Room[] roomArray, Context context) {
+        RoomStateFragment fragment = new RoomStateFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         mRoomArray = roomArray;
-        RoomDisplayOrderedFragment.context = context;
+        RoomStateFragment.context = context;
         return fragment;
     }
 
@@ -86,9 +87,9 @@ public class RoomDisplayOrderedFragment extends BaseFragment {
 
         mAdapter = new RecyclerAdapter(
                 context,
-                R.layout.grid_items_room_grid,
+                R.layout.grid_items_room,
                 rmIdStrings,
-                RecyclerAdapter.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER,
+                DrawbalBuilderUtil.getDrawbalBuilder(DrawbalBuilderUtil.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER),
                 false
         );
         mAdapter.setOnClickListener(new RecyclerAdapter.OnClickListener() {

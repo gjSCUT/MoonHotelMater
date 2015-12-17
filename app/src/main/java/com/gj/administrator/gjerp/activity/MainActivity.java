@@ -5,7 +5,6 @@ import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,15 +16,16 @@ import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.fragment.AnalyzeFragment;
 import com.gj.administrator.gjerp.fragment.DataFragment;
 import com.gj.administrator.gjerp.fragment.HomeFragment;
-import com.gj.administrator.gjerp.fragment.ManageFragment;
 import com.gj.administrator.gjerp.fragment.SelectFragment;
 import com.gj.administrator.gjerp.util.LogUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
+import de.greenrobot.event.EventBus;
+
 
 /*
  * main activity
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public class MainActivity extends BaseActivity{
     private static final String TAG = "MainActivity";
@@ -34,6 +34,7 @@ public class MainActivity extends BaseActivity{
     TextView mNavName;
     TextView mHotelName;
 
+    HomeFragment homeFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,19 @@ public class MainActivity extends BaseActivity{
         setContentView(R.layout.activity_main);
         initViews();
         initEvents();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+
+    }
+
+    public void onEventMainThread(com.gj.administrator.gjerp.domain.Message message) {
+        if(homeFragment!=null)
+            homeFragment.listenMessage(message);
     }
 
     @Override
@@ -52,7 +66,7 @@ public class MainActivity extends BaseActivity{
         View headerLayout = navigationView.getHeaderView(0); // change introduced by changing support library from 23.0.x to 23.1.1
         mNavName = (TextView) headerLayout.findViewById(R.id.nav_username);
         mHotelName = (TextView) headerLayout.findViewById(R.id.nav_hotelname);
-        mNavName.setText(SessionUtil.getUser().getUsername());
+        mNavName.setText(SessionUtil.getStaff().getName());
         mHotelName.setText(SessionUtil.getHotel().getName());
     }
 
@@ -63,8 +77,9 @@ public class MainActivity extends BaseActivity{
             setupDrawerContent();
         }
 
+        homeFragment = HomeFragment.getInstance(mContext);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, HomeFragment.getInstance(mContext))
+                .replace(R.id.container, homeFragment)
                 .commit();
         setTitle("Home");
 
@@ -78,8 +93,9 @@ public class MainActivity extends BaseActivity{
                 LogUtil.i(TAG, "Select nav" + menuItem.getItemId());
                 switch (menuItem.getItemId()) {
                     case R.id.nav_home:
+                        homeFragment = HomeFragment.getInstance(mContext);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, HomeFragment.getInstance(mContext))
+                                .replace(R.id.container, homeFragment)
                                 .commit();
                         setTitle("Home");
                         break;
@@ -140,7 +156,6 @@ public class MainActivity extends BaseActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         LogUtil.i(TAG,"Select menu"+item);
         switch (item.getItemId()) {
-            //TODO
             case android.R.id.home:
                 if(!drawerLayout.isDrawerVisible(GravityCompat.START))
                     drawerLayout.openDrawer(GravityCompat.START);

@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * Room fragment
- * Created by guojun on 2015/12/09
+ * Created by guojun on 2015/12/13
  */
 public class RoomStateFragment extends BaseFragment {
 

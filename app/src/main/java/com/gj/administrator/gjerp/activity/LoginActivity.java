@@ -12,27 +12,25 @@ import android.widget.Spinner;
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.base.BaseApplication;
-import com.gj.administrator.gjerp.dao.BookRecordDao;
 import com.gj.administrator.gjerp.dao.DaoSession;
 import com.gj.administrator.gjerp.dao.HotelDao;
 import com.gj.administrator.gjerp.dao.UserDao;
-import com.gj.administrator.gjerp.domain.Dialog;
 import com.gj.administrator.gjerp.domain.Hotel;
-import com.gj.administrator.gjerp.domain.Task;
+import com.gj.administrator.gjerp.domain.Staff;
 import com.gj.administrator.gjerp.domain.User;
+import com.gj.administrator.gjerp.util.DBUtil;
 import com.gj.administrator.gjerp.util.LogUtil;
-import com.gj.administrator.gjerp.util.RandomUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
-import java.util.Date;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
 
 
 /**
  * login activity
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public class LoginActivity extends BaseActivity{
     private static final String TAG = "LoginActivity";
@@ -42,9 +40,8 @@ public class LoginActivity extends BaseActivity{
     private Button loginBtn;
     private Button upBtn;
     private Button clearBtn;
-    HotelDao hotelDao;
-    UserDao userDao;
-
+    private HotelDao hotelDao;
+    private UserDao userDao;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
@@ -53,7 +50,7 @@ public class LoginActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         preferences = getSharedPreferences("gjerp", MODE_PRIVATE);
-        DaoSession session = BaseApplication.getDaoSession(this);
+        DaoSession session = DBUtil.getDaoSession(this);
         hotelDao = session.getHotelDao();
         userDao = session.getUserDao();
         initViews();
@@ -72,11 +69,15 @@ public class LoginActivity extends BaseActivity{
         upBtn = (Button) findViewById(R.id.loginBtnUp);
         clearBtn = (Button) findViewById(R.id.loginBtnClr);
 
-        ArrayAdapter<String> hotelAdapter  = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,SessionUtil.getHotelnames());
+        List<Hotel> hotels = hotelDao.loadAll();
+        List<String> hotelNames = new ArrayList<>();
+        for(Hotel hotel:hotels)
+            hotelNames.add(hotel.getName());
+        ArrayAdapter<String> hotelAdapter  = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,hotelNames);
         hotelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         loginSpHotel.setAdapter(hotelAdapter);
 
-        loginSpHotel.setSelection(Integer.parseInt(preferences.getString("loginHotel", "0")));
+        loginSpHotel.setSelection(preferences.getInt("loginHotelSelect", 0));
         loginEdUsr.setText(preferences.getString("loginUsr", "admin"));
         loginEdPwd.setText(preferences.getString("loginPwd", "admin"));
 
@@ -91,21 +92,24 @@ public class LoginActivity extends BaseActivity{
             public void onClick(View view) {
                 // save the last input data
                 editor = preferences.edit();
-                editor.putString("loginHotel", String.valueOf(loginSpHotel.getSelectedItemId()));
+                editor.putInt("loginHotelSelect", loginSpHotel.getSelectedItemPosition());
                 editor.putString("loginUsr", loginEdUsr.getText().toString());
                 editor.putString("loginPwd", loginEdPwd.getText().toString());
                 editor.apply();
-
+                Hotel hotel = hotelDao.load(loginSpHotel.getSelectedItemId() + 1);
                 QueryBuilder<User> qb = userDao.queryBuilder();
-                qb.where(UserDao.Properties.Username.eq(loginEdUsr.getText().toString()),
-                        UserDao.Properties.Password.eq(loginEdPwd.getText().toString()));
-                if(qb.list().isEmpty()){
+                User user = qb.where(
+                            UserDao.Properties.Username.eq(loginEdUsr.getText().toString()),
+                            UserDao.Properties.Password.eq(loginEdPwd.getText().toString())
+                        )
+                        .unique();
+                if(user == null){
                     showShortToast("username or password is wrong");
                 }
                 else {
                     // save the login info
-                    SessionUtil.setHotel(hotelDao.load(loginSpHotel.getSelectedItemId() + 1));
-                    SessionUtil.setUser(qb.list().get(0));
+                    SessionUtil.setHotel(hotel);
+                    SessionUtil.setStaff(user.getStaff());
 
                     LogUtil.i(TAG, "LOGIN");
                     startActivity(MainActivity.class);

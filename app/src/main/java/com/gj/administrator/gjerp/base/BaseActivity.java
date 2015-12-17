@@ -4,29 +4,20 @@ import android.content.DialogInterface;
 import android.support.v7.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Toast;
 
 
-import com.gj.administrator.gjerp.dao.DaoMaster;
-import com.gj.administrator.gjerp.dao.DaoSession;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * BaseActivity
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
@@ -108,6 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void showLongToast(int resId) {
         Toast.makeText(this, getString(resId), Toast.LENGTH_LONG).show();
     }
+
 
     /** 长时间显示Toast提示(来自String) **/
     protected void showLongToast(String text) {

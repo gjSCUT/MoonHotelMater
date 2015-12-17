@@ -11,15 +11,17 @@ import android.widget.ListView;
 
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.adapter.DrawableAdapter;
-import com.gj.administrator.gjerp.base.BaseApplication;
 import com.gj.administrator.gjerp.base.BaseFragment;
 import com.gj.administrator.gjerp.domain.Hotel;
+import com.gj.administrator.gjerp.util.DBUtil;
 import com.gj.administrator.gjerp.util.DrawbalBuilderUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
+import java.util.List;
+
 /**
  * manage fragment
- * Created by guojun on 2015/12/09
+ * Created by guojun on 2015/12/13
  */
 public class SelectFragment extends BaseFragment{
     protected Context context;
@@ -57,24 +59,27 @@ public class SelectFragment extends BaseFragment{
 
     @Override
     protected void initEvents() {
+        List<Hotel> hotels = DBUtil.getDaoSession(context).getHotelDao().loadAll();
+        final String [] hotelnames = new String[hotels.size()];
+        for(int i = 0;i<hotels.size();i++)
+            hotelnames[i] = hotels.get(i).getName();
         if(listView != null){
             listView.setAdapter(new DrawableAdapter(
                     context,
                     R.layout.dp60_list_items,
-                    SessionUtil.getHotelnames(),
+                    hotelnames,
                     DrawbalBuilderUtil.getDrawbalBuilder(DrawbalBuilderUtil.DRAWABLE_TYPE.SAMPLE_ROUND_RECT_BORDER),
                     true, false));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Hotel hotel = BaseApplication.getDaoSession(context).getHotelDao().load((long)i+1);
+                    Hotel hotel = DBUtil.getDaoSession(context).getHotelDao().load((long)i+1);
                     SessionUtil.setHotel(hotel);
 
                     SharedPreferences preferences = context.getSharedPreferences("gjerp",context.MODE_PRIVATE);
                     preferences.edit().putString("loginHotel", String.valueOf(i));
-                    hotelListener.setHotel(SessionUtil.getHotelnames()[i]);
+                    hotelListener.setHotel(hotelnames[i]);
 
-                    //TODO
                 }
             });
         }

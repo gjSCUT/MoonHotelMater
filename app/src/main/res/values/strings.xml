@@ -11,13 +11,13 @@
     <string name="about_title">Glad to join the intership of WorkApp</string>
     <string name="about_text">Welcome to guide. Thank you.\nBy GuoJun\n2015.12.11</string>
 
-    <string name="room_type_blank">空房\n%1$d（间）</string>
-    <string name="room_type_dirty">脏房\n%1$d（间）</string>
-    <string name="room_type_in_use">住人\n%1$d（间）</string>
-    <string name="room_type_repair">维修\n%1$d（间）</string>
-    <string name="room_type_in_use_dirty">占脏\n%1$d（间）</string>
-    <string name="room_type_total">全部\n%1$d（间）</string>
-    <string name="room_string_model">%1$d（间）</string>
+    <string name="room_type_blank">Empty\n%1$d</string>
+    <string name="room_type_dirty">Dirty\n%1$d</string>
+    <string name="room_type_in_use">Living\n%1$d</string>
+    <string name="room_type_repair">Repairing\n%1$d（间）</string>
+    <string name="room_type_in_use_dirty">BLocking\n%1$d（间）</string>
+    <string name="room_type_total">Total\n%1$d</string>
+    <string name="room_string_model">%1$d</string>
 
     <string name="form_current">Current</string>
     <string name="form_history">History</string>
@@ -25,10 +25,10 @@
     <string name="form_yesterday_value">Yesterday</string>
     <string name="form_month_value">Monthly</string>
 
-    <string name="guest_state_in">在住报告</string>
-    <string name="guest_state_left_today">今日离店</string>
-    <string name="guest_state_left_yesterday">昨日离店</string>
-    <string name="guest_state_in_summary_textView">在住间数：%1$d间  房价合计：%2$d元</string>
+    <string name="guest_state_in">Today check in</string>
+    <string name="guest_state_left_today">Today check out</string>
+    <string name="guest_state_left_yesterday">Yesterday check out</string>
+    <string name="guest_state_in_summary_textView">Now living number：%1$d  Total sales：%2$d Yuan</string>
     <string name="guest_state_room_id">Room</string>
     <string name="guest_state_name">Name</string>
     <string name="guest_state_income">Income</string>

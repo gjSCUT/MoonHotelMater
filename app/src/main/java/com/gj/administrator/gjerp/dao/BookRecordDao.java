@@ -11,7 +11,7 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
-import com.gj.administrator.gjerp.domain.Guest;
+import com.gj.administrator.gjerp.domain.Customer;
 import com.gj.administrator.gjerp.domain.Room;
 
 import com.gj.administrator.gjerp.domain.BookRecord;
@@ -30,13 +30,11 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Create_date = new Property(1, java.util.Date.class, "create_date", false, "CREATE_DATE");
-        public final static Property Arrive_date = new Property(2, java.util.Date.class, "arrive_date", false, "ARRIVE_DATE");
-        public final static Property Leave_date = new Property(3, java.util.Date.class, "leave_date", false, "LEAVE_DATE");
-        public final static Property Total_price = new Property(4, double.class, "total_price", false, "TOTAL_PRICE");
-        public final static Property Deposit = new Property(5, Double.class, "deposit", false, "DEPOSIT");
-        public final static Property Guest_id = new Property(6, long.class, "guest_id", false, "GUEST_ID");
-        public final static Property Room_id = new Property(7, long.class, "room_id", false, "ROOM_ID");
+        public final static Property Arrive_date = new Property(1, java.util.Date.class, "arrive_date", false, "ARRIVE_DATE");
+        public final static Property Leave_date = new Property(2, java.util.Date.class, "leave_date", false, "LEAVE_DATE");
+        public final static Property Deposit = new Property(3, double.class, "deposit", false, "DEPOSIT");
+        public final static Property Customer_id = new Property(4, long.class, "customer_id", false, "CUSTOMER_ID");
+        public final static Property Room_id = new Property(5, long.class, "room_id", false, "ROOM_ID");
     };
 
     private DaoSession daoSession;
@@ -56,13 +54,11 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BOOK_RECORD\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"CREATE_DATE\" INTEGER NOT NULL ," + // 1: create_date
-                "\"ARRIVE_DATE\" INTEGER NOT NULL ," + // 2: arrive_date
-                "\"LEAVE_DATE\" INTEGER NOT NULL ," + // 3: leave_date
-                "\"TOTAL_PRICE\" REAL NOT NULL ," + // 4: total_price
-                "\"DEPOSIT\" REAL," + // 5: deposit
-                "\"GUEST_ID\" INTEGER NOT NULL ," + // 6: guest_id
-                "\"ROOM_ID\" INTEGER NOT NULL );"); // 7: room_id
+                "\"ARRIVE_DATE\" INTEGER NOT NULL ," + // 1: arrive_date
+                "\"LEAVE_DATE\" INTEGER NOT NULL ," + // 2: leave_date
+                "\"DEPOSIT\" REAL NOT NULL ," + // 3: deposit
+                "\"CUSTOMER_ID\" INTEGER NOT NULL ," + // 4: customer_id
+                "\"ROOM_ID\" INTEGER NOT NULL );"); // 5: room_id
     }
 
     /** Drops the underlying database table. */
@@ -80,17 +76,11 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getCreate_date().getTime());
-        stmt.bindLong(3, entity.getArrive_date().getTime());
-        stmt.bindLong(4, entity.getLeave_date().getTime());
-        stmt.bindDouble(5, entity.getTotal_price());
- 
-        Double deposit = entity.getDeposit();
-        if (deposit != null) {
-            stmt.bindDouble(6, deposit);
-        }
-        stmt.bindLong(7, entity.getGuest_id());
-        stmt.bindLong(8, entity.getRoom_id());
+        stmt.bindLong(2, entity.getArrive_date().getTime());
+        stmt.bindLong(3, entity.getLeave_date().getTime());
+        stmt.bindDouble(4, entity.getDeposit());
+        stmt.bindLong(5, entity.getCustomer_id());
+        stmt.bindLong(6, entity.getRoom_id());
     }
 
     @Override
@@ -110,13 +100,11 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
     public BookRecord readEntity(Cursor cursor, int offset) {
         BookRecord entity = new BookRecord( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            new java.util.Date(cursor.getLong(offset + 1)), // create_date
-            new java.util.Date(cursor.getLong(offset + 2)), // arrive_date
-            new java.util.Date(cursor.getLong(offset + 3)), // leave_date
-            cursor.getDouble(offset + 4), // total_price
-            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5), // deposit
-            cursor.getLong(offset + 6), // guest_id
-            cursor.getLong(offset + 7) // room_id
+            new java.util.Date(cursor.getLong(offset + 1)), // arrive_date
+            new java.util.Date(cursor.getLong(offset + 2)), // leave_date
+            cursor.getDouble(offset + 3), // deposit
+            cursor.getLong(offset + 4), // customer_id
+            cursor.getLong(offset + 5) // room_id
         );
         return entity;
     }
@@ -125,13 +113,11 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
     @Override
     public void readEntity(Cursor cursor, BookRecord entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCreate_date(new java.util.Date(cursor.getLong(offset + 1)));
-        entity.setArrive_date(new java.util.Date(cursor.getLong(offset + 2)));
-        entity.setLeave_date(new java.util.Date(cursor.getLong(offset + 3)));
-        entity.setTotal_price(cursor.getDouble(offset + 4));
-        entity.setDeposit(cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5));
-        entity.setGuest_id(cursor.getLong(offset + 6));
-        entity.setRoom_id(cursor.getLong(offset + 7));
+        entity.setArrive_date(new java.util.Date(cursor.getLong(offset + 1)));
+        entity.setLeave_date(new java.util.Date(cursor.getLong(offset + 2)));
+        entity.setDeposit(cursor.getDouble(offset + 3));
+        entity.setCustomer_id(cursor.getLong(offset + 4));
+        entity.setRoom_id(cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */
@@ -164,11 +150,11 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getGuestDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getCustomerDao().getAllColumns());
             builder.append(',');
             SqlUtils.appendColumns(builder, "T1", daoSession.getRoomDao().getAllColumns());
             builder.append(" FROM BOOK_RECORD T");
-            builder.append(" LEFT JOIN GUEST T0 ON T.\"GUEST_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN CUSTOMER T0 ON T.\"CUSTOMER_ID\"=T0.\"_id\"");
             builder.append(" LEFT JOIN ROOM T1 ON T.\"ROOM_ID\"=T1.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
@@ -180,11 +166,11 @@ public class BookRecordDao extends AbstractDao<BookRecord, Long> {
         BookRecord entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
 
-        Guest guest = loadCurrentOther(daoSession.getGuestDao(), cursor, offset);
-         if(guest != null) {
-            entity.setGuest(guest);
+        Customer customer = loadCurrentOther(daoSession.getCustomerDao(), cursor, offset);
+         if(customer != null) {
+            entity.setCustomer(customer);
         }
-        offset += daoSession.getGuestDao().getAllColumns().length;
+        offset += daoSession.getCustomerDao().getAllColumns().length;
 
         Room room = loadCurrentOther(daoSession.getRoomDao(), cursor, offset);
          if(room != null) {

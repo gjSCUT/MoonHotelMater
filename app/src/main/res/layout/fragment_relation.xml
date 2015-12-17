@@ -17,8 +17,22 @@
             android:background="@color/md_white"
             android:orientation="horizontal">
 
+
+            <TextView
+                android:layout_width="40dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10.0dp"
+                android:layout_marginEnd="5.0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:text="Find:">
+            </TextView>
+
             <EditText
-                android:id="@+id/drawtab_chat_editer"
+                android:id="@+id/find_editer"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
@@ -32,22 +46,6 @@
                 android:layout_marginBottom="5.0dp"
                 android:hint="@null"/>
 
-            <Button
-                android:id="@+id/drawtab_chat_send"
-                android:layout_width="50dip"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="5.0dp"
-                android:layout_marginEnd="10.0dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="14sp"
-                android:singleLine="true"
-                android:text="Find"
-                android:textColor="@color/md_white"
-                android:background="@drawable/button_shape"
-                android:contentDescription="@string/app_name">
-            </Button>
 
         </LinearLayout>
 
@@ -85,4 +83,6 @@
         fab:fab_colorNormal="@color/primary"
         fab:fab_colorPressed="@color/primary_pressed"
         fab:fab_colorRipple="@color/ripple" />
+
+
 </FrameLayout>

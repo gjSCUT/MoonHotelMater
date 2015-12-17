@@ -24,8 +24,6 @@ public class Supplier {
     /** Not-null value. */
     private String email;
     /** Not-null value. */
-    private java.util.Date create_time;
-    /** Not-null value. */
     private String company;
 
     /** Used to resolve relations */
@@ -45,13 +43,12 @@ public class Supplier {
         this.id = id;
     }
 
-    public Supplier(Long id, String name, String supplier_type, String telphone, String email, java.util.Date create_time, String company) {
+    public Supplier(Long id, String name, String supplier_type, String telphone, String email, String company) {
         this.id = id;
         this.name = name;
         this.supplier_type = supplier_type;
         this.telphone = telphone;
         this.email = email;
-        this.create_time = create_time;
         this.company = company;
     }
 
@@ -107,16 +104,6 @@ public class Supplier {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    /** Not-null value. */
-    public java.util.Date getCreate_time() {
-        return create_time;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setCreate_time(java.util.Date create_time) {
-        this.create_time = create_time;
     }
 
     /** Not-null value. */

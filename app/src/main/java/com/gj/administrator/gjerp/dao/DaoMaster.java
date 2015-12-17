@@ -9,17 +9,19 @@ import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import com.gj.administrator.gjerp.dao.HotelDao;
+import com.gj.administrator.gjerp.dao.RegionDao;
 import com.gj.administrator.gjerp.dao.RoomTypeDao;
 import com.gj.administrator.gjerp.dao.RoomDao;
-import com.gj.administrator.gjerp.dao.UserDao;
 import com.gj.administrator.gjerp.dao.ScheduleDao;
-import com.gj.administrator.gjerp.dao.TaskDao;
-import com.gj.administrator.gjerp.dao.EmployeeDao;
-import com.gj.administrator.gjerp.dao.GuestDao;
+import com.gj.administrator.gjerp.dao.DialogDao;
+import com.gj.administrator.gjerp.dao.StaffDao;
+import com.gj.administrator.gjerp.dao.MessageDao;
+import com.gj.administrator.gjerp.dao.CustomerDao;
+import com.gj.administrator.gjerp.dao.UserDao;
 import com.gj.administrator.gjerp.dao.PartnerDao;
 import com.gj.administrator.gjerp.dao.SupplierDao;
-import com.gj.administrator.gjerp.dao.DialogDao;
-import com.gj.administrator.gjerp.dao.MessageDao;
+import com.gj.administrator.gjerp.dao.TaskDao;
+import com.gj.administrator.gjerp.dao.StaffsTasksDao;
 import com.gj.administrator.gjerp.dao.BookRecordDao;
 import com.gj.administrator.gjerp.dao.OutRecordDao;
 
@@ -33,17 +35,19 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         HotelDao.createTable(db, ifNotExists);
+        RegionDao.createTable(db, ifNotExists);
         RoomTypeDao.createTable(db, ifNotExists);
         RoomDao.createTable(db, ifNotExists);
-        UserDao.createTable(db, ifNotExists);
         ScheduleDao.createTable(db, ifNotExists);
-        TaskDao.createTable(db, ifNotExists);
-        EmployeeDao.createTable(db, ifNotExists);
-        GuestDao.createTable(db, ifNotExists);
+        DialogDao.createTable(db, ifNotExists);
+        StaffDao.createTable(db, ifNotExists);
+        MessageDao.createTable(db, ifNotExists);
+        CustomerDao.createTable(db, ifNotExists);
+        UserDao.createTable(db, ifNotExists);
         PartnerDao.createTable(db, ifNotExists);
         SupplierDao.createTable(db, ifNotExists);
-        DialogDao.createTable(db, ifNotExists);
-        MessageDao.createTable(db, ifNotExists);
+        TaskDao.createTable(db, ifNotExists);
+        StaffsTasksDao.createTable(db, ifNotExists);
         BookRecordDao.createTable(db, ifNotExists);
         OutRecordDao.createTable(db, ifNotExists);
     }
@@ -51,17 +55,19 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         HotelDao.dropTable(db, ifExists);
+        RegionDao.dropTable(db, ifExists);
         RoomTypeDao.dropTable(db, ifExists);
         RoomDao.dropTable(db, ifExists);
-        UserDao.dropTable(db, ifExists);
         ScheduleDao.dropTable(db, ifExists);
-        TaskDao.dropTable(db, ifExists);
-        EmployeeDao.dropTable(db, ifExists);
-        GuestDao.dropTable(db, ifExists);
+        DialogDao.dropTable(db, ifExists);
+        StaffDao.dropTable(db, ifExists);
+        MessageDao.dropTable(db, ifExists);
+        CustomerDao.dropTable(db, ifExists);
+        UserDao.dropTable(db, ifExists);
         PartnerDao.dropTable(db, ifExists);
         SupplierDao.dropTable(db, ifExists);
-        DialogDao.dropTable(db, ifExists);
-        MessageDao.dropTable(db, ifExists);
+        TaskDao.dropTable(db, ifExists);
+        StaffsTasksDao.dropTable(db, ifExists);
         BookRecordDao.dropTable(db, ifExists);
         OutRecordDao.dropTable(db, ifExists);
     }
@@ -96,17 +102,19 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(HotelDao.class);
+        registerDaoClass(RegionDao.class);
         registerDaoClass(RoomTypeDao.class);
         registerDaoClass(RoomDao.class);
-        registerDaoClass(UserDao.class);
         registerDaoClass(ScheduleDao.class);
-        registerDaoClass(TaskDao.class);
-        registerDaoClass(EmployeeDao.class);
-        registerDaoClass(GuestDao.class);
+        registerDaoClass(DialogDao.class);
+        registerDaoClass(StaffDao.class);
+        registerDaoClass(MessageDao.class);
+        registerDaoClass(CustomerDao.class);
+        registerDaoClass(UserDao.class);
         registerDaoClass(PartnerDao.class);
         registerDaoClass(SupplierDao.class);
-        registerDaoClass(DialogDao.class);
-        registerDaoClass(MessageDao.class);
+        registerDaoClass(TaskDao.class);
+        registerDaoClass(StaffsTasksDao.class);
         registerDaoClass(BookRecordDao.class);
         registerDaoClass(OutRecordDao.class);
     }

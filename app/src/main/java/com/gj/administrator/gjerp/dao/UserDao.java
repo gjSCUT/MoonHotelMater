@@ -1,12 +1,17 @@
 package com.gj.administrator.gjerp.dao;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
+
+import com.gj.administrator.gjerp.domain.Staff;
 
 import com.gj.administrator.gjerp.domain.User;
 
@@ -26,6 +31,7 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Username = new Property(1, String.class, "username", false, "USERNAME");
         public final static Property Password = new Property(2, String.class, "password", false, "PASSWORD");
+        public final static Property Staff_id = new Property(3, long.class, "staff_id", false, "STAFF_ID");
     };
 
     private DaoSession daoSession;
@@ -46,7 +52,13 @@ public class UserDao extends AbstractDao<User, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"USER\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"USERNAME\" TEXT NOT NULL UNIQUE ," + // 1: username
-                "\"PASSWORD\" TEXT NOT NULL );"); // 2: password
+                "\"PASSWORD\" TEXT NOT NULL ," + // 2: password
+                "\"STAFF_ID\" INTEGER NOT NULL );"); // 3: staff_id
+        // Add Indexes
+        db.execSQL("CREATE INDEX " + constraint + "IDX_USER_USERNAME ON USER" +
+                " (\"USERNAME\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_USER_PASSWORD ON USER" +
+                " (\"PASSWORD\");");
     }
 
     /** Drops the underlying database table. */
@@ -66,6 +78,7 @@ public class UserDao extends AbstractDao<User, Long> {
         }
         stmt.bindString(2, entity.getUsername());
         stmt.bindString(3, entity.getPassword());
+        stmt.bindLong(4, entity.getStaff_id());
     }
 
     @Override
@@ -86,7 +99,8 @@ public class UserDao extends AbstractDao<User, Long> {
         User entity = new User( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // username
-            cursor.getString(offset + 2) // password
+            cursor.getString(offset + 2), // password
+            cursor.getLong(offset + 3) // staff_id
         );
         return entity;
     }
@@ -97,6 +111,7 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUsername(cursor.getString(offset + 1));
         entity.setPassword(cursor.getString(offset + 2));
+        entity.setStaff_id(cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
@@ -122,4 +137,97 @@ public class UserDao extends AbstractDao<User, Long> {
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getStaffDao().getAllColumns());
+            builder.append(" FROM USER T");
+            builder.append(" LEFT JOIN STAFF T0 ON T.\"STAFF_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected User loadCurrentDeep(Cursor cursor, boolean lock) {
+        User entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        Staff staff = loadCurrentOther(daoSession.getStaffDao(), cursor, offset);
+         if(staff != null) {
+            entity.setStaff(staff);
+        }
+
+        return entity;    
+    }
+
+    public User loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<User> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<User> list = new ArrayList<User>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<User> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<User> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

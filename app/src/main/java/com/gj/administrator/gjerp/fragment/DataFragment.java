@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.adapter.TabPagerAdapter;
 import com.gj.administrator.gjerp.base.BaseFragment;
-import com.gj.administrator.gjerp.domain.Guest;
 import com.gj.administrator.gjerp.view.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.List;
 
 /**
  * analyze chart
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public class DataFragment extends BaseFragment{
     protected Context context;

@@ -1,12 +1,23 @@
 package com.gj.administrator.gjerp.dao;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
+
+import com.gj.administrator.gjerp.domain.Dialog;
+import com.gj.administrator.gjerp.domain.Partner;
+import com.gj.administrator.gjerp.domain.Staff;
+import com.gj.administrator.gjerp.domain.Supplier;
+import com.gj.administrator.gjerp.domain.Task;
 
 import com.gj.administrator.gjerp.domain.Task;
 
@@ -26,13 +37,20 @@ public class TaskDao extends AbstractDao<Task, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
         public final static Property Content = new Property(2, String.class, "content", false, "CONTENT");
-        public final static Property Priority = new Property(3, String.class, "priority", false, "PRIORITY");
-        public final static Property State = new Property(4, String.class, "state", false, "STATE");
-        public final static Property Complete_time = new Property(5, java.util.Date.class, "complete_time", false, "COMPLETE_TIME");
+        public final static Property Leader_id = new Property(3, Long.class, "leader_id", false, "LEADER_ID");
+        public final static Property Period = new Property(4, int.class, "period", false, "PERIOD");
+        public final static Property State = new Property(5, String.class, "state", false, "STATE");
+        public final static Property Start_time = new Property(6, java.util.Date.class, "start_time", false, "START_TIME");
+        public final static Property Finish_time = new Property(7, java.util.Date.class, "finish_time", false, "FINISH_TIME");
+        public final static Property Parenter_id = new Property(8, Long.class, "parenter_id", false, "PARENTER_ID");
+        public final static Property Supplier_id = new Property(9, Long.class, "supplier_id", false, "SUPPLIER_ID");
+        public final static Property Task_id = new Property(10, Long.class, "task_id", false, "TASK_ID");
+        public final static Property Dialog_id = new Property(11, Long.class, "dialog_id", false, "DIALOG_ID");
     };
 
     private DaoSession daoSession;
 
+    private Query<Task> task_ChildrenQuery;
 
     public TaskDao(DaoConfig config) {
         super(config);
@@ -50,9 +68,15 @@ public class TaskDao extends AbstractDao<Task, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"TITLE\" TEXT NOT NULL ," + // 1: title
                 "\"CONTENT\" TEXT NOT NULL ," + // 2: content
-                "\"PRIORITY\" TEXT NOT NULL ," + // 3: priority
-                "\"STATE\" TEXT NOT NULL ," + // 4: state
-                "\"COMPLETE_TIME\" INTEGER NOT NULL );"); // 5: complete_time
+                "\"LEADER_ID\" INTEGER," + // 3: leader_id
+                "\"PERIOD\" INTEGER NOT NULL ," + // 4: period
+                "\"STATE\" TEXT NOT NULL ," + // 5: state
+                "\"START_TIME\" INTEGER NOT NULL ," + // 6: start_time
+                "\"FINISH_TIME\" INTEGER NOT NULL ," + // 7: finish_time
+                "\"PARENTER_ID\" INTEGER," + // 8: parenter_id
+                "\"SUPPLIER_ID\" INTEGER," + // 9: supplier_id
+                "\"TASK_ID\" INTEGER," + // 10: task_id
+                "\"DIALOG_ID\" INTEGER);"); // 11: dialog_id
     }
 
     /** Drops the underlying database table. */
@@ -72,9 +96,35 @@ public class TaskDao extends AbstractDao<Task, Long> {
         }
         stmt.bindString(2, entity.getTitle());
         stmt.bindString(3, entity.getContent());
-        stmt.bindString(4, entity.getPriority());
-        stmt.bindString(5, entity.getState());
-        stmt.bindLong(6, entity.getComplete_time().getTime());
+ 
+        Long leader_id = entity.getLeader_id();
+        if (leader_id != null) {
+            stmt.bindLong(4, leader_id);
+        }
+        stmt.bindLong(5, entity.getPeriod());
+        stmt.bindString(6, entity.getState());
+        stmt.bindLong(7, entity.getStart_time().getTime());
+        stmt.bindLong(8, entity.getFinish_time().getTime());
+ 
+        Long parenter_id = entity.getParenter_id();
+        if (parenter_id != null) {
+            stmt.bindLong(9, parenter_id);
+        }
+ 
+        Long supplier_id = entity.getSupplier_id();
+        if (supplier_id != null) {
+            stmt.bindLong(10, supplier_id);
+        }
+ 
+        Long task_id = entity.getTask_id();
+        if (task_id != null) {
+            stmt.bindLong(11, task_id);
+        }
+ 
+        Long dialog_id = entity.getDialog_id();
+        if (dialog_id != null) {
+            stmt.bindLong(12, dialog_id);
+        }
     }
 
     @Override
@@ -96,9 +146,15 @@ public class TaskDao extends AbstractDao<Task, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // title
             cursor.getString(offset + 2), // content
-            cursor.getString(offset + 3), // priority
-            cursor.getString(offset + 4), // state
-            new java.util.Date(cursor.getLong(offset + 5)) // complete_time
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // leader_id
+            cursor.getInt(offset + 4), // period
+            cursor.getString(offset + 5), // state
+            new java.util.Date(cursor.getLong(offset + 6)), // start_time
+            new java.util.Date(cursor.getLong(offset + 7)), // finish_time
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // parenter_id
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // supplier_id
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // task_id
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11) // dialog_id
         );
         return entity;
     }
@@ -109,9 +165,15 @@ public class TaskDao extends AbstractDao<Task, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setTitle(cursor.getString(offset + 1));
         entity.setContent(cursor.getString(offset + 2));
-        entity.setPriority(cursor.getString(offset + 3));
-        entity.setState(cursor.getString(offset + 4));
-        entity.setComplete_time(new java.util.Date(cursor.getLong(offset + 5)));
+        entity.setLeader_id(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setPeriod(cursor.getInt(offset + 4));
+        entity.setState(cursor.getString(offset + 5));
+        entity.setStart_time(new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setFinish_time(new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setParenter_id(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setSupplier_id(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setTask_id(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
+        entity.setDialog_id(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
      }
     
     /** @inheritdoc */
@@ -137,4 +199,137 @@ public class TaskDao extends AbstractDao<Task, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "children" to-many relationship of Task. */
+    public List<Task> _queryTask_Children(Long task_id) {
+        synchronized (this) {
+            if (task_ChildrenQuery == null) {
+                QueryBuilder<Task> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Task_id.eq(null));
+                task_ChildrenQuery = queryBuilder.build();
+            }
+        }
+        Query<Task> query = task_ChildrenQuery.forCurrentThread();
+        query.setParameter(0, task_id);
+        return query.list();
+    }
+
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getStaffDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T1", daoSession.getPartnerDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T2", daoSession.getSupplierDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T3", daoSession.getTaskDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T4", daoSession.getDialogDao().getAllColumns());
+            builder.append(" FROM TASK T");
+            builder.append(" LEFT JOIN STAFF T0 ON T.\"LEADER_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN PARTNER T1 ON T.\"PARENTER_ID\"=T1.\"_id\"");
+            builder.append(" LEFT JOIN SUPPLIER T2 ON T.\"SUPPLIER_ID\"=T2.\"_id\"");
+            builder.append(" LEFT JOIN TASK T3 ON T.\"TASK_ID\"=T3.\"_id\"");
+            builder.append(" LEFT JOIN DIALOG T4 ON T.\"DIALOG_ID\"=T4.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected Task loadCurrentDeep(Cursor cursor, boolean lock) {
+        Task entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        Staff leader = loadCurrentOther(daoSession.getStaffDao(), cursor, offset);
+        entity.setLeader(leader);
+        offset += daoSession.getStaffDao().getAllColumns().length;
+
+        Partner parenter = loadCurrentOther(daoSession.getPartnerDao(), cursor, offset);
+        entity.setParenter(parenter);
+        offset += daoSession.getPartnerDao().getAllColumns().length;
+
+        Supplier supplier = loadCurrentOther(daoSession.getSupplierDao(), cursor, offset);
+        entity.setSupplier(supplier);
+        offset += daoSession.getSupplierDao().getAllColumns().length;
+
+        Task parent = loadCurrentOther(daoSession.getTaskDao(), cursor, offset);
+        entity.setParent(parent);
+        offset += daoSession.getTaskDao().getAllColumns().length;
+
+        Dialog dialog = loadCurrentOther(daoSession.getDialogDao(), cursor, offset);
+        entity.setDialog(dialog);
+
+        return entity;    
+    }
+
+    public Task loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<Task> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<Task> list = new ArrayList<Task>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<Task> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<Task> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

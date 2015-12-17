@@ -11,19 +11,26 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.gj.administrator.gjerp.R;
+import com.gj.administrator.gjerp.dao.DaoSession;
+import com.gj.administrator.gjerp.dao.DialogDao;
+import com.gj.administrator.gjerp.dao.StaffDao;
+import com.gj.administrator.gjerp.dao.TaskDao;
 import com.gj.administrator.gjerp.domain.Dialog;
 import com.gj.administrator.gjerp.domain.Message;
+import com.gj.administrator.gjerp.domain.Staff;
+import com.gj.administrator.gjerp.domain.Task;
+import com.gj.administrator.gjerp.util.DBUtil;
 import com.gj.administrator.gjerp.util.DrawbalBuilderUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import jp.co.worksap.intern.entities.staff.StaffDTO;
 
 /**
  * the adapter of drawable list
- * Created by guojun on 2015/12/08
+ * Created by guojun on 2015/12/15
  */
 public class MessageAdapter extends BaseAdapter {
     protected Context context;
@@ -33,11 +40,13 @@ public class MessageAdapter extends BaseAdapter {
     private int itemId;
     // list of data items
     public List<Dialog> mDataList;
+    private DaoSession daoSession;
 
     public MessageAdapter(Context context, int itemId, List<Dialog> datas) {
         this.context = context;
         this.itemId = itemId;
         this.mDataList = datas;
+        daoSession = DBUtil.getDaoSession(context);
     }
 
 
@@ -68,36 +77,48 @@ public class MessageAdapter extends BaseAdapter {
         }
 
         Dialog item = getItem(position);
-        Message message = item.getMessages().get(0);
-        for(Message msg : item.getMessages())
-            if(msg.getName().compareTo(SessionUtil.getUser().getUsername())!=0){
-                message  = msg;
-                break;
-            }
-
+        Message message = item.getMessages().get(item.getMessages().size()-1);
 
         // provide support for selected state
-        String msgType = message.getMsg_type();
         TextDrawable.IBuilder mDrawableBuilder;
         String iconName;
         TextDrawable drawable;
-        if(msgType.compareTo("Chat")==0) {
+
+        if(item.getDialog_type()== Dialog.TYPE_CHAT) {
+            Staff staff = daoSession.getStaffDao()
+                    .queryBuilder()
+                    .where(StaffDao.Properties.Dialog_id
+                            .eq(item.getId()))
+                    .unique();
+
             mDrawableBuilder = DrawbalBuilderUtil.getDrawbalBuilder(DrawbalBuilderUtil.DRAWABLE_TYPE.SAMPLE_RECT);
-            iconName = message.getName().substring(0, 1);
-            drawable = mDrawableBuilder.build(iconName, mColorGenerator.getColor(message.getName()));
+            iconName = staff.getName().substring(0, 1);
+            drawable = mDrawableBuilder.build(iconName, mColorGenerator.getColor(staff.getName()));
+            holder.avater.setImageDrawable(drawable);
+            holder.view.setBackgroundColor(Color.TRANSPARENT);
+            holder.name.setText(staff.getName());
+            holder.type.setText(Dialog.TYPE[item.getDialog_type()]);
+            holder.message.setText(Message.MESSAGE_TYPE[message.getMsg_type()] + " : " +
+                    (message.getContent().length() > 30 ? message.getContent().substring(0, 30) + "..." : message.getContent()));
+            holder.time.setText(new SimpleDateFormat("HH:mm").format(message.getMsg_time()));
         }
-        else {
+        else if(item.getDialog_type()== Dialog.TYPE_TASK){
+            Task task = daoSession.getTaskDao()
+                    .queryBuilder()
+                    .where(TaskDao.Properties.Dialog_id
+                            .eq(item.getId()))
+                    .unique();
             mDrawableBuilder = DrawbalBuilderUtil.getDrawbalBuilder(DrawbalBuilderUtil.DRAWABLE_TYPE.SAMPLE_ROUND);
-            iconName = message.getMsg_type().substring(0,1);
+            iconName = "T";
             drawable = mDrawableBuilder.build(iconName, mColorGenerator.getColor(message.getMsg_type()));
+            holder.avater.setImageDrawable(drawable);
+            holder.view.setBackgroundColor(Color.TRANSPARENT);
+            holder.name.setText(task.getTitle());
+            holder.type.setText(Dialog.TYPE[item.getDialog_type()]);
+            holder.message.setText(Message.MESSAGE_TYPE[message.getMsg_type()] + " : " +
+                    (message.getContent().length() > 30 ? message.getContent().substring(0, 30) + "..." : message.getContent()));
+            holder.time.setText(new SimpleDateFormat("HH:mm").format(message.getMsg_time()));
         }
-        holder.avater.setImageDrawable(drawable);
-        holder.view.setBackgroundColor(Color.TRANSPARENT);
-        holder.name.setText(message.getName());
-        holder.type.setText(message.getName_type()!=null? message.getName_type():"");
-        holder.message.setText(message.getMsg_type() + " : " +
-                (message.getContent().length() > 30 ? message.getContent().substring(0, 15) + "..." : message.getContent()));
-        holder.time.setText(new SimpleDateFormat("HH:mm").format(message.getMsg_time()));
         return convertView;
     }
 

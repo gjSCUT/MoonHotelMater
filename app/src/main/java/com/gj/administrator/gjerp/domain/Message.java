@@ -18,14 +18,10 @@ public class Message {
     private Long id;
     /** Not-null value. */
     private String content;
-    /** Not-null value. */
-    private String name;
-    /** Not-null value. */
-    private String msg_type;
+    private int msg_type;
+    private boolean identify;
     /** Not-null value. */
     private java.util.Date msg_time;
-    private String name_type;
-    private Long name_id;
     private Long dialog_id;
 
     /** Used to resolve relations */
@@ -39,6 +35,10 @@ public class Message {
 
 
     // KEEP FIELDS - put your custom fields here
+    public final static  int CREATED = 0;
+    public final static  int PROCESS = 1;
+    public final static  int FINISHED = 2;
+    public final static String[] MESSAGE_TYPE= {"Created","Processing","Finished"};
     // KEEP FIELDS END
 
     public Message() {
@@ -48,14 +48,12 @@ public class Message {
         this.id = id;
     }
 
-    public Message(Long id, String content, String name, String msg_type, java.util.Date msg_time, String name_type, Long name_id, Long dialog_id) {
+    public Message(Long id, String content, int msg_type, boolean identify, java.util.Date msg_time, Long dialog_id) {
         this.id = id;
         this.content = content;
-        this.name = name;
         this.msg_type = msg_type;
+        this.identify = identify;
         this.msg_time = msg_time;
-        this.name_type = name_type;
-        this.name_id = name_id;
         this.dialog_id = dialog_id;
     }
 
@@ -83,24 +81,20 @@ public class Message {
         this.content = content;
     }
 
-    /** Not-null value. */
-    public String getName() {
-        return name;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /** Not-null value. */
-    public String getMsg_type() {
+    public int getMsg_type() {
         return msg_type;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setMsg_type(String msg_type) {
+    public void setMsg_type(int msg_type) {
         this.msg_type = msg_type;
+    }
+
+    public boolean getIdentify() {
+        return identify;
+    }
+
+    public void setIdentify(boolean identify) {
+        this.identify = identify;
     }
 
     /** Not-null value. */
@@ -111,22 +105,6 @@ public class Message {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setMsg_time(java.util.Date msg_time) {
         this.msg_time = msg_time;
-    }
-
-    public String getName_type() {
-        return name_type;
-    }
-
-    public void setName_type(String name_type) {
-        this.name_type = name_type;
-    }
-
-    public Long getName_id() {
-        return name_id;
-    }
-
-    public void setName_id(Long name_id) {
-        this.name_id = name_id;
     }
 
     public Long getDialog_id() {

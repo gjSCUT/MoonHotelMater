@@ -10,32 +10,36 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import com.gj.administrator.gjerp.domain.Hotel;
+import com.gj.administrator.gjerp.domain.Region;
 import com.gj.administrator.gjerp.domain.RoomType;
 import com.gj.administrator.gjerp.domain.Room;
-import com.gj.administrator.gjerp.domain.User;
 import com.gj.administrator.gjerp.domain.Schedule;
-import com.gj.administrator.gjerp.domain.Task;
-import com.gj.administrator.gjerp.domain.Employee;
-import com.gj.administrator.gjerp.domain.Guest;
+import com.gj.administrator.gjerp.domain.Dialog;
+import com.gj.administrator.gjerp.domain.Staff;
+import com.gj.administrator.gjerp.domain.Message;
+import com.gj.administrator.gjerp.domain.Customer;
+import com.gj.administrator.gjerp.domain.User;
 import com.gj.administrator.gjerp.domain.Partner;
 import com.gj.administrator.gjerp.domain.Supplier;
-import com.gj.administrator.gjerp.domain.Dialog;
-import com.gj.administrator.gjerp.domain.Message;
+import com.gj.administrator.gjerp.domain.Task;
+import com.gj.administrator.gjerp.domain.StaffsTasks;
 import com.gj.administrator.gjerp.domain.BookRecord;
 import com.gj.administrator.gjerp.domain.OutRecord;
 
 import com.gj.administrator.gjerp.dao.HotelDao;
+import com.gj.administrator.gjerp.dao.RegionDao;
 import com.gj.administrator.gjerp.dao.RoomTypeDao;
 import com.gj.administrator.gjerp.dao.RoomDao;
-import com.gj.administrator.gjerp.dao.UserDao;
 import com.gj.administrator.gjerp.dao.ScheduleDao;
-import com.gj.administrator.gjerp.dao.TaskDao;
-import com.gj.administrator.gjerp.dao.EmployeeDao;
-import com.gj.administrator.gjerp.dao.GuestDao;
+import com.gj.administrator.gjerp.dao.DialogDao;
+import com.gj.administrator.gjerp.dao.StaffDao;
+import com.gj.administrator.gjerp.dao.MessageDao;
+import com.gj.administrator.gjerp.dao.CustomerDao;
+import com.gj.administrator.gjerp.dao.UserDao;
 import com.gj.administrator.gjerp.dao.PartnerDao;
 import com.gj.administrator.gjerp.dao.SupplierDao;
-import com.gj.administrator.gjerp.dao.DialogDao;
-import com.gj.administrator.gjerp.dao.MessageDao;
+import com.gj.administrator.gjerp.dao.TaskDao;
+import com.gj.administrator.gjerp.dao.StaffsTasksDao;
 import com.gj.administrator.gjerp.dao.BookRecordDao;
 import com.gj.administrator.gjerp.dao.OutRecordDao;
 
@@ -49,32 +53,36 @@ import com.gj.administrator.gjerp.dao.OutRecordDao;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig hotelDaoConfig;
+    private final DaoConfig regionDaoConfig;
     private final DaoConfig roomTypeDaoConfig;
     private final DaoConfig roomDaoConfig;
-    private final DaoConfig userDaoConfig;
     private final DaoConfig scheduleDaoConfig;
-    private final DaoConfig taskDaoConfig;
-    private final DaoConfig employeeDaoConfig;
-    private final DaoConfig guestDaoConfig;
+    private final DaoConfig dialogDaoConfig;
+    private final DaoConfig staffDaoConfig;
+    private final DaoConfig messageDaoConfig;
+    private final DaoConfig customerDaoConfig;
+    private final DaoConfig userDaoConfig;
     private final DaoConfig partnerDaoConfig;
     private final DaoConfig supplierDaoConfig;
-    private final DaoConfig dialogDaoConfig;
-    private final DaoConfig messageDaoConfig;
+    private final DaoConfig taskDaoConfig;
+    private final DaoConfig staffsTasksDaoConfig;
     private final DaoConfig bookRecordDaoConfig;
     private final DaoConfig outRecordDaoConfig;
 
     private final HotelDao hotelDao;
+    private final RegionDao regionDao;
     private final RoomTypeDao roomTypeDao;
     private final RoomDao roomDao;
-    private final UserDao userDao;
     private final ScheduleDao scheduleDao;
-    private final TaskDao taskDao;
-    private final EmployeeDao employeeDao;
-    private final GuestDao guestDao;
+    private final DialogDao dialogDao;
+    private final StaffDao staffDao;
+    private final MessageDao messageDao;
+    private final CustomerDao customerDao;
+    private final UserDao userDao;
     private final PartnerDao partnerDao;
     private final SupplierDao supplierDao;
-    private final DialogDao dialogDao;
-    private final MessageDao messageDao;
+    private final TaskDao taskDao;
+    private final StaffsTasksDao staffsTasksDao;
     private final BookRecordDao bookRecordDao;
     private final OutRecordDao outRecordDao;
 
@@ -85,26 +93,32 @@ public class DaoSession extends AbstractDaoSession {
         hotelDaoConfig = daoConfigMap.get(HotelDao.class).clone();
         hotelDaoConfig.initIdentityScope(type);
 
+        regionDaoConfig = daoConfigMap.get(RegionDao.class).clone();
+        regionDaoConfig.initIdentityScope(type);
+
         roomTypeDaoConfig = daoConfigMap.get(RoomTypeDao.class).clone();
         roomTypeDaoConfig.initIdentityScope(type);
 
         roomDaoConfig = daoConfigMap.get(RoomDao.class).clone();
         roomDaoConfig.initIdentityScope(type);
 
-        userDaoConfig = daoConfigMap.get(UserDao.class).clone();
-        userDaoConfig.initIdentityScope(type);
-
         scheduleDaoConfig = daoConfigMap.get(ScheduleDao.class).clone();
         scheduleDaoConfig.initIdentityScope(type);
 
-        taskDaoConfig = daoConfigMap.get(TaskDao.class).clone();
-        taskDaoConfig.initIdentityScope(type);
+        dialogDaoConfig = daoConfigMap.get(DialogDao.class).clone();
+        dialogDaoConfig.initIdentityScope(type);
 
-        employeeDaoConfig = daoConfigMap.get(EmployeeDao.class).clone();
-        employeeDaoConfig.initIdentityScope(type);
+        staffDaoConfig = daoConfigMap.get(StaffDao.class).clone();
+        staffDaoConfig.initIdentityScope(type);
 
-        guestDaoConfig = daoConfigMap.get(GuestDao.class).clone();
-        guestDaoConfig.initIdentityScope(type);
+        messageDaoConfig = daoConfigMap.get(MessageDao.class).clone();
+        messageDaoConfig.initIdentityScope(type);
+
+        customerDaoConfig = daoConfigMap.get(CustomerDao.class).clone();
+        customerDaoConfig.initIdentityScope(type);
+
+        userDaoConfig = daoConfigMap.get(UserDao.class).clone();
+        userDaoConfig.initIdentityScope(type);
 
         partnerDaoConfig = daoConfigMap.get(PartnerDao.class).clone();
         partnerDaoConfig.initIdentityScope(type);
@@ -112,11 +126,11 @@ public class DaoSession extends AbstractDaoSession {
         supplierDaoConfig = daoConfigMap.get(SupplierDao.class).clone();
         supplierDaoConfig.initIdentityScope(type);
 
-        dialogDaoConfig = daoConfigMap.get(DialogDao.class).clone();
-        dialogDaoConfig.initIdentityScope(type);
+        taskDaoConfig = daoConfigMap.get(TaskDao.class).clone();
+        taskDaoConfig.initIdentityScope(type);
 
-        messageDaoConfig = daoConfigMap.get(MessageDao.class).clone();
-        messageDaoConfig.initIdentityScope(type);
+        staffsTasksDaoConfig = daoConfigMap.get(StaffsTasksDao.class).clone();
+        staffsTasksDaoConfig.initIdentityScope(type);
 
         bookRecordDaoConfig = daoConfigMap.get(BookRecordDao.class).clone();
         bookRecordDaoConfig.initIdentityScope(type);
@@ -125,55 +139,65 @@ public class DaoSession extends AbstractDaoSession {
         outRecordDaoConfig.initIdentityScope(type);
 
         hotelDao = new HotelDao(hotelDaoConfig, this);
+        regionDao = new RegionDao(regionDaoConfig, this);
         roomTypeDao = new RoomTypeDao(roomTypeDaoConfig, this);
         roomDao = new RoomDao(roomDaoConfig, this);
-        userDao = new UserDao(userDaoConfig, this);
         scheduleDao = new ScheduleDao(scheduleDaoConfig, this);
-        taskDao = new TaskDao(taskDaoConfig, this);
-        employeeDao = new EmployeeDao(employeeDaoConfig, this);
-        guestDao = new GuestDao(guestDaoConfig, this);
+        dialogDao = new DialogDao(dialogDaoConfig, this);
+        staffDao = new StaffDao(staffDaoConfig, this);
+        messageDao = new MessageDao(messageDaoConfig, this);
+        customerDao = new CustomerDao(customerDaoConfig, this);
+        userDao = new UserDao(userDaoConfig, this);
         partnerDao = new PartnerDao(partnerDaoConfig, this);
         supplierDao = new SupplierDao(supplierDaoConfig, this);
-        dialogDao = new DialogDao(dialogDaoConfig, this);
-        messageDao = new MessageDao(messageDaoConfig, this);
+        taskDao = new TaskDao(taskDaoConfig, this);
+        staffsTasksDao = new StaffsTasksDao(staffsTasksDaoConfig, this);
         bookRecordDao = new BookRecordDao(bookRecordDaoConfig, this);
         outRecordDao = new OutRecordDao(outRecordDaoConfig, this);
 
         registerDao(Hotel.class, hotelDao);
+        registerDao(Region.class, regionDao);
         registerDao(RoomType.class, roomTypeDao);
         registerDao(Room.class, roomDao);
-        registerDao(User.class, userDao);
         registerDao(Schedule.class, scheduleDao);
-        registerDao(Task.class, taskDao);
-        registerDao(Employee.class, employeeDao);
-        registerDao(Guest.class, guestDao);
+        registerDao(Dialog.class, dialogDao);
+        registerDao(Staff.class, staffDao);
+        registerDao(Message.class, messageDao);
+        registerDao(Customer.class, customerDao);
+        registerDao(User.class, userDao);
         registerDao(Partner.class, partnerDao);
         registerDao(Supplier.class, supplierDao);
-        registerDao(Dialog.class, dialogDao);
-        registerDao(Message.class, messageDao);
+        registerDao(Task.class, taskDao);
+        registerDao(StaffsTasks.class, staffsTasksDao);
         registerDao(BookRecord.class, bookRecordDao);
         registerDao(OutRecord.class, outRecordDao);
     }
     
     public void clear() {
         hotelDaoConfig.getIdentityScope().clear();
+        regionDaoConfig.getIdentityScope().clear();
         roomTypeDaoConfig.getIdentityScope().clear();
         roomDaoConfig.getIdentityScope().clear();
-        userDaoConfig.getIdentityScope().clear();
         scheduleDaoConfig.getIdentityScope().clear();
-        taskDaoConfig.getIdentityScope().clear();
-        employeeDaoConfig.getIdentityScope().clear();
-        guestDaoConfig.getIdentityScope().clear();
+        dialogDaoConfig.getIdentityScope().clear();
+        staffDaoConfig.getIdentityScope().clear();
+        messageDaoConfig.getIdentityScope().clear();
+        customerDaoConfig.getIdentityScope().clear();
+        userDaoConfig.getIdentityScope().clear();
         partnerDaoConfig.getIdentityScope().clear();
         supplierDaoConfig.getIdentityScope().clear();
-        dialogDaoConfig.getIdentityScope().clear();
-        messageDaoConfig.getIdentityScope().clear();
+        taskDaoConfig.getIdentityScope().clear();
+        staffsTasksDaoConfig.getIdentityScope().clear();
         bookRecordDaoConfig.getIdentityScope().clear();
         outRecordDaoConfig.getIdentityScope().clear();
     }
 
     public HotelDao getHotelDao() {
         return hotelDao;
+    }
+
+    public RegionDao getRegionDao() {
+        return regionDao;
     }
 
     public RoomTypeDao getRoomTypeDao() {
@@ -184,24 +208,28 @@ public class DaoSession extends AbstractDaoSession {
         return roomDao;
     }
 
-    public UserDao getUserDao() {
-        return userDao;
-    }
-
     public ScheduleDao getScheduleDao() {
         return scheduleDao;
     }
 
-    public TaskDao getTaskDao() {
-        return taskDao;
+    public DialogDao getDialogDao() {
+        return dialogDao;
     }
 
-    public EmployeeDao getEmployeeDao() {
-        return employeeDao;
+    public StaffDao getStaffDao() {
+        return staffDao;
     }
 
-    public GuestDao getGuestDao() {
-        return guestDao;
+    public MessageDao getMessageDao() {
+        return messageDao;
+    }
+
+    public CustomerDao getCustomerDao() {
+        return customerDao;
+    }
+
+    public UserDao getUserDao() {
+        return userDao;
     }
 
     public PartnerDao getPartnerDao() {
@@ -212,12 +240,12 @@ public class DaoSession extends AbstractDaoSession {
         return supplierDao;
     }
 
-    public DialogDao getDialogDao() {
-        return dialogDao;
+    public TaskDao getTaskDao() {
+        return taskDao;
     }
 
-    public MessageDao getMessageDao() {
-        return messageDao;
+    public StaffsTasksDao getStaffsTasksDao() {
+        return staffsTasksDao;
     }
 
     public BookRecordDao getBookRecordDao() {

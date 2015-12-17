@@ -16,7 +16,7 @@ import com.gj.administrator.gjerp.util.DrawbalBuilderUtil;
 
 /**
  * manage fragment
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public class AnalyzeFragment extends BaseFragment{
     private static final String[] items = {"Hotel Analysis", "Room Analysis","Product Analysis","Guest Analysis"};

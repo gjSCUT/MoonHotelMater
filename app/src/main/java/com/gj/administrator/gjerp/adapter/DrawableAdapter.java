@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * the adapter of drawable list
- * Created by guojun on 2015/12/08
+ * Created by guojun on 2015/12/15
  */
 public class DrawableAdapter extends BaseAdapter {
     protected Context context;

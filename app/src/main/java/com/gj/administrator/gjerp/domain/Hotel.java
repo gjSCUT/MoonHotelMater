@@ -17,6 +17,10 @@ public class Hotel {
     private Long id;
     /** Not-null value. */
     private String name;
+    /** Not-null value. */
+    private String address;
+    /** Not-null value. */
+    private String tel;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -35,9 +39,11 @@ public class Hotel {
         this.id = id;
     }
 
-    public Hotel(Long id, String name) {
+    public Hotel(Long id, String name, String address, String tel) {
         this.id = id;
         this.name = name;
+        this.address = address;
+        this.tel = tel;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -62,6 +68,26 @@ public class Hotel {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /** Not-null value. */
+    public String getAddress() {
+        return address;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    /** Not-null value. */
+    public String getTel() {
+        return tel;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

@@ -3,7 +3,7 @@ package com.gj.administrator.gjerp.util;
 import android.util.Log;
 
 /**
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public class LogUtil {
     private static final String TAG = "LogUtil";

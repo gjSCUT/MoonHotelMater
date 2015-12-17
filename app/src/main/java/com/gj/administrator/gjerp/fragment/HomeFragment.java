@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.adapter.TabPagerAdapter;
 import com.gj.administrator.gjerp.base.BaseFragment;
+import com.gj.administrator.gjerp.domain.Message;
 import com.gj.administrator.gjerp.view.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.List;
 
 /**
  * analyze chart
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public class HomeFragment extends BaseFragment{
     protected Context context;
@@ -27,11 +28,18 @@ public class HomeFragment extends BaseFragment{
     List<BaseFragment> fragments;
     TabPagerAdapter mPagerAdapter;
     ViewPager mViewPager;
+    MessageFragment messageFragment;
 
     public static HomeFragment getInstance(Context context) {
         HomeFragment mf = new HomeFragment();
         mf.context = context;
         return mf;
+    }
+
+    public void listenMessage(Message message){
+        if(messageFragment!=null){
+            messageFragment.listenMessage(message);
+        }
     }
 
     @Override
@@ -49,12 +57,14 @@ public class HomeFragment extends BaseFragment{
     protected void initViews() {
         // 加入Fragment
         fragments = new ArrayList<>();
-        fragments.add(MessageFragment.getInstance(context));
+        messageFragment = MessageFragment.getInstance(context);
+        fragments.add(messageFragment);
         fragments.add(TaskFragment.getInstance(context));
         fragments.add(RelationFragment.getInstance(context));
         mPagerAdapter = new TabPagerAdapter(this.getChildFragmentManager(), fragments,titles);
         mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
 
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         slidingTabLayout.setDistributeEvenly(true);

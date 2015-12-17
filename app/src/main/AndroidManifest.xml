@@ -46,17 +46,28 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.ManageActivity"
-            android:label="Manage"
-            android:screenOrientation="portrait"  >
-        </activity>
-        <activity
             android:name=".activity.ManageRoomActivity"
             android:label="Item"
             android:screenOrientation="portrait"  >
         </activity>
         <activity
             android:name=".activity.ChatActivity"
+            android:screenOrientation="portrait"  >
+        </activity>
+
+        <activity
+            android:name=".activity.TaskCreateActivity"
+            android:screenOrientation="portrait"  >
+        </activity>
+
+
+        <activity
+            android:name=".activity.TaskItemActivity"
+            android:screenOrientation="portrait"  >
+        </activity>
+
+        <activity
+            android:name=".activity.ScheduleActivity"
             android:screenOrientation="portrait"  >
         </activity>
     </application>

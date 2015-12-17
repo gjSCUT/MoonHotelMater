@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * the adapter of drawable list
- * Created by guojun on 2015/12/09
+ * Created by guojun on 2015/12/13
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
     protected Context context;

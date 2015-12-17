@@ -15,7 +15,11 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.gj.administrator.gjerp.R;
+import com.gj.administrator.gjerp.dao.StaffDao;
+import com.gj.administrator.gjerp.domain.Dialog;
 import com.gj.administrator.gjerp.domain.Message;
+import com.gj.administrator.gjerp.domain.Staff;
+import com.gj.administrator.gjerp.util.DBUtil;
 import com.gj.administrator.gjerp.util.DrawbalBuilderUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
@@ -23,10 +27,18 @@ public class ChatAdapter extends BaseAdapter {
     private Context context;
 
     public List<Message> datas;
+    Staff staff;
 
     public ChatAdapter(Context context, List<Message> datas) {
         this.context = context;
         this.datas = datas;
+        staff = DBUtil.getDaoSession(context)
+                .getStaffDao()
+                .queryBuilder()
+                .where(StaffDao.Properties.Dialog_id.eq(
+                     datas.get(0).getDialog_id())
+                )
+                .unique();
     }
 
 
@@ -47,13 +59,14 @@ public class ChatAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Message msg = getItem(position);
+        Message msg = getItem(position);
+
 
         ViewHolder holder = null;
 
         if (convertView == null) {
             holder = new ViewHolder();
-            if(msg.getName().compareTo(SessionUtil.getUser().getUsername())!=0) {
+            if(msg.getIdentify() == false) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.listitem_receive_msg, null);
                 holder.mHtvTimeStampTime = (TextView) convertView.findViewById(R.id.message_timestamp_htv_time);
                 holder.mIvLeftAvatar = (ImageView) convertView.findViewById(R.id.left_message_iv_userphoto);
@@ -73,14 +86,14 @@ public class ChatAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
 
         TextDrawable drawable = DrawbalBuilderUtil.getDrawbalBuilder(DrawbalBuilderUtil.DRAWABLE_TYPE.SAMPLE_RECT_BORDER)
-                .build(String.valueOf(msg.getName().charAt(0)), ColorGenerator.MATERIAL.getColor(msg.getName()));
-        if(msg.getName().compareTo(SessionUtil.getUser().getUsername())!=0) {
-            holder.mHtvTimeStampTime.setText(new SimpleDateFormat("HH:mm").format(msg.getMsg_time()));
+                .build(String.valueOf(staff.getName().charAt(0)), ColorGenerator.MATERIAL.getColor(staff.getName()));
+        if(msg.getIdentify() == false) {
+            holder.mHtvTimeStampTime.setText(new SimpleDateFormat("HH:mm:ss").format(msg.getMsg_time()));
             holder.mTvTextContent.setText(msg.getContent());
             holder.mIvLeftAvatar.setImageDrawable(drawable);
         }
         else{
-            holder.mHtvTimeStampTime.setText(new SimpleDateFormat("HH:mm").format(msg.getMsg_time()));
+            holder.mHtvTimeStampTime.setText(new SimpleDateFormat("HH:mm:ss").format(msg.getMsg_time()));
             holder.mTvTextContent.setText(msg.getContent());
             holder.mIvRightAvatar.setImageDrawable(drawable);
         }

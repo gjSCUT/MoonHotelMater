@@ -15,11 +15,11 @@ import com.gj.administrator.gjerp.dao.RoomTypeDao;
 public class RoomType {
 
     private Long id;
-    private int type_name;
-    private int bed_num;
-    private double day_price;
-    private Double hour_price;
-    private Double longtime_price;
+    /** Not-null value. */
+    private String type_name;
+    private double price;
+    /** Not-null value. */
+    private String price_unit;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -38,13 +38,11 @@ public class RoomType {
         this.id = id;
     }
 
-    public RoomType(Long id, int type_name, int bed_num, double day_price, Double hour_price, Double longtime_price) {
+    public RoomType(Long id, String type_name, double price, String price_unit) {
         this.id = id;
         this.type_name = type_name;
-        this.bed_num = bed_num;
-        this.day_price = day_price;
-        this.hour_price = hour_price;
-        this.longtime_price = longtime_price;
+        this.price = price;
+        this.price_unit = price_unit;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -61,44 +59,32 @@ public class RoomType {
         this.id = id;
     }
 
-    public int getType_name() {
+    /** Not-null value. */
+    public String getType_name() {
         return type_name;
     }
 
-    public void setType_name(int type_name) {
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setType_name(String type_name) {
         this.type_name = type_name;
     }
 
-    public int getBed_num() {
-        return bed_num;
+    public double getPrice() {
+        return price;
     }
 
-    public void setBed_num(int bed_num) {
-        this.bed_num = bed_num;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public double getDay_price() {
-        return day_price;
+    /** Not-null value. */
+    public String getPrice_unit() {
+        return price_unit;
     }
 
-    public void setDay_price(double day_price) {
-        this.day_price = day_price;
-    }
-
-    public Double getHour_price() {
-        return hour_price;
-    }
-
-    public void setHour_price(Double hour_price) {
-        this.hour_price = hour_price;
-    }
-
-    public Double getLongtime_price() {
-        return longtime_price;
-    }
-
-    public void setLongtime_price(Double longtime_price) {
-        this.longtime_price = longtime_price;
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setPrice_unit(String price_unit) {
+        this.price_unit = price_unit;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

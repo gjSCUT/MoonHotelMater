@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,8 +13,6 @@ import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.base.BaseFragment;
 import com.gj.administrator.gjerp.fragment.AnalyzeCombinedchartFragment;
 import com.gj.administrator.gjerp.fragment.AnalyzePiechartFragment;
-import com.gj.administrator.gjerp.fragment.ManageFragment;
-import com.gj.administrator.gjerp.fragment.RoomFragment;
 import com.gj.administrator.gjerp.view.CircleIndicator;
 
 import java.util.ArrayList;

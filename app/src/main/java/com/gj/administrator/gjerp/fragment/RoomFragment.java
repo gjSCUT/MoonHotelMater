@@ -9,10 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
 
-import com.activeandroid.util.Log;
 import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.base.BaseFragment;
 import com.gj.administrator.gjerp.domain.Room;
@@ -22,14 +20,13 @@ import java.util.HashMap;
 
 /**
  * Room fragment
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public class RoomFragment extends BaseFragment {
     // this is the descriptions used in the main page, under the descriptions
     String[] states = new String[]{"Empty", "Checking", "Booking", "Outing", "Blocking"};
     Integer[] counts = new Integer[]{0, 0, 0, 0, 0};
     protected Context context;
-    private RadioGroup roomGroup;
     private GridView gridView;
 
     private static Room[] mRoomArray;
@@ -57,56 +54,25 @@ public class RoomFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         fetchRoomArray();
-        switch (roomGroup.getCheckedRadioButtonId()) {
-            case R.id.room_style_num:
-                Fragment roomDisplayOrderedFragment = RoomStateFragment.getInstance(mRoomArray, context);
-                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                transaction.replace(R.id.room_container, roomDisplayOrderedFragment).commit();
-                break;
-            case R.id.room_style_type:
-                break;
-            default:
-                break;
-        }
+        Fragment roomDisplayOrderedFragment = RoomStateFragment.getInstance(mRoomArray, context);
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.room_container, roomDisplayOrderedFragment).commit();
     }
 
     @Override
     protected void initViews() {
         gridView = (GridView) findViewById(R.id.room_state_grid);
-        roomGroup = (RadioGroup) findViewById(R.id.room_style_group);
     }
 
     @Override
     protected void initEvents() {
-        Log.i(TAG, "Method initEvents is called.");
         if (gridView != null) {
             setupGridContent();
         }
         fetchRoomArray();
-        roomGroup.check(R.id.room_style_num);
-
-        roomGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                switch (checkedId) {
-                    case R.id.room_style_num:
-                        //TODO
-                        Fragment roomDisplayOrderedFragment = RoomStateFragment.getInstance(mRoomArray, context);
-                        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                        transaction.replace(R.id.room_container, roomDisplayOrderedFragment)
-                                .commit();
-                        break;
-                    case R.id.room_style_type:
-                        //TODO
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-        });
+        Fragment roomDisplayOrderedFragment = RoomStateFragment.getInstance(mRoomArray, context);
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.room_container, roomDisplayOrderedFragment).commit();
     }
 
     private void setupGridContent() {
@@ -157,7 +123,6 @@ public class RoomFragment extends BaseFragment {
         for (int i = 0; i < counts.length; i++) {
             counts[i] = inputCounts[i];
         }
-        Log.i(TAG, "Room counts for different types are set.");
     }
 
 }

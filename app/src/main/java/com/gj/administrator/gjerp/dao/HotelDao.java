@@ -25,6 +25,8 @@ public class HotelDao extends AbstractDao<Hotel, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
+        public final static Property Address = new Property(2, String.class, "address", false, "ADDRESS");
+        public final static Property Tel = new Property(3, String.class, "tel", false, "TEL");
     };
 
     private DaoSession daoSession;
@@ -44,7 +46,9 @@ public class HotelDao extends AbstractDao<Hotel, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"HOTEL\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"NAME\" TEXT NOT NULL );"); // 1: name
+                "\"NAME\" TEXT NOT NULL ," + // 1: name
+                "\"ADDRESS\" TEXT NOT NULL ," + // 2: address
+                "\"TEL\" TEXT NOT NULL );"); // 3: tel
     }
 
     /** Drops the underlying database table. */
@@ -63,6 +67,8 @@ public class HotelDao extends AbstractDao<Hotel, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getName());
+        stmt.bindString(3, entity.getAddress());
+        stmt.bindString(4, entity.getTel());
     }
 
     @Override
@@ -82,7 +88,9 @@ public class HotelDao extends AbstractDao<Hotel, Long> {
     public Hotel readEntity(Cursor cursor, int offset) {
         Hotel entity = new Hotel( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1) // name
+            cursor.getString(offset + 1), // name
+            cursor.getString(offset + 2), // address
+            cursor.getString(offset + 3) // tel
         );
         return entity;
     }
@@ -92,6 +100,8 @@ public class HotelDao extends AbstractDao<Hotel, Long> {
     public void readEntity(Cursor cursor, Hotel entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.getString(offset + 1));
+        entity.setAddress(cursor.getString(offset + 2));
+        entity.setTel(cursor.getString(offset + 3));
      }
     
     /** @inheritdoc */

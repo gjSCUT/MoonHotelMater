@@ -2,7 +2,6 @@ package com.gj.administrator.gjerp.activity;
 
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +13,7 @@ import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.base.BaseApplication;
 import com.gj.administrator.gjerp.domain.Room;
+import com.gj.administrator.gjerp.util.DBUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
 
@@ -48,7 +48,7 @@ public class ManageRoomActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Room room = new Room(null,roomNum.getText().toString(),0, roomType.getSelectedItemId(), SessionUtil.getHotel().getId());
-                BaseApplication.getDaoSession(mContext).getRoomDao().insert(room);
+                DBUtil.getDaoSession(mContext).getRoomDao().insert(room);
                 finish();
             }
         });

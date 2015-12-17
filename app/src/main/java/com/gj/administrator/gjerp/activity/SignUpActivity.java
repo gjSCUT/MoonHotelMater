@@ -12,8 +12,9 @@ import com.gj.administrator.gjerp.R;
 import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.base.BaseApplication;
 import com.gj.administrator.gjerp.dao.DaoSession;
-import com.gj.administrator.gjerp.domain.Guest;
+import com.gj.administrator.gjerp.domain.Staff;
 import com.gj.administrator.gjerp.domain.User;
+import com.gj.administrator.gjerp.util.DBUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
 import java.util.Date;
@@ -55,22 +56,20 @@ public class SignUpActivity extends BaseActivity {
         sureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User user = new User(null,loginEdUsr.getText().toString(),loginEdPwd.getText().toString());
-                DaoSession daoSession = BaseApplication.getDaoSession(mContext);
-                long userId =daoSession .getUserDao().insert(user);
-                Guest guest = new Guest(
+                DaoSession daoSession = DBUtil.getDaoSession(mContext);
+                Staff staff = new Staff(
                         null,
                         loginEdName.getText().toString(),
-                        Guest.NORMAL,
-                        loginEdPhone.getText().toString(),
-                        "gjscut@qq.com",
-                        new Date(),
                         loginEdGender.getText().toString(),
-                        Integer.parseInt(loginEdAge.getText().toString()),
-                        userId);
-                daoSession.getGuestDao().insert(guest);
-                SessionUtil.getUser().setUsername(loginEdUsr.getText().toString());
-                SessionUtil.getUser().setPassword(loginEdPwd.getText().toString());
+                        loginEdPhone.getText().toString(),
+                        loginEdAge.getText().toString(),
+                        SessionUtil.getHotel().getId(),
+                        null);
+                daoSession.getStaffDao().insert(staff);
+
+                User user = new User(null,loginEdUsr.getText().toString(),loginEdPwd.getText().toString(),staff.getId());
+                daoSession .getUserDao().insert(user);
+
                 startActivity(MainActivity.class);
                 finish();
             }

@@ -32,12 +32,10 @@ public class MessageDao extends AbstractDao<Message, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Content = new Property(1, String.class, "content", false, "CONTENT");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Msg_type = new Property(3, String.class, "msg_type", false, "MSG_TYPE");
+        public final static Property Msg_type = new Property(2, int.class, "msg_type", false, "MSG_TYPE");
+        public final static Property Identify = new Property(3, boolean.class, "identify", false, "IDENTIFY");
         public final static Property Msg_time = new Property(4, java.util.Date.class, "msg_time", false, "MSG_TIME");
-        public final static Property Name_type = new Property(5, String.class, "name_type", false, "NAME_TYPE");
-        public final static Property Name_id = new Property(6, Long.class, "name_id", false, "NAME_ID");
-        public final static Property Dialog_id = new Property(7, Long.class, "dialog_id", false, "DIALOG_ID");
+        public final static Property Dialog_id = new Property(5, Long.class, "dialog_id", false, "DIALOG_ID");
     };
 
     private DaoSession daoSession;
@@ -59,12 +57,10 @@ public class MessageDao extends AbstractDao<Message, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"MESSAGE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"CONTENT\" TEXT NOT NULL ," + // 1: content
-                "\"NAME\" TEXT NOT NULL ," + // 2: name
-                "\"MSG_TYPE\" TEXT NOT NULL ," + // 3: msg_type
+                "\"MSG_TYPE\" INTEGER NOT NULL ," + // 2: msg_type
+                "\"IDENTIFY\" INTEGER NOT NULL ," + // 3: identify
                 "\"MSG_TIME\" INTEGER NOT NULL ," + // 4: msg_time
-                "\"NAME_TYPE\" TEXT," + // 5: name_type
-                "\"NAME_ID\" INTEGER," + // 6: name_id
-                "\"DIALOG_ID\" INTEGER);"); // 7: dialog_id
+                "\"DIALOG_ID\" INTEGER);"); // 5: dialog_id
     }
 
     /** Drops the underlying database table. */
@@ -83,23 +79,13 @@ public class MessageDao extends AbstractDao<Message, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getContent());
-        stmt.bindString(3, entity.getName());
-        stmt.bindString(4, entity.getMsg_type());
+        stmt.bindLong(3, entity.getMsg_type());
+        stmt.bindLong(4, entity.getIdentify() ? 1L: 0L);
         stmt.bindLong(5, entity.getMsg_time().getTime());
- 
-        String name_type = entity.getName_type();
-        if (name_type != null) {
-            stmt.bindString(6, name_type);
-        }
- 
-        Long name_id = entity.getName_id();
-        if (name_id != null) {
-            stmt.bindLong(7, name_id);
-        }
  
         Long dialog_id = entity.getDialog_id();
         if (dialog_id != null) {
-            stmt.bindLong(8, dialog_id);
+            stmt.bindLong(6, dialog_id);
         }
     }
 
@@ -121,12 +107,10 @@ public class MessageDao extends AbstractDao<Message, Long> {
         Message entity = new Message( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // content
-            cursor.getString(offset + 2), // name
-            cursor.getString(offset + 3), // msg_type
+            cursor.getInt(offset + 2), // msg_type
+            cursor.getShort(offset + 3) != 0, // identify
             new java.util.Date(cursor.getLong(offset + 4)), // msg_time
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // name_type
-            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // name_id
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // dialog_id
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // dialog_id
         );
         return entity;
     }
@@ -136,12 +120,10 @@ public class MessageDao extends AbstractDao<Message, Long> {
     public void readEntity(Cursor cursor, Message entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setContent(cursor.getString(offset + 1));
-        entity.setName(cursor.getString(offset + 2));
-        entity.setMsg_type(cursor.getString(offset + 3));
+        entity.setMsg_type(cursor.getInt(offset + 2));
+        entity.setIdentify(cursor.getShort(offset + 3) != 0);
         entity.setMsg_time(new java.util.Date(cursor.getLong(offset + 4)));
-        entity.setName_type(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setName_id(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
-        entity.setDialog_id(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setDialog_id(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */
@@ -173,7 +155,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
             if (dialog_MessagesQuery == null) {
                 QueryBuilder<Message> queryBuilder = queryBuilder();
                 queryBuilder.where(Properties.Dialog_id.eq(null));
-                queryBuilder.orderRaw("T.'MSG_TIME' DESC");
+                queryBuilder.orderRaw("T.'MSG_TIME' ASC");
                 dialog_MessagesQuery = queryBuilder.build();
             }
         }

@@ -11,7 +11,7 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
-import com.gj.administrator.gjerp.domain.Guest;
+import com.gj.administrator.gjerp.domain.Customer;
 import com.gj.administrator.gjerp.domain.Room;
 
 import com.gj.administrator.gjerp.domain.OutRecord;
@@ -32,11 +32,9 @@ public class OutRecordDao extends AbstractDao<OutRecord, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Arrive_date = new Property(1, java.util.Date.class, "arrive_date", false, "ARRIVE_DATE");
         public final static Property Leave_date = new Property(2, java.util.Date.class, "leave_date", false, "LEAVE_DATE");
-        public final static Property Total_price = new Property(3, double.class, "total_price", false, "TOTAL_PRICE");
-        public final static Property Actual_price = new Property(4, double.class, "actual_price", false, "ACTUAL_PRICE");
-        public final static Property Book_day = new Property(5, int.class, "book_day", false, "BOOK_DAY");
-        public final static Property Guest_id = new Property(6, long.class, "guest_id", false, "GUEST_ID");
-        public final static Property Room_id = new Property(7, long.class, "room_id", false, "ROOM_ID");
+        public final static Property Consumption = new Property(3, double.class, "consumption", false, "CONSUMPTION");
+        public final static Property Guest_id = new Property(4, long.class, "guest_id", false, "GUEST_ID");
+        public final static Property Room_id = new Property(5, long.class, "room_id", false, "ROOM_ID");
     };
 
     private DaoSession daoSession;
@@ -58,11 +56,9 @@ public class OutRecordDao extends AbstractDao<OutRecord, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ARRIVE_DATE\" INTEGER NOT NULL ," + // 1: arrive_date
                 "\"LEAVE_DATE\" INTEGER NOT NULL ," + // 2: leave_date
-                "\"TOTAL_PRICE\" REAL NOT NULL ," + // 3: total_price
-                "\"ACTUAL_PRICE\" REAL NOT NULL ," + // 4: actual_price
-                "\"BOOK_DAY\" INTEGER NOT NULL ," + // 5: book_day
-                "\"GUEST_ID\" INTEGER NOT NULL ," + // 6: guest_id
-                "\"ROOM_ID\" INTEGER NOT NULL );"); // 7: room_id
+                "\"CONSUMPTION\" REAL NOT NULL ," + // 3: consumption
+                "\"GUEST_ID\" INTEGER NOT NULL ," + // 4: guest_id
+                "\"ROOM_ID\" INTEGER NOT NULL );"); // 5: room_id
     }
 
     /** Drops the underlying database table. */
@@ -82,11 +78,9 @@ public class OutRecordDao extends AbstractDao<OutRecord, Long> {
         }
         stmt.bindLong(2, entity.getArrive_date().getTime());
         stmt.bindLong(3, entity.getLeave_date().getTime());
-        stmt.bindDouble(4, entity.getTotal_price());
-        stmt.bindDouble(5, entity.getActual_price());
-        stmt.bindLong(6, entity.getBook_day());
-        stmt.bindLong(7, entity.getGuest_id());
-        stmt.bindLong(8, entity.getRoom_id());
+        stmt.bindDouble(4, entity.getConsumption());
+        stmt.bindLong(5, entity.getGuest_id());
+        stmt.bindLong(6, entity.getRoom_id());
     }
 
     @Override
@@ -108,11 +102,9 @@ public class OutRecordDao extends AbstractDao<OutRecord, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             new java.util.Date(cursor.getLong(offset + 1)), // arrive_date
             new java.util.Date(cursor.getLong(offset + 2)), // leave_date
-            cursor.getDouble(offset + 3), // total_price
-            cursor.getDouble(offset + 4), // actual_price
-            cursor.getInt(offset + 5), // book_day
-            cursor.getLong(offset + 6), // guest_id
-            cursor.getLong(offset + 7) // room_id
+            cursor.getDouble(offset + 3), // consumption
+            cursor.getLong(offset + 4), // guest_id
+            cursor.getLong(offset + 5) // room_id
         );
         return entity;
     }
@@ -123,11 +115,9 @@ public class OutRecordDao extends AbstractDao<OutRecord, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setArrive_date(new java.util.Date(cursor.getLong(offset + 1)));
         entity.setLeave_date(new java.util.Date(cursor.getLong(offset + 2)));
-        entity.setTotal_price(cursor.getDouble(offset + 3));
-        entity.setActual_price(cursor.getDouble(offset + 4));
-        entity.setBook_day(cursor.getInt(offset + 5));
-        entity.setGuest_id(cursor.getLong(offset + 6));
-        entity.setRoom_id(cursor.getLong(offset + 7));
+        entity.setConsumption(cursor.getDouble(offset + 3));
+        entity.setGuest_id(cursor.getLong(offset + 4));
+        entity.setRoom_id(cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */
@@ -160,11 +150,11 @@ public class OutRecordDao extends AbstractDao<OutRecord, Long> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getGuestDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getCustomerDao().getAllColumns());
             builder.append(',');
             SqlUtils.appendColumns(builder, "T1", daoSession.getRoomDao().getAllColumns());
             builder.append(" FROM OUT_RECORD T");
-            builder.append(" LEFT JOIN GUEST T0 ON T.\"GUEST_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN CUSTOMER T0 ON T.\"GUEST_ID\"=T0.\"_id\"");
             builder.append(" LEFT JOIN ROOM T1 ON T.\"ROOM_ID\"=T1.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
@@ -176,11 +166,11 @@ public class OutRecordDao extends AbstractDao<OutRecord, Long> {
         OutRecord entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
 
-        Guest guest = loadCurrentOther(daoSession.getGuestDao(), cursor, offset);
-         if(guest != null) {
-            entity.setGuest(guest);
+        Customer customer = loadCurrentOther(daoSession.getCustomerDao(), cursor, offset);
+         if(customer != null) {
+            entity.setCustomer(customer);
         }
-        offset += daoSession.getGuestDao().getAllColumns().length;
+        offset += daoSession.getCustomerDao().getAllColumns().length;
 
         Room room = loadCurrentOther(daoSession.getRoomDao(), cursor, offset);
          if(room != null) {

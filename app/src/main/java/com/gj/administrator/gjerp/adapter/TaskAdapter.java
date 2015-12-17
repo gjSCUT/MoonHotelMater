@@ -1,7 +1,6 @@
 package com.gj.administrator.gjerp.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,11 @@ import com.gj.administrator.gjerp.domain.Task;
 import com.gj.administrator.gjerp.util.DrawbalBuilderUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * the adapter of drawable list
- * Created by guojun on 2015/12/09
+ * Created by guojun on 2015/12/13
  */
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
     protected Context context;
@@ -66,7 +64,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
         holder.position = position;
         holder.textView.setText(item.getTitle());
         holder.stateView.setText(item.getState());
-        holder.startTime.setText("expiry date : " + new SimpleDateFormat("MM-dd HH:mm").format(item.getComplete_time()));
+        holder.startTime.setText("deadline time : " + new SimpleDateFormat("MM-dd HH:mm").format(item.getFinish_time()));
     }
 
     @Override
@@ -95,8 +93,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
             startTime = (TextView) view.findViewById(R.id.startTime);
             endTime = (TextView) view.findViewById(R.id.endTime);
 
-            textView.setOnClickListener(this);
-            stateView.setOnClickListener(this);
+            view.setOnClickListener(this);
         }
 
         @Override

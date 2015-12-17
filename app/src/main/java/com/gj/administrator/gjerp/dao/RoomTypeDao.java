@@ -24,11 +24,9 @@ public class RoomTypeDao extends AbstractDao<RoomType, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Type_name = new Property(1, int.class, "type_name", false, "TYPE_NAME");
-        public final static Property Bed_num = new Property(2, int.class, "bed_num", false, "BED_NUM");
-        public final static Property Day_price = new Property(3, double.class, "day_price", false, "DAY_PRICE");
-        public final static Property Hour_price = new Property(4, Double.class, "hour_price", false, "HOUR_PRICE");
-        public final static Property Longtime_price = new Property(5, Double.class, "longtime_price", false, "LONGTIME_PRICE");
+        public final static Property Type_name = new Property(1, String.class, "type_name", false, "TYPE_NAME");
+        public final static Property Price = new Property(2, double.class, "price", false, "PRICE");
+        public final static Property Price_unit = new Property(3, String.class, "price_unit", false, "PRICE_UNIT");
     };
 
     private DaoSession daoSession;
@@ -48,11 +46,9 @@ public class RoomTypeDao extends AbstractDao<RoomType, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"ROOM_TYPE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"TYPE_NAME\" INTEGER NOT NULL ," + // 1: type_name
-                "\"BED_NUM\" INTEGER NOT NULL ," + // 2: bed_num
-                "\"DAY_PRICE\" REAL NOT NULL ," + // 3: day_price
-                "\"HOUR_PRICE\" REAL," + // 4: hour_price
-                "\"LONGTIME_PRICE\" REAL);"); // 5: longtime_price
+                "\"TYPE_NAME\" TEXT NOT NULL ," + // 1: type_name
+                "\"PRICE\" REAL NOT NULL ," + // 2: price
+                "\"PRICE_UNIT\" TEXT NOT NULL );"); // 3: price_unit
     }
 
     /** Drops the underlying database table. */
@@ -70,19 +66,9 @@ public class RoomTypeDao extends AbstractDao<RoomType, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getType_name());
-        stmt.bindLong(3, entity.getBed_num());
-        stmt.bindDouble(4, entity.getDay_price());
- 
-        Double hour_price = entity.getHour_price();
-        if (hour_price != null) {
-            stmt.bindDouble(5, hour_price);
-        }
- 
-        Double longtime_price = entity.getLongtime_price();
-        if (longtime_price != null) {
-            stmt.bindDouble(6, longtime_price);
-        }
+        stmt.bindString(2, entity.getType_name());
+        stmt.bindDouble(3, entity.getPrice());
+        stmt.bindString(4, entity.getPrice_unit());
     }
 
     @Override
@@ -102,11 +88,9 @@ public class RoomTypeDao extends AbstractDao<RoomType, Long> {
     public RoomType readEntity(Cursor cursor, int offset) {
         RoomType entity = new RoomType( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getInt(offset + 1), // type_name
-            cursor.getInt(offset + 2), // bed_num
-            cursor.getDouble(offset + 3), // day_price
-            cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4), // hour_price
-            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5) // longtime_price
+            cursor.getString(offset + 1), // type_name
+            cursor.getDouble(offset + 2), // price
+            cursor.getString(offset + 3) // price_unit
         );
         return entity;
     }
@@ -115,11 +99,9 @@ public class RoomTypeDao extends AbstractDao<RoomType, Long> {
     @Override
     public void readEntity(Cursor cursor, RoomType entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setType_name(cursor.getInt(offset + 1));
-        entity.setBed_num(cursor.getInt(offset + 2));
-        entity.setDay_price(cursor.getDouble(offset + 3));
-        entity.setHour_price(cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4));
-        entity.setLongtime_price(cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5));
+        entity.setType_name(cursor.getString(offset + 1));
+        entity.setPrice(cursor.getDouble(offset + 2));
+        entity.setPrice_unit(cursor.getString(offset + 3));
      }
     
     /** @inheritdoc */

@@ -15,13 +15,17 @@ import com.gj.administrator.gjerp.adapter.ChatAdapter;
 import com.gj.administrator.gjerp.base.BaseActivity;
 import com.gj.administrator.gjerp.base.BaseApplication;
 import com.gj.administrator.gjerp.dao.DaoSession;
+import com.gj.administrator.gjerp.domain.Dialog;
 import com.gj.administrator.gjerp.domain.Message;
+import com.gj.administrator.gjerp.domain.Staff;
+import com.gj.administrator.gjerp.util.DBUtil;
 import com.gj.administrator.gjerp.util.SessionUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 
 public class ChatActivity extends BaseActivity {
@@ -50,26 +54,29 @@ public class ChatActivity extends BaseActivity {
 
     @Override
     protected void initEvents() {
-        DaoSession session = BaseApplication.getDaoSession(mContext);
-        List<Message> datas = session.getDialogDao().load(dialogID).getMessages();
-
+        DaoSession session = DBUtil.getDaoSession(mContext);
+        final Dialog dialog = session.getDialogDao().load(dialogID);
+        List<Message> datas = dialog.getMessages();
         final ChatAdapter adapter = new ChatAdapter(mContext,datas);
 
         chatListView.setAdapter(adapter);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
                 Message data = new Message(
                         null,
                         editText.getText().toString(),
-                        SessionUtil.getUser().getUsername(),
-                        "Manager",
+                        Message.PROCESS,
+                        true,
                         new Date(),
-                        null,
-                        null,
                         dialogID
                 );
+
+                dialog.setLast_time(data.getMsg_time());
+                DBUtil.getDaoSession(mContext).getDialogDao().insertOrReplace(dialog);
+                DBUtil.getDaoSession(mContext).getMessageDao().insert(data);
+                EventBus.getDefault().post(data);
+
                 adapter.datas.add(data);
                 adapter.notifyDataSetChanged();
                 editText.setText("");
@@ -78,6 +85,7 @@ public class ChatActivity extends BaseActivity {
                     InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+
             }
         });
     }

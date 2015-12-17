@@ -17,8 +17,8 @@ import com.gj.administrator.gjerp.dao.MessageDao;
 public class Dialog {
 
     private Long id;
-    /** Not-null value. */
-    private String dialog_type;
+    private int dialog_type;
+    private java.util.Date last_time;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -29,6 +29,10 @@ public class Dialog {
     private List<Message> messages;
 
     // KEEP FIELDS - put your custom fields here
+    public final static int TYPE_CHAT = 0;
+    public final static int TYPE_TASK = 1;
+    public final static int TYPE_SCHEDULE = 2;
+    public final static String[] TYPE = {"Chat","Task","Schedule"};
     // KEEP FIELDS END
 
     public Dialog() {
@@ -38,9 +42,10 @@ public class Dialog {
         this.id = id;
     }
 
-    public Dialog(Long id, String dialog_type) {
+    public Dialog(Long id, int dialog_type, java.util.Date last_time) {
         this.id = id;
         this.dialog_type = dialog_type;
+        this.last_time = last_time;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -57,14 +62,20 @@ public class Dialog {
         this.id = id;
     }
 
-    /** Not-null value. */
-    public String getDialog_type() {
+    public int getDialog_type() {
         return dialog_type;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setDialog_type(String dialog_type) {
+    public void setDialog_type(int dialog_type) {
         this.dialog_type = dialog_type;
+    }
+
+    public java.util.Date getLast_time() {
+        return last_time;
+    }
+
+    public void setLast_time(java.util.Date last_time) {
+        this.last_time = last_time;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

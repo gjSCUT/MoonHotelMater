@@ -3,7 +3,7 @@ package com.gj.administrator.gjerp.domain;
 import com.gj.administrator.gjerp.dao.DaoSession;
 import de.greenrobot.dao.DaoException;
 
-import com.gj.administrator.gjerp.dao.GuestDao;
+import com.gj.administrator.gjerp.dao.CustomerDao;
 import com.gj.administrator.gjerp.dao.OutRecordDao;
 import com.gj.administrator.gjerp.dao.RoomDao;
 
@@ -21,9 +21,7 @@ public class OutRecord {
     private java.util.Date arrive_date;
     /** Not-null value. */
     private java.util.Date leave_date;
-    private double total_price;
-    private double actual_price;
-    private int book_day;
+    private double consumption;
     private long guest_id;
     private long room_id;
 
@@ -33,8 +31,8 @@ public class OutRecord {
     /** Used for active entity operations. */
     private transient OutRecordDao myDao;
 
-    private Guest guest;
-    private Long guest__resolvedKey;
+    private Customer customer;
+    private Long customer__resolvedKey;
 
     private Room room;
     private Long room__resolvedKey;
@@ -50,13 +48,11 @@ public class OutRecord {
         this.id = id;
     }
 
-    public OutRecord(Long id, java.util.Date arrive_date, java.util.Date leave_date, double total_price, double actual_price, int book_day, long guest_id, long room_id) {
+    public OutRecord(Long id, java.util.Date arrive_date, java.util.Date leave_date, double consumption, long guest_id, long room_id) {
         this.id = id;
         this.arrive_date = arrive_date;
         this.leave_date = leave_date;
-        this.total_price = total_price;
-        this.actual_price = actual_price;
-        this.book_day = book_day;
+        this.consumption = consumption;
         this.guest_id = guest_id;
         this.room_id = room_id;
     }
@@ -95,28 +91,12 @@ public class OutRecord {
         this.leave_date = leave_date;
     }
 
-    public double getTotal_price() {
-        return total_price;
+    public double getConsumption() {
+        return consumption;
     }
 
-    public void setTotal_price(double total_price) {
-        this.total_price = total_price;
-    }
-
-    public double getActual_price() {
-        return actual_price;
-    }
-
-    public void setActual_price(double actual_price) {
-        this.actual_price = actual_price;
-    }
-
-    public int getBook_day() {
-        return book_day;
-    }
-
-    public void setBook_day(int book_day) {
-        this.book_day = book_day;
+    public void setConsumption(double consumption) {
+        this.consumption = consumption;
     }
 
     public long getGuest_id() {
@@ -136,30 +116,30 @@ public class OutRecord {
     }
 
     /** To-one relationship, resolved on first access. */
-    public Guest getGuest() {
+    public Customer getCustomer() {
         long __key = this.guest_id;
-        if (guest__resolvedKey == null || !guest__resolvedKey.equals(__key)) {
+        if (customer__resolvedKey == null || !customer__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            GuestDao targetDao = daoSession.getGuestDao();
-            Guest guestNew = targetDao.load(__key);
+            CustomerDao targetDao = daoSession.getCustomerDao();
+            Customer customerNew = targetDao.load(__key);
             synchronized (this) {
-                guest = guestNew;
-            	guest__resolvedKey = __key;
+                customer = customerNew;
+            	customer__resolvedKey = __key;
             }
         }
-        return guest;
+        return customer;
     }
 
-    public void setGuest(Guest guest) {
-        if (guest == null) {
+    public void setCustomer(Customer customer) {
+        if (customer == null) {
             throw new DaoException("To-one property 'guest_id' has not-null constraint; cannot set to-one to null");
         }
         synchronized (this) {
-            this.guest = guest;
-            guest_id = guest.getId();
-            guest__resolvedKey = guest_id;
+            this.customer = customer;
+            guest_id = customer.getId();
+            customer__resolvedKey = guest_id;
         }
     }
 

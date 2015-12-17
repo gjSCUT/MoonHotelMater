@@ -10,13 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.gj.administrator.gjerp.dao.DaoSession;
+import com.gj.administrator.gjerp.util.DBUtil;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * BaseFragment
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public abstract class BaseFragment extends Fragment {
     protected View mView;

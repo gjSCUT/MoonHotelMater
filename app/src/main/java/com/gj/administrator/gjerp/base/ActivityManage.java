@@ -4,7 +4,7 @@ import java.util.Stack;
 
 /**
  * ActivityManage
- * Created by guojun on 2015/12/07
+ * Created by guojun on 2015/12/14
  */
 public class ActivityManage {
     private static Stack<BaseActivity> queue;

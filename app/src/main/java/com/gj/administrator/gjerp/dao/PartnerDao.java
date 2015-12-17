@@ -28,8 +28,7 @@ public class PartnerDao extends AbstractDao<Partner, Long> {
         public final static Property Partner_type = new Property(2, String.class, "partner_type", false, "PARTNER_TYPE");
         public final static Property Telphone = new Property(3, String.class, "telphone", false, "TELPHONE");
         public final static Property Email = new Property(4, String.class, "email", false, "EMAIL");
-        public final static Property Create_time = new Property(5, java.util.Date.class, "create_time", false, "CREATE_TIME");
-        public final static Property Company = new Property(6, String.class, "company", false, "COMPANY");
+        public final static Property Company = new Property(5, String.class, "company", false, "COMPANY");
     };
 
     private DaoSession daoSession;
@@ -53,8 +52,10 @@ public class PartnerDao extends AbstractDao<Partner, Long> {
                 "\"PARTNER_TYPE\" TEXT NOT NULL ," + // 2: partner_type
                 "\"TELPHONE\" TEXT NOT NULL ," + // 3: telphone
                 "\"EMAIL\" TEXT NOT NULL ," + // 4: email
-                "\"CREATE_TIME\" INTEGER NOT NULL ," + // 5: create_time
-                "\"COMPANY\" TEXT NOT NULL );"); // 6: company
+                "\"COMPANY\" TEXT NOT NULL );"); // 5: company
+        // Add Indexes
+        db.execSQL("CREATE INDEX " + constraint + "IDX_PARTNER_NAME ON PARTNER" +
+                " (\"NAME\");");
     }
 
     /** Drops the underlying database table. */
@@ -76,8 +77,7 @@ public class PartnerDao extends AbstractDao<Partner, Long> {
         stmt.bindString(3, entity.getPartner_type());
         stmt.bindString(4, entity.getTelphone());
         stmt.bindString(5, entity.getEmail());
-        stmt.bindLong(6, entity.getCreate_time().getTime());
-        stmt.bindString(7, entity.getCompany());
+        stmt.bindString(6, entity.getCompany());
     }
 
     @Override
@@ -101,8 +101,7 @@ public class PartnerDao extends AbstractDao<Partner, Long> {
             cursor.getString(offset + 2), // partner_type
             cursor.getString(offset + 3), // telphone
             cursor.getString(offset + 4), // email
-            new java.util.Date(cursor.getLong(offset + 5)), // create_time
-            cursor.getString(offset + 6) // company
+            cursor.getString(offset + 5) // company
         );
         return entity;
     }
@@ -115,8 +114,7 @@ public class PartnerDao extends AbstractDao<Partner, Long> {
         entity.setPartner_type(cursor.getString(offset + 2));
         entity.setTelphone(cursor.getString(offset + 3));
         entity.setEmail(cursor.getString(offset + 4));
-        entity.setCreate_time(new java.util.Date(cursor.getLong(offset + 5)));
-        entity.setCompany(cursor.getString(offset + 6));
+        entity.setCompany(cursor.getString(offset + 5));
      }
     
     /** @inheritdoc */

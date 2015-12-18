@@ -103,7 +103,7 @@ public class LoginActivity extends BaseActivity{
                             UserDao.Properties.Password.eq(loginEdPwd.getText().toString())
                         )
                         .unique();
-                if(user == null){
+                if(user == null || user.getStaff().getHotel_id() != SessionUtil.getHotel().getId()){
                     showShortToast("username or password is wrong");
                 }
                 else {
